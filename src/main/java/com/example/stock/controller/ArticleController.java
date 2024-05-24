@@ -1,15 +1,14 @@
 package com.example.stock.controller;
 
 import com.example.stock.model.Article;
-import com.example.stock.model.Category;
-import com.example.stock.model.Roles;
+
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.CategoryRepository;
 import com.example.stock.service.ArticleService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
+
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.ServletContext;
@@ -24,13 +23,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.naming.Context;
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController

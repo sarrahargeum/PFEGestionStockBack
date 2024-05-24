@@ -1,6 +1,5 @@
 package com.example.stock.service;
 
-import com.example.stock.model.Article;
 import com.example.stock.model.User;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface UserService {
     
     void deleteUser(Integer id);
     
-	int searchUserBynomEtprenom(String firstname, String lastname);
+//int searchUserBynomEtprenom(String firstname, String lastname);
 	
-	User updateUser (User u);
+	  public void updateUser(Integer id, User User) ;
 }

@@ -1,6 +1,7 @@
 package com.example.stock.service.metiers;
 
 import com.example.stock.model.Article;
+import com.example.stock.model.Category;
 import com.example.stock.model.User;
 import com.example.stock.repository.UserRepository;
 import com.example.stock.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -52,19 +54,31 @@ public class UserServicesImpl implements UserService {
 	}
 
 
-	@Override
+	/*@Override
 	public int searchUserBynomEtprenom(String firstname, String lastname) {
 		return userRepository.searchUserBynomEtprenom(firstname, lastname);
-	}
+	}*/
 	
 	
 	@Override
-	public User updateUser(User u) {
-		   
-		  log.info(""+u);
-	     
-	     return  userRepository .save(u);
-	}
+	
+	  public void updateUser(Integer id, User User) {
+		    
+		 
+		    Optional<User> userInfo = userRepository.findById(id);
+		 
+		    if (userInfo.isPresent()) {
+		    	User user = userInfo.get();
+		    	user.setFirstname(user.getFirstname());
+		    	user.setLastname(user.getLastname());
+		    	user.setEmail(user.getEmail());
+		    	user.setMagasin(user.getMagasin());
+		    	user.setRole(user.getRole());
+		          		           
+		          User u = userRepository.save(user);
+		         
+		  }
+	  }
 
 
 }

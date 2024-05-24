@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.stock.model.Category;
+
 import com.example.stock.model.Fournisseur;
-import com.example.stock.service.CategoryService;
+
 import com.example.stock.service.FournisseurService;
 
 @CrossOrigin(origins = "http://localhost:4200")
