@@ -1,15 +1,18 @@
 package com.example.stock.controller;
 
 
-import com.example.stock.model.Article;
 import com.example.stock.model.Category;
-import com.example.stock.model.User;
+import com.example.stock.repository.CategoryRepository;
 import com.example.stock.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -17,6 +20,9 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
+    
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @PostMapping("/addCat")
     public Category ajouterCategory(@RequestBody Category ca){
@@ -31,11 +37,8 @@ public class CategoryController {
         return categoryService.findAll();
     }
 
-    @PutMapping("/update")
-    public Category updateCategory(@RequestBody Category category) {
-        return categoryService.updateCategory(category);
-    }
-    
+   
+ 
     
     @DeleteMapping("/delete/{id}")
     public void deleteCategory(@PathVariable Integer id) {
@@ -47,5 +50,12 @@ public class CategoryController {
     public Category retrieveCategory(@PathVariable("id") Integer categoryId) {
         return categoryService.retrieveCategory(categoryId);
     }
+    
+    @PutMapping("/Update/{id}")
+	  public void updateCategorie(@PathVariable("id") Integer id, @RequestBody Category Category) {           
+	       categoryService.updateCategorie(id, Category);
+	   
+	    
+	  }
 
 }
