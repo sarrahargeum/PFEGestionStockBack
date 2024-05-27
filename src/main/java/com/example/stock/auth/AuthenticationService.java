@@ -107,7 +107,7 @@ public class AuthenticationService {
             }}
     
         // new user is active
-        newUser.setActivated(true);
+        newUser.setActivated("activer");
 
         // new user gets registration key
         newUser.setActivationKey(RandomStringUtils.random(20, 0, 0, true, true, (char[])null, SECURE_RANDOM));
@@ -134,24 +134,20 @@ public class AuthenticationService {
    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-		/*
-		 * UsernamePasswordAuthenticationToken authenticate= new
-		 * UsernamePasswordAuthenticationToken( request.getEmail(),
-		 * request.getPassword() );
-		 */
+	
         User user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        if(!user.isActivated() ){
+       /* if(!user.isActivated() ){
             return AuthenticationResponse.builder()
                     .message("Votre compte est desactivé")
                     .build();
         }
-        else{
+        else{*/
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
-    }
+  //  }
         }
 
 

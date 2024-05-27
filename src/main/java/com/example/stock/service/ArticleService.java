@@ -10,11 +10,7 @@ import java.util.List;
 
 public interface ArticleService {
 
-/*	public void  ajoutArticle(MultipartFile image, String code, String designation
-            , float prix , float tauxTva  ,Integer categoryId, Integer magasinId);*/
-	
-   // public Article  ajoutArticle(String image, String code, String designation
-         //   , float prix , float tauxTva  );
+
     Article findById(Integer id);
 
     Article findByCodeArticle(String codeArticle);
@@ -28,7 +24,6 @@ public interface ArticleService {
 
 	List<Article> findAll();
 
-	//ResponseEntity<List<String>> getAll1();
     
  
 }

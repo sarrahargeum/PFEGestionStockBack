@@ -26,9 +26,9 @@ public class Category {
 
     private String designation;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private List<Article> articles;
+    
+   /* @OneToMany(mappedBy = "category")
+    private List<Article> articles;*/
 
 	
     

@@ -59,21 +59,20 @@ public class UserServicesImpl implements UserService {
 		return userRepository.searchUserBynomEtprenom(firstname, lastname);
 	}*/
 	
-	
+
 	@Override
 	
 	  public void updateUser(Integer id, User User) {
-		    
 		 
 		    Optional<User> userInfo = userRepository.findById(id);
 		 
 		    if (userInfo.isPresent()) {
 		    	User user = userInfo.get();
-		    	user.setFirstname(user.getFirstname());
-		    	user.setLastname(user.getLastname());
-		    	user.setEmail(user.getEmail());
-		    	user.setMagasin(user.getMagasin());
-		    	user.setRole(user.getRole());
+		    	user.setFirstname(User.getFirstname());
+		    	user.setLastname(User.getLastname());
+		    	user.setEmail(User.getEmail());
+		    	user.setActivated(User.getActivated());
+		    	//user.setRole(User.getRole());
 		          		           
 		          User u = userRepository.save(user);
 		         

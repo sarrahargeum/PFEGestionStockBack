@@ -44,9 +44,9 @@ public class AuthenticationConrtroller {
                 "\n" + "http://localhost:4200/login";
         String subject=" votre compte est préte";
         User user = service.register(request);
-        System.out.println("uuuuuuuu"+user.getUsername());
+       // System.out.println("uuuuuuuu"+user.getUsername());
 
-        System.out.println("uuuuuuuu"+user);
+       // System.out.println("uuuuuuuu"+user);
         try {
             mailSenderService.sendSimpleMessageToNewUser(user.getEmail(),subject,text);
         } catch (MessagingException e) {
@@ -62,7 +62,7 @@ public class AuthenticationConrtroller {
     }
 
 
-    @PutMapping("/admin/activated")
+   /* @PutMapping("/admin/activated")
     public ResponseEntity<User> updateUserActivated(@Valid @RequestBody User userDTO) throws MessagingException {
         String text = "Votre compte est Activé, merci de cliquer sur le lien ci-dessous pour y accéder :\n" +
                 "\n" + "http://localhost:4200/login";
@@ -72,7 +72,7 @@ public class AuthenticationConrtroller {
         mailSenderService.sendSimpleMessageToNewUser(us.getEmail(), subject, text);
         return new ResponseEntity(updatedUserAcivated, HttpStatus.OK);
 
-    }
+    }*/
 
 
 

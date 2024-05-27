@@ -51,46 +51,7 @@ public class ArticleServiceImpl  implements ArticleService {
 	
     private static  Log log = LogFactory.getLog(ArticleServiceImpl.class);
 
-  /*  public void ajoutArticle(MultipartFile image, String code, String designation,
-            float prix, float tauxTva, Integer categoryId, Integer magasinId) {
-    	Article art = new Article();
-    	String fileName = StringUtils.cleanPath(image.getOriginalFilename());
 
-    	if (fileName.contains("..")) {
-    		System.out.println("Not a valid file");
-    		// Handle invalid file case here
-    		return;
-    	}
-
-    	try {
-    		art.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    		// Handle image processing error here
-    		return;
-    	}
-
-    	art.setCode(code);
-    	art.setDesignation(designation);
-    	art.setPrix(prix);
-    	art.setTauxTva(tauxTva);
-
-    	// Fetch category and magasin objects from their respective repositories
-    	Category category = categoryRepository.findById(categoryId).orElse(null);
-    	Magasin magasin = magasinRepository.findById(magasinId).orElse(null);
-
-if (category == null || magasin == null) {
-System.out.println("Category or Magasin not found");
-
-return;
-}
-
-art.setCategory(category);
-art.setMagasin(magasin);
-
-articleRepository.save(art);
-}
-*/
 
 	
 

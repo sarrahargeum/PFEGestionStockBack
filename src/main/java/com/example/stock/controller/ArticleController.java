@@ -1,9 +1,11 @@
 package com.example.stock.controller;
 
 import com.example.stock.model.Article;
-
+import com.example.stock.model.Category;
+import com.example.stock.model.Magasin;
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.CategoryRepository;
+import com.example.stock.repository.MagasinRepository;
 import com.example.stock.service.ArticleService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -42,18 +44,16 @@ public class ArticleController {
     @Autowired
     CategoryRepository categoryRepository;
 
-    
-   /* @PostMapping("/add")
-    public Article ajoutArticle(@RequestBody Article article) {
-        Article articles= articleService.ajoutArticle(article.getImage(), article.getCode(), article.getDesignation(), article.getPrix(), article.getTauxTva(), article.getCategory().getId(), article.getMagasin().getId());
-        return articles; // Returning the code as a response, adjust as needed
-    }*/
+    @Autowired
+    MagasinRepository magasinRepository;
+ 
     
     
     @PostMapping("/add")
     public ResponseEntity<Response> ajoutArticle(@RequestParam("file") MultipartFile file,
-    		@RequestParam("article")String article
-    		//@RequestParam("idcategory") Integer idcategory
+    		@RequestParam("article")String article,
+    		@RequestParam("categoryId") Integer categoryId,
+    		@RequestParam("magasinId") Integer magasinId
     		) throws JsonParseException, JsonMappingException,Exception,IOException
     {
     	
@@ -62,10 +62,16 @@ public class ArticleController {
     	
     	Article arti = new ObjectMapper().readValue(article, Article.class)  ;
     	  // Fetch the category using the provided categoryId
-       /* Category category = categoryRepository.findById(idcategory)
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        arti.setCategory(category);*/
+        arti.setCategory(category);
+        
+        Magasin magasin = magasinRepository.findById(magasinId)
+                .orElseThrow(() -> new RuntimeException("magasin not found"));
+
+        arti.setMagasin(magasin);
+        
         
     	boolean isExit = new File(context.getRealPath("/Images/")).exists();
     
@@ -73,7 +79,7 @@ public class ArticleController {
     {
     	new File (context.getRealPath("/Images/")).mkdir();
     	System.out.println("mk dir....");
-    	
+    	 
     }
     String filename = file.getOriginalFilename();
     String newFileName = FilenameUtils.getBaseName(filename)+"."+FilenameUtils.getExtension(filename);
@@ -109,16 +115,14 @@ public class ArticleController {
     }
 
 
-  /*  @GetMapping("/allArticle")
-    public ResponseEntity<List<String>> getAll() {
-        return articleService.getAll1();
-    }*/
     
     @GetMapping(path="/Imgarticles/{id}")
 	 public byte[] getPhoto(@PathVariable("id") Integer id) throws Exception{
 		 Article Article   = articleRepository.findById(id).get();
 		 return Files.readAllBytes(Paths.get(context.getRealPath("/Images/")+Article.getImage()));
 	 }
+    
+    
     
     @GetMapping("/all")
     @ResponseBody

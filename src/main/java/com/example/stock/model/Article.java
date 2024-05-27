@@ -26,14 +26,14 @@ public class Article {
     private Float tauxTva;
  
     private String image;
- //   @JsonIgnore
+
     @ManyToOne
-    @JoinColumn(name = "idcategory")
+    @JoinColumn(name = "categoryId")
     private Category category;
 
-    @JsonIgnore
+  
     @ManyToOne
-    @JoinColumn(name = "idmagasin")
+    @JoinColumn(name = "magasinId")
     private Magasin magasin;
 
 
