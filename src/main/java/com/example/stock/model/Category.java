@@ -26,11 +26,7 @@ public class Category {
 
     private String designation;
 
-    
-   /* @OneToMany(mappedBy = "category")
-    private List<Article> articles;*/
-
-	
+    	
     
 }
 

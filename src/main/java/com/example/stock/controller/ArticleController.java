@@ -50,7 +50,7 @@ public class ArticleController {
     
     
     @PostMapping("/add")
-    public ResponseEntity<Response> ajoutArticle(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<Article> ajoutArticle(@RequestParam("file") MultipartFile file,
     		@RequestParam("article")String article,
     		@RequestParam("categoryId") Integer categoryId,
     		@RequestParam("magasinId") Integer magasinId
@@ -95,10 +95,10 @@ public class ArticleController {
     Article art = articleRepository.save(arti);
     
     if(art != null) {
-    	return new ResponseEntity<Response>(new Response (),HttpStatus.OK);
+    	return new ResponseEntity<>(art,HttpStatus.OK);
     }
     else {
-    	return new ResponseEntity<Response>(new Response (),HttpStatus.BAD_REQUEST);
+    	return new ResponseEntity<>(art,HttpStatus.BAD_REQUEST);
 
     }
     }

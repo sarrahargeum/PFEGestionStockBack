@@ -3,6 +3,7 @@ package com.example.stock.auth;
 import com.example.stock.config.JwtAuthenticationFilter;
 import com.example.stock.config.JwtService;
 import com.example.stock.model.User;
+import com.example.stock.service.UserService;
 import com.example.stock.service.metiers.MailServiceImpl;
 import jakarta.mail.MessagingException;
 
@@ -44,9 +45,7 @@ public class AuthenticationConrtroller {
                 "\n" + "http://localhost:4200/login";
         String subject=" votre compte est préte";
         User user = service.register(request);
-       // System.out.println("uuuuuuuu"+user.getUsername());
-
-       // System.out.println("uuuuuuuu"+user);
+     
         try {
             mailSenderService.sendSimpleMessageToNewUser(user.getEmail(),subject,text);
         } catch (MessagingException e) {
@@ -73,7 +72,8 @@ public class AuthenticationConrtroller {
         return new ResponseEntity(updatedUserAcivated, HttpStatus.OK);
 
     }*/
-
+    
+ 
 
 
 
