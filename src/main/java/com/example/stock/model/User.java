@@ -29,7 +29,9 @@ public class User implements UserDetails {
     
     @NotNull
     @Column(nullable = true)
-    private String activated = "activer";
+   // private String activated = "activer";
+    private boolean activated ;
+
     
     
     @Column(name = "activation_key", length = 20)
@@ -94,7 +96,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    public String isActivated() {
+    public boolean isActivated() {
         return activated;
     }
 
@@ -102,7 +104,7 @@ public class User implements UserDetails {
         return activationKey;
     }
 
-    public void setActivated(String activated) {
+    public void setActivated(Boolean activated) {
         this.activated = activated;
     }
 

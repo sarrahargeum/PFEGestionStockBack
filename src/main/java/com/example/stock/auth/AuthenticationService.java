@@ -60,13 +60,7 @@ public class AuthenticationService {
       @Autowired
       MagasinRepository magasinRepositrory;
 
-  /* private boolean removeNonActivatedUser(User existingUser) {
-        if (existingUser.isActivated()) {
-            return false;
-        }
-        userRepository.delete(existingUser);
-        return true;
-    }*/
+  
    
    
     public User register(RegisterRequest userDTO) {
@@ -107,8 +101,7 @@ public class AuthenticationService {
             }}
     
         // new user is active
-        newUser.setActivated("activer");
-
+        newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomStringUtils.random(20, 0, 0, true, true, (char[])null, SECURE_RANDOM));
       //  newUser.setRoles(userDTO.getRoles());

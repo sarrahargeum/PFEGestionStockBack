@@ -18,6 +18,7 @@ public class Stock {
     private Integer id;
     private Integer quantite;
     private Date dateMvt;
+    
     @Column(name = "typestock")
     @Enumerated(EnumType.STRING)
     private TypeStock typestock;

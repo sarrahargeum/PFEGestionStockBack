@@ -26,6 +26,7 @@ public class BonSortieClient {
     @ManyToOne
     @JoinColumn(name = "idUser")
     private  User user;
+    
     @Column(name = "etatcommande")
     @Enumerated(EnumType.STRING)
     private EtatCommande etatCommande;
