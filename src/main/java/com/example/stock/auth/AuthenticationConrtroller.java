@@ -2,7 +2,9 @@ package com.example.stock.auth;
 
 import com.example.stock.config.JwtAuthenticationFilter;
 import com.example.stock.config.JwtService;
+import com.example.stock.exception.ErrorMessage;
 import com.example.stock.model.User;
+import com.example.stock.repository.UserRepository;
 import com.example.stock.service.UserService;
 import com.example.stock.service.metiers.MailServiceImpl;
 import jakarta.mail.MessagingException;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,11 +42,10 @@ public class AuthenticationConrtroller {
 
     @Autowired
     MailServiceImpl mailSenderService;
-
+    
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest request) {
-        String text ="Votre compte est préte, merci de cliquer sur le lien ci-dessous pour y accéder :\n" +
-                "\n" + "http://localhost:4200/login";
+        String text ="Votre compte est préte, mais encore désactivée ";
         String subject=" votre compte est préte";
         User user = service.register(request);
      
@@ -72,9 +75,5 @@ public class AuthenticationConrtroller {
         return new ResponseEntity(updatedUserAcivated, HttpStatus.OK);
 
     }
-    
- 
-
-
 
 }

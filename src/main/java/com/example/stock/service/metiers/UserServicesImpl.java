@@ -12,6 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -72,17 +76,12 @@ public class UserServicesImpl implements UserService {
 		    	user.setFirstname(User.getFirstname());
 		    	user.setLastname(User.getLastname());
 		    	user.setEmail(User.getEmail());
-		    	user.setActivated(User.isActivated());
+		    	//user.setActivated(User.isActivated());
 		    	//user.setRole(User.getRole());
 		          		           
 		          User u = userRepository.save(user);
 		         
 		  }
 	  }
-	
-	
-    
-
-
 
 }

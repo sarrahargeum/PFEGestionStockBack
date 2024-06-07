@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Paths;
 import java.io.File;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -88,10 +90,35 @@ public class ArticleServiceImpl  implements ArticleService {
 
 
 
-    public Article updateArticle(Article article) {
+  /*  public Article updateArticle(Article article) {
         articleRepository.findById(article.getId());
         return articleRepository.save(article);
+    }*/
+    public ResponseEntity<Article> updateArticle(Integer id, Article Article) {
+	    System.out.println("Update Article with ID = " + id + "...");
+	    Optional<Article> ArticleInfo = articleRepository.findById(id);
+	    if (ArticleInfo.isPresent()) {
+	    	Article article = ArticleInfo.get();
+	           article.setCode(Article.getCode());
+	           article.setDesignation(Article.getDesignation());
+	           article.setPrix(Article.getPrix());
+	           article.setTauxTva(Article.getTauxTva());
+	           article.setCategory(Article.getCategory());
+	         
+	           Article art = articleRepository.save(article);
+	           
+	           if(art != null) {
+	           	return new ResponseEntity<>(art,HttpStatus.OK);
+	           }
+	           else {
+	           	return new ResponseEntity<>(art,HttpStatus.BAD_REQUEST);
+	           	}
+
+	    }
+		return null;
     }
+    
+    
 
     public Article deleteArticle(Integer id) {
         articleRepository.deleteById(id);

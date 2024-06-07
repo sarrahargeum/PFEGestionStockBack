@@ -130,9 +130,14 @@ public class ArticleController {
         return articleService.findAll();
     }
     
-    @PutMapping("/update")
+   /* @PutMapping("/update")
     public Article updateArticle(@RequestBody Article article) {
         return articleService.updateArticle(article);
+    }*/
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable("id") Integer id, @RequestBody Article Article) {
+    	
+    	return articleService.updateArticle(id, Article);
     }
     
     @DeleteMapping("/delete/{id}")

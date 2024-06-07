@@ -21,7 +21,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 	FournisseurRepository fournisseurRepository;
 	
 	@Override
-	public Fournisseur ajouterFournisseur(Fournisseur four) {
+	public Fournisseur ajouterFournisseur(Fournisseur four ) {
 		// TODO Auto-generated method stub
 		 return fournisseurRepository.save(four);
 	}

@@ -28,9 +28,7 @@ public class FournisseurController {
 	    FournisseurService fournisseurService;
 
 	    @PostMapping("/addFour")
-	    
 	    public  Fournisseur ajouterFournisseur(@RequestBody Fournisseur four){
-
 	        return fournisseurService.ajouterFournisseur(four);
 	        }
 

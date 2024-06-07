@@ -2,6 +2,8 @@ package com.example.stock.config;
 
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +20,8 @@ import com.example.stock.repository.UserRepository;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private  UserRepository repository;
+	@Autowired
+      UserRepository repository;
 
     @Bean
     public UserDetailsService userDetailsService() {

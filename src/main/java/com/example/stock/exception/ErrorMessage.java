@@ -2,7 +2,7 @@ package com.example.stock.exception;
 
 import java.util.Date;
 
-public class ErrorMessage {
+public class ErrorMessage extends RuntimeException {
   private int statusCode;
   private Date timestamp;
   private String message;
@@ -30,4 +30,9 @@ public class ErrorMessage {
   public String getDescription() {
     return description;
   }
+
+public ErrorMessage(String message) {
+	super(message);
+}
+  
 }

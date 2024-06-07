@@ -27,6 +27,7 @@ import java.security.SecureRandom;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -130,17 +131,20 @@ public class AuthenticationService {
 	
         User user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-       /* if(!user.isActivated() ){
+        if(!user.isActivated() ){
             return AuthenticationResponse.builder()
                     .message("Votre compte est desactivé")
                     .build();
         }
-        else{*/
+        else{
         String jwtToken = jwtService.generateToken(user);
+		Roles role = user.getRole();
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .roles(role)
                 .build();
-  //  }
+    }
         }
 
 

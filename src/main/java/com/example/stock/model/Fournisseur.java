@@ -23,8 +23,9 @@ public class Fournisseur {
     private String prenom;
     private String adresse;
 
-    @Column(name = "idmagasin")
-    private Integer idMagasin;
+    @ManyToOne
+    @JoinColumn(name = "idmagasin")
+    private Magasin magasin;
 
     @JsonIgnore
     @OneToMany(mappedBy = "fournisseur")
