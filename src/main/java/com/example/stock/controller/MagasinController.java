@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.stock.model.Fournisseur;
 import com.example.stock.model.Magasin;
 import com.example.stock.service.MagasinService;
 
@@ -39,10 +40,16 @@ public class MagasinController {
 	        return magasinService.findAll();
 	    }
 
-	    @PutMapping("/update")
-	    public Magasin updateMagasin(@RequestBody Magasin magasin) {
-	        return magasinService.updateMagasin(magasin);
+	    @PutMapping("/update/{id}")
+	    public void updateMagasin(@PathVariable("id") Integer id,@RequestBody Magasin magasin) {
+	    	magasinService.updateMagasin(id, magasin);
 	    }
+	    
+	    @GetMapping("/retrieve-magasin/{id}")
+	    public Magasin retrieveMagasin(@PathVariable("id") Integer magasinId) {
+	        return magasinService.retrieveMagasin(magasinId);
+	    }
+	    
 	    @DeleteMapping("/delete/{id}")
 	    public void deleteMagasin(@PathVariable Integer id) {
 	        magasinService.deleteMagasin(id);

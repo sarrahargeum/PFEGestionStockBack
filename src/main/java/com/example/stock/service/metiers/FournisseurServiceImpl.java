@@ -1,6 +1,7 @@
 package com.example.stock.service.metiers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,27 @@ public class FournisseurServiceImpl implements FournisseurService {
 		 return fournisseurRepository.save(four);
 	}
 
-	@Override
-	public Fournisseur updateFournisseur(Fournisseur fournisseur) {
-		// TODO Auto-generated method stub
-		fournisseurRepository.findById(fournisseur.getId());
-        return fournisseurRepository.save(fournisseur);
-	}
+
+	
+	public void updateFournisseur(Integer id, Fournisseur fournisseur) {
+	  
+	    Optional<Fournisseur> forniInfo = fournisseurRepository.findById(id);
+
+	    if (forniInfo.isPresent()) {
+	        Fournisseur four = forniInfo.get();
+	        four.setNom(fournisseur.getNom()); 
+	        four.setPrenom(fournisseur.getPrenom());
+	        four.setAdresse(fournisseur.getAdresse());
+	        four.setNumTel(fournisseur.getNumTel());
+
+	        fournisseurRepository.save(four); 
+	    } else {
+	        System.out.println("Fournisseur with ID = " + id + " not found.");
+	    }
+	
+	  }
+	
+	
 
 	@Override
 	public Fournisseur deleteFournisseur(Integer id) {
@@ -46,7 +62,10 @@ public class FournisseurServiceImpl implements FournisseurService {
         return fournisseurRepository.findAll().stream().collect(Collectors.toList());
 	}
 	
-	
+    public Fournisseur retrieveFournisseur (Integer fournisseurId){
+    	Fournisseur four = fournisseurRepository.findById(fournisseurId).get();
+        return  four;
+    }
 	
 
 }

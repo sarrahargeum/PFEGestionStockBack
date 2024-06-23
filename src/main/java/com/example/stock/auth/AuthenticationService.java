@@ -9,15 +9,13 @@ import com.example.stock.repository.RolesRepository;
 import com.example.stock.service.metiers.MailServiceImpl;
 import com.example.stock.repository.UserRepository;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,8 +24,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 
 @Service
@@ -105,7 +102,7 @@ public class AuthenticationService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomStringUtils.random(20, 0, 0, true, true, (char[])null, SECURE_RANDOM));
-      //  newUser.setRoles(userDTO.getRoles());
+       newUser.setRole(userDTO.getRoles());
         userRepository.save(newUser);
 
         log.debug("Created Information for User: {}", newUser);
@@ -128,7 +125,12 @@ public class AuthenticationService {
    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-	
+    	 authenticationManager.authenticate(
+    		        new UsernamePasswordAuthenticationToken(
+    		            request.getEmail(),
+    		            request.getPassword()
+    		        )
+    		    );
         User user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         if(!user.isActivated() ){
@@ -139,10 +141,12 @@ public class AuthenticationService {
         else{
         String jwtToken = jwtService.generateToken(user);
 		Roles role = user.getRole();
-
+		
+		
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accesstoken(jwtToken)
                 .roles(role)
+                .user(user)
                 .build();
     }
         }

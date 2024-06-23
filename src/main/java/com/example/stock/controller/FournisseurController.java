@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.example.stock.model.Category;
 import com.example.stock.model.Fournisseur;
 
 import com.example.stock.service.FournisseurService;
@@ -38,11 +38,19 @@ public class FournisseurController {
 
 	        return fournisseurService.findAll();
 	    }
-
-	    @PutMapping("/update")
-	    public Fournisseur updateFournisseur(@RequestBody Fournisseur fournisseur) {
-	        return fournisseurService.updateFournisseur(fournisseur);
+	    
+	    
+	
+	    @PutMapping("/update/{id}")
+	    public void updateFournisseur(@PathVariable("id") Integer id,@RequestBody Fournisseur fournisseur) {
+	        fournisseurService.updateFournisseur(id, fournisseur);
 	    }
+	    
+	    @GetMapping("/retrieve-fournisseur/{id}")
+	    public Fournisseur retrieveFournisseur(@PathVariable("id") Integer fourniseurId) {
+	        return fournisseurService.retrieveFournisseur(fourniseurId);
+	    }
+	    
 	    @DeleteMapping("/delete/{id}")
 	    public void deleteFournisseur(@PathVariable Integer id) {
 	        fournisseurService.deleteFournisseur(id);

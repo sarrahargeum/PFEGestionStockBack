@@ -1,6 +1,7 @@
 package com.example.stock.controller;
 
 import com.example.stock.config.ApplicationConfig;
+import com.example.stock.model.Category;
 import com.example.stock.model.User;
 import com.example.stock.service.UserService;
 import com.example.stock.repository.UserRepository;
@@ -34,6 +35,7 @@ public class UserController {
     public User retrieveUser(@PathVariable("id") Integer userId) {
         return userServices.retrieveUser(userId);
     }
+  
 
     @GetMapping("/all")
     @ResponseBody

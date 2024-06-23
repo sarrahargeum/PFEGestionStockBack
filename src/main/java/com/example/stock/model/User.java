@@ -35,7 +35,11 @@ public class User implements UserDetails {
     private boolean activated ;
 
     
-    
+    public User(String firstname, String lastname, String email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+    }
     @Column(name = "activation_key", length = 20)
     @JsonIgnore
     private String activationKey;
