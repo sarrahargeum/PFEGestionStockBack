@@ -8,6 +8,7 @@ import com.example.stock.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,29 +60,27 @@ public class UserServicesImpl implements UserService {
 	}
 
 
-	/*@Override
-	public int searchUserBynomEtprenom(String firstname, String lastname) {
-		return userRepository.searchUserBynomEtprenom(firstname, lastname);
-	}*/
+	
 	
 
-	@Override
 	
-	  public void updateUser(Integer id, User User) {
-		 
-		    Optional<User> userInfo = userRepository.findById(id);
-		 
-		    if (userInfo.isPresent()) {
-		    	User user = userInfo.get();
-		    	user.setFirstname(User.getFirstname());
-		    	user.setLastname(User.getLastname());
-		    	user.setEmail(User.getEmail());
-		    	//user.setActivated(User.isActivated());
-		    	//user.setRole(User.getRole());
-		          		           
-		          User u = userRepository.save(user);
-		         
-		  }
-	  }
+	@Override
+	public User updateUser(Integer id, User user) {
+	    Optional<User> userInfo = userRepository.findById(id);
+	    User u;
+	    
+	    if (userInfo.isPresent()) {
+	        User existingUser = userInfo.get();
+	        existingUser.setFirstname(user.getFirstname());
+	        existingUser.setLastname(user.getLastname());
+	        existingUser.setEmail(user.getEmail());
+	   
+	        u = userRepository.save(existingUser);
+	    } else {
+	        u = userRepository.save(user);
+	    }
+	    
+	    return u;
+	}
 
 }

@@ -3,38 +3,37 @@ package com.example.stock.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "bonEntreClient")
-public class BonSortieClient {
+@Builder
+@Table(name = "Mvtstock")
+
+public class MVTStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    private String code;
-    private Date dateCommande;
-
-    @ManyToOne
-    @JoinColumn(name = "idUser")
-    private  User user;
+    private Integer quantite;
+    private Instant dateMvt;
     
-    @Column(name = "etatcommande")
+    @Column(name = "typestock")
     @Enumerated(EnumType.STRING)
-    private EtatCommande etatCommande;
+    private TypeStock typestock;
 
     @Column(name = "idmagasin")
     private Integer idMagasin;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "bonSortieClient")
-    private List<LigneSortieClient> ligneSortieClientsClients;
+    @ManyToOne
+    @JoinColumn(name = "idarticle")
+    private Article article;
+
+
+    
 }

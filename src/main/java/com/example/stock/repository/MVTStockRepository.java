@@ -1,0 +1,21 @@
+package com.example.stock.repository;
+
+import com.example.stock.model.MVTStock;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+public interface MVTStockRepository extends JpaRepository<MVTStock, Integer> {
+
+	
+	
+
+	  @Query("select sum(m.quantite) from MVTStock m where m.article.id = :idArticle")
+	  BigDecimal stockReelArticle(@Param("idArticle") Integer idArticle);
+
+	  List<MVTStock> findAllByArticleId(Integer idArticle);
+}

@@ -5,12 +5,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -23,7 +27,8 @@ public class BonEntreFournisseur {
     private String code;
 
 
-    private Date dateCommande;
+    private Instant dateCommande;
+ 
 
     @Column(name = "etatcommande")
     @Enumerated(EnumType.STRING)
@@ -41,4 +46,9 @@ public class BonEntreFournisseur {
     @OneToMany(mappedBy = "ligneEntreeFournisseur")
     private List<LigneEntreeFournisseur> ligneEntreeFournisseurs;
 
+    
+    public boolean isBonFournisseurLivree() {
+        return EtatCommande.LIVREE.equals(this.etatCommande);
+      }
+    
 }

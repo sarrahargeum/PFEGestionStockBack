@@ -1,7 +1,7 @@
 package com.example.stock.validator;
 
 
-import com.example.stock.model.Stock;
+import com.example.stock.model.MVTStock;
 
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class StockValidator {
 
-  public static List<String> validate(Stock stock) {
+  public static List<String> validate(MVTStock stock) {
     List<String> errors = new ArrayList<>();
     if (stock == null) {
       errors.add("Veuillez renseigner la date du mouvenent");

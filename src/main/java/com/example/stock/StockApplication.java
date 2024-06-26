@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 @SpringBootApplication
 @EnableWebSecurity
-
+//@EnableSwagger2 
 public class StockApplication {
 
 	public static void main(String[] args) {

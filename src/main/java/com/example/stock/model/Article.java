@@ -38,7 +38,7 @@ public class Article {
 
 
     @OneToMany(mappedBy = "article")
-    private List<Stock>  stocks;
+    private List<MVTStock>  stocks;
 
     @OneToMany(mappedBy = "article")
     private List<LigneEntreeFournisseur> ligneEntreeFournisseur;

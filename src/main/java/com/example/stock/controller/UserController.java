@@ -6,6 +6,7 @@ import com.example.stock.model.User;
 import com.example.stock.service.UserService;
 import com.example.stock.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,9 +27,13 @@ public class UserController {
     UserRepository userRepository;
     
     @PutMapping("/updateUser/{id}")
-	  public void updateUser(@PathVariable("id") Integer id, @RequestBody User User) {           
-    	userServices.updateUser(id, User);
-	  }
+    
+    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
+        User updatedUser = userServices.updateUser(id, user);
+        return ResponseEntity.ok(updatedUser);
+        
+    }
+	  
 
 
     @GetMapping("/retrieve-user/{id}")

@@ -19,8 +19,7 @@ public interface UserService {
     
     void deleteUser(Integer id);
     
-//int searchUserBynomEtprenom(String firstname, String lastname);
 	
-	  public void updateUser(Integer id, User User) ;
+	 User updateUser(Integer id, User User) ;
 	  
 }
