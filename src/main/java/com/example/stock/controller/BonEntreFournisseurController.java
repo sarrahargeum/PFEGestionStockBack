@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,13 +24,7 @@ import com.example.stock.service.BonEntreFournisseurService;
 @RestController
 @RequestMapping("/api/BonEntreFournisseur")
 public class BonEntreFournisseurController {
-	
-	
-	
-	@Autowired
-	BonEntreFournisseurRepository bonEntreRepository;
-	
-	
+
 	
 	 @Autowired
 	    private BonEntreFournisseurService bonEntreFournisseurService;
@@ -67,4 +62,14 @@ public class BonEntreFournisseurController {
 	    return bonEntreFournisseurService.updateEtatCommande(id, etatCommande);
 	
 	    }
+	    
+	    
+	    @PutMapping("/quantite/{id}/{idligneEntreeFournisseur}/{quantite}")
+	    BonEntreFournisseur updateQuantiteCommande(@PathVariable("id") Integer id,
+	    		@PathVariable("idligneEntreeFournisseur") Integer idligneEntreeFournisseur, @PathVariable("quantite") Integer quantite)
+ {
+	      return bonEntreFournisseurService.updateQuantiteCommande(id, idligneEntreeFournisseur,quantite);
+	    }
+
+	   
 }

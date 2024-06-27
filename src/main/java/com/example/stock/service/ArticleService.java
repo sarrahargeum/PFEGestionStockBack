@@ -18,12 +18,11 @@ public interface ArticleService {
     Article findByCodeArticle(String codeArticle);
     
    
-   // public ResponseEntity<Article> updateArticle(Integer id,  Article Article);
    void update(Integer id, Article Article);
     Article deleteArticle(Integer id);
     
     public Article retrieveArticle (Integer id);
-	Article ajoutArticle(MultipartFile image);
+	
 
 	List<Article> findAll();
 

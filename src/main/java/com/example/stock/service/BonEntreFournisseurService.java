@@ -17,6 +17,7 @@ public interface BonEntreFournisseurService {
 	  List<BonEntreFournisseur> findAll();
 	  
 	  
-	  public BonEntreFournisseur updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
+	  BonEntreFournisseur updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
 
+	   BonEntreFournisseur updateQuantiteCommande(Integer idCommande, Integer idligneEntreeFournisseur, Integer quantite);
 }

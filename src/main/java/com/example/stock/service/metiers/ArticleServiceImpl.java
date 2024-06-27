@@ -94,45 +94,9 @@ public class ArticleServiceImpl  implements ArticleService {
     }
 
 
-  
-  /*  public ResponseEntity<Article> updateArticle(Integer id, Article Article) {
-	    System.out.println("Update Article with ID = " + id + "...");
-	    Optional<Article> ArticleInfo = articleRepository.findById(id);
-	    if (ArticleInfo.isPresent()) {
-	    	Article article = ArticleInfo.get();
-	           article.setCode(Article.getCode());
-	           article.setDesignation(Article.getDesignation());
-	           article.setPrix(Article.getPrix());
-	           article.setTauxTva(Article.getTauxTva());
-	           article.setCategory(Article.getCategory());
-	         
-	           Article art = articleRepository.save(article);
-	           
-	           if(art != null) {
-	           	return new ResponseEntity<>(art,HttpStatus.OK);
-	           }
-	           else {
-	           	return new ResponseEntity<>(art,HttpStatus.BAD_REQUEST);
-	           	}
 
-	    }
-		return null;
-    }*/
     
-	  public void updateCategorie(Integer id, Category Category) {
-		    System.out.println("Update Categorie with ID = " + id + "...");
-		 
-		    Optional<Category> categoryInfo = categoryRepository.findById(id);
-		 
-		    if (categoryInfo.isPresent()) {
-		    	Category categorie = categoryInfo.get();
-		    	categorie.setCode(Category.getCode());
-		          categorie.setDesignation(Category.getDesignation());
-		           
-		          Category cat = categoryRepository.save(categorie);
-		         
-		  }
-	  }
+	
     
     public void update(Integer id, Article Article) {
         Optional<Article> arti = articleRepository.findById(id);
@@ -156,11 +120,6 @@ public class ArticleServiceImpl  implements ArticleService {
         return null;
     }
 
-	@Override
-	public Article ajoutArticle(MultipartFile image) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 
