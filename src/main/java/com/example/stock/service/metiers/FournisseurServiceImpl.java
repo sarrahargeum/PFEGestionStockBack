@@ -23,7 +23,6 @@ public class FournisseurServiceImpl implements FournisseurService {
 	
 	@Override
 	public Fournisseur ajouterFournisseur(Fournisseur four ) {
-		// TODO Auto-generated method stub
 		 return fournisseurRepository.save(four);
 	}
 
@@ -51,14 +50,12 @@ public class FournisseurServiceImpl implements FournisseurService {
 
 	@Override
 	public Fournisseur deleteFournisseur(Integer id) {
-		// TODO Auto-generated method stub
 		fournisseurRepository.deleteById(id);
         return null;
 	}
 
 	@Override
 	public List<Fournisseur> findAll() {
-		// TODO Auto-generated method stub
         return fournisseurRepository.findAll().stream().collect(Collectors.toList());
 	}
 	

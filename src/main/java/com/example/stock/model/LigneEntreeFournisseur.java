@@ -24,11 +24,11 @@ public class LigneEntreeFournisseur {
     private Integer quantite;
     private Float prixUnitaire;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idarticle")
     private Article article;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idbonEntrefournisseur")
     private BonEntreFournisseur bonEntreFournisseur;
 
@@ -39,7 +39,7 @@ public class LigneEntreeFournisseur {
     private Integer idMagasin;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bon_entre_fournisseur_id")
     private BonEntreFournisseur ligneEntreeFournisseur;
 

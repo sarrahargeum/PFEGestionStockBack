@@ -22,9 +22,15 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "code")
     private String code;
 
+    @Column(name = "designation")
     private String designation;
+
+    @OneToMany( fetch = FetchType.LAZY)
+    private List<Article> articles;
+
 
     	
     

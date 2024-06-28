@@ -81,11 +81,11 @@ public class ArticleServiceImpl  implements ArticleService {
     }
 
     @Override
-    public List<Article> findAll() {
-        return articleRepository.findAll().stream().collect(Collectors.toList());
+    public List<Article> getAllArticle() {
+        return articleRepository.findAll();
     }
     
-   
+
       
 
     public Article retrieveArticle (Integer id){

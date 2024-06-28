@@ -16,7 +16,7 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
     @Query("SELECT a FROM Article a WHERE a.code = :code")
 
         Article findByCodeArticle(String code);
-    
+  //  List<Article> findAll();
     Optional<Article> findArticleByCode(String code);
 
 }

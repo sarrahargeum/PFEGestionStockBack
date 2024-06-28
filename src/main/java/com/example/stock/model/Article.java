@@ -27,27 +27,27 @@ public class Article {
  
     private String image;
 
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "categoryId")
     private Category category;
 
   
-    @ManyToOne
+  @ManyToOne
     @JoinColumn(name = "magasinId")
     private Magasin magasin;
 
 
-    @OneToMany(mappedBy = "article")
-    private List<MVTStock>  stocks;
-
-    @OneToMany(mappedBy = "article")
-    private List<LigneEntreeFournisseur> ligneEntreeFournisseur;
-
-    @OneToMany(mappedBy = "article")
-    private List<LigneSortieClient> ligneSortieClients;
-
-    @OneToMany(mappedBy = "article")
-    private List<LigneEntreeFournisseur> ligneEntreeFournisseurs;
+//    @OneToMany(mappedBy = "article")
+//    private List<MVTStock>  stocks;
+//
+//    @OneToMany(mappedBy = "article")
+//    private List<LigneEntreeFournisseur> ligneEntreeFournisseur;
+//
+//    @OneToMany(mappedBy = "article")
+//    private List<LigneSortieClient> ligneSortieClients;
+//
+//    @OneToMany(mappedBy = "article")
+//    private List<LigneEntreeFournisseur> ligneEntreeFournisseurs;
 
 	
 

@@ -24,7 +24,7 @@ public interface ArticleService {
     public Article retrieveArticle (Integer id);
 	
 
-	List<Article> findAll();
+	List<Article> getAllArticle();
 
     
  

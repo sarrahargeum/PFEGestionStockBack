@@ -70,7 +70,7 @@ public class ArticleController {
         Magasin magasin = magasinRepository.findById(magasinId)
                 .orElseThrow(() -> new RuntimeException("magasin not found"));
 
-        arti.setMagasin(magasin);
+       arti.setMagasin(magasin);
         
         
     	boolean isExit = new File(context.getRealPath("/Images/")).exists();
@@ -124,11 +124,11 @@ public class ArticleController {
     
     
     
-    @GetMapping("/all")
-    @ResponseBody
-    public List<Article> findAll() {
-        return articleService.findAll();
+    @GetMapping("/allArticle")
+    public List<Article> getAllArticle() {
+        return articleService.getAllArticle();
     }
+    
     
 
     @PutMapping("/update/{id}")
