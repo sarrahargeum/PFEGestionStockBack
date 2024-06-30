@@ -27,7 +27,7 @@ public class BonEntreFournisseurController {
 
 	
 	 @Autowired
-	    private BonEntreFournisseurService bonEntreFournisseurService;
+	     BonEntreFournisseurService bonEntreFournisseurService;
 
 	    @PostMapping("/saveBF")
 	    public ResponseEntity<BonEntreFournisseur> saveBonEntreFournisseur(@RequestBody BonEntreFournisseur bonEntreFournisseur) {

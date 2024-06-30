@@ -35,6 +35,6 @@ public class BonSortieClient {
     private Integer idMagasin;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "bonSortieClient")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bonSortieClient")
     private List<LigneSortieClient> ligneSortieClientsClients;
 }

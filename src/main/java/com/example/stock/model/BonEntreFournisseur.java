@@ -43,7 +43,7 @@ public class BonEntreFournisseur {
     private Fournisseur fournisseur;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ligneEntreeFournisseur")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy =  "ligneEntreeFournisseur")
     private List<LigneEntreeFournisseur> ligneEntreeFournisseurs;
 
     

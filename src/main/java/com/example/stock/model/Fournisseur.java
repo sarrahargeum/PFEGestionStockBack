@@ -32,7 +32,7 @@ public class Fournisseur {
     private Magasin magasin;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "fournisseur")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "fournisseur")
     private List<BonEntreFournisseur> bonEntreFournisseurs;
 
 }

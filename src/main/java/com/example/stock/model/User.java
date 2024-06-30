@@ -55,7 +55,7 @@ public class User implements UserDetails {
     private Magasin magasin;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
    private List<BonSortieClient> bonSortieClients;
 
     public User(User user) {

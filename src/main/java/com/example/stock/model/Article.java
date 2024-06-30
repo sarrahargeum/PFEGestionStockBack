@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 
-import jakarta.persistence.CascadeType;
-
 import java.util.List;
 
 @Data
@@ -34,20 +32,19 @@ public class Article {
   
   @ManyToOne
     @JoinColumn(name = "magasinId")
-    private Magasin magasin;
+   private Magasin magasin;
 
 
-//    @OneToMany(mappedBy = "article")
-//    private List<MVTStock>  stocks;
-//
-//    @OneToMany(mappedBy = "article")
-//    private List<LigneEntreeFournisseur> ligneEntreeFournisseur;
-//
-//    @OneToMany(mappedBy = "article")
-//    private List<LigneSortieClient> ligneSortieClients;
-//
-//    @OneToMany(mappedBy = "article")
-//    private List<LigneEntreeFournisseur> ligneEntreeFournisseurs;
+    @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
+    private List<MVTStock>  stocks;
+
+   @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
+    private List<LigneEntreeFournisseur> ligneEntreeFournisseur;
+   
+    @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
+    private List<LigneSortieClient> ligneSortieClients;
+
+
 
 	
 
