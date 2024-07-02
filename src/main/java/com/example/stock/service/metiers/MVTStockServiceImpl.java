@@ -34,10 +34,10 @@ public class MVTStockServiceImpl implements MVTStockService {
 	ArticleService articleService;
 	
 	@Override
-	public BigDecimal stockReelArticle(Integer idArticle) {
+	public Integer stockReelArticle(Integer idArticle) {
 		   if (idArticle == null) {
 			      log.error("ID article is NULL");
-			      return BigDecimal.valueOf(-1);
+			      return -1;
 			    }
 			    articleService.findById(idArticle);
 			    return mvtrepository.stockReelArticle(idArticle);
@@ -71,6 +71,26 @@ public class MVTStockServiceImpl implements MVTStockService {
 		        mvtrepository.save(mvt);
 		  }
 	  
+	  private MVTStock sortieNegative(MVTStock mvt, TypeStock typeMvtStk) {
+		    List<String> errors = StockValidator.validate(mvt);
+		    if (!errors.isEmpty()) {
+		      log.error("Article is not valid {}", mvt);
+		      throw new InvalidEntityException("Le mouvement du stock n'est pas valide", errors);
+		    }
+		    mvt.setQuantite(
 
+		            mvt.getQuantite() * -1
+		        
+		    );
+		    mvt.setTypestock(typeMvtStk);
+		    return 
+		        mvtrepository.save(mvt);
+		    
+		  }
+
+	  @Override
+	  public MVTStock sortieStock(MVTStock dto) {
+	    return sortieNegative(dto, TypeStock.SORTIE);
+	  }
 	  
 }

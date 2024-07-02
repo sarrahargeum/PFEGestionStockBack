@@ -35,4 +35,6 @@ public class LigneSortie {
     @ManyToOne
     @JoinColumn(name = "bon_sortie_id")
     private BonSortie bonSortie;
+    
+    
 }

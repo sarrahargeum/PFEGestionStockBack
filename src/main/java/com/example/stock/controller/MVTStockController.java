@@ -26,7 +26,7 @@ public class MVTStockController {
 	
 	  @GetMapping("/stockreel/{idArticle}")
 	  
-	  BigDecimal stockReelArticle(@PathVariable("idArticle") Integer idArticle){
+	  Integer stockReelArticle(@PathVariable("idArticle") Integer idArticle){
 	 return mvtsService.stockReelArticle(idArticle);
 	 
 	}

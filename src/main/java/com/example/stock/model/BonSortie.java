@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class BonSortie {
     private Integer id;
 
     private String code;
-    private Date dateCommande;
+    private Instant dateCommande;
 
     @ManyToOne
     @JoinColumn(name = "idclient")
@@ -34,5 +36,12 @@ public class BonSortie {
     
     @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL)
     private List<LigneSortie> ligneSorties;
+    
+    public boolean isBonSortieLivree() {
+        return EtatCommande.LIVREE.equals(this.etatCommande);
+      }
+    
+    
+  
 
 }
