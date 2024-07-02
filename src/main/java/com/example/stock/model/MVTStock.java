@@ -2,13 +2,10 @@ package com.example.stock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.Instant;
-import java.util.Date;
+
 
 @Data
 @Entity
@@ -16,6 +13,7 @@ import java.util.Date;
 @Table(name = "Mvtstock")
 
 public class MVTStock {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

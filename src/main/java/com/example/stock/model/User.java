@@ -5,12 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 import javax.validation.constraints.NotNull;
 
@@ -31,7 +28,6 @@ public class User implements UserDetails {
     
     @NotNull
     @Column(nullable = true)
-   // private String activated = "activer";
     private boolean activated ;
 
     
@@ -46,7 +42,7 @@ public class User implements UserDetails {
  
     
     @ManyToOne
-    @JoinColumn(name = "role_id") // Name of the foreign key column in the users table
+    @JoinColumn(name = "role_id") 
     private Roles role;
 
 
@@ -54,9 +50,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "idmagasin")
     private Magasin magasin;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
-   private List<BonSortieClient> bonSortieClients;
+
 
     public User(User user) {
     }

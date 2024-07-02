@@ -1,11 +1,8 @@
 package com.example.stock.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-
 import java.util.List;
 
 @Data
@@ -39,15 +36,10 @@ public class Article {
     private List<MVTStock>  stocks;
 
    @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
-    private List<LigneEntreeFournisseur> ligneEntreeFournisseur;
+    private List<LigneEntree> ligneEntrees;
    
     @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
-    private List<LigneSortieClient> ligneSortieClients;
-
-
-
-	
-
+    private List<LigneSortie> ligneSorties;
 
 
 

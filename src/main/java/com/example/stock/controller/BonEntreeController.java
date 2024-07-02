@@ -15,60 +15,60 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.stock.model.BonEntreFournisseur;
+import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
-import com.example.stock.repository.BonEntreFournisseurRepository;
-import com.example.stock.service.BonEntreFournisseurService;
+import com.example.stock.repository.BonEntreeRepository;
+import com.example.stock.service.BonEntreeService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/BonEntreFournisseur")
-public class BonEntreFournisseurController {
+@RequestMapping("/api/BonEntree")
+public class BonEntreeController {
 
 	
 	 @Autowired
-	     BonEntreFournisseurService bonEntreFournisseurService;
+	     BonEntreeService bonEntreeService;
 
 	    @PostMapping("/saveBF")
-	    public ResponseEntity<BonEntreFournisseur> saveBonEntreFournisseur(@RequestBody BonEntreFournisseur bonEntreFournisseur) {
-	        BonEntreFournisseur savedBonEntreFournisseur = bonEntreFournisseurService.save(bonEntreFournisseur);
+	    public ResponseEntity<BonEntree> saveBonEntreFournisseur(@RequestBody BonEntree bonEntreFournisseur) {
+	        BonEntree savedBonEntreFournisseur = bonEntreeService.save(bonEntreFournisseur);
 	        return ResponseEntity.ok(savedBonEntreFournisseur);
 	    }
 	    
 	    @GetMapping("/retreive-code/{code}")
-	    public BonEntreFournisseur findByCode(@PathVariable("code") String code){
-	      return bonEntreFournisseurService.findByCode(code);
+	    public BonEntree findByCode(@PathVariable("code") String code){
+	      return bonEntreeService.findByCode(code);
 	    }
 	    
 	    @GetMapping( "/allBF")
-	    public List<BonEntreFournisseur> findAll() {
-	      return bonEntreFournisseurService.findAll();
+	    public List<BonEntree> findAll() {
+	      return bonEntreeService.findAll();
 	    }
 	    
 	    @GetMapping("/retreive/{idbonEntrefournisseur}")
-	    BonEntreFournisseur findById(@PathVariable("idbonEntrefournisseur") Integer id) {
-	    return bonEntreFournisseurService.findById(id);
+	    BonEntree findById(@PathVariable("idbonEntrefournisseur") Integer id) {
+	    return bonEntreeService.findById(id);
 	    }
 	    
 	    
 	    @DeleteMapping("/delete/{id}")
 	    void delete(@PathVariable("id") Integer id){
-	    	bonEntreFournisseurService.delete(id);
+	    	bonEntreeService.delete(id);
 	    }
 	    
 	    
 	    @PutMapping("/update/etat/{id}/{etatCommande}")
-	    BonEntreFournisseur updateEtatCommande(@PathVariable("id") Integer id, @PathVariable("etatCommande") EtatCommande etatCommande) {
-	    return bonEntreFournisseurService.updateEtatCommande(id, etatCommande);
+	    BonEntree updateEtatCommande(@PathVariable("id") Integer id, @PathVariable("etatCommande") EtatCommande etatCommande) {
+	    return bonEntreeService.updateEtatCommande(id, etatCommande);
 	
 	    }
 	    
 	    
 	    @PutMapping("/quantite/{id}/{idligneEntreeFournisseur}/{quantite}")
-	    BonEntreFournisseur updateQuantiteCommande(@PathVariable("id") Integer id,
+	    BonEntree updateQuantiteCommande(@PathVariable("id") Integer id,
 	    		@PathVariable("idligneEntreeFournisseur") Integer idligneEntreeFournisseur, @PathVariable("quantite") Integer quantite)
  {
-	      return bonEntreFournisseurService.updateQuantiteCommande(id, idligneEntreeFournisseur,quantite);
+	      return bonEntreeService.updateQuantiteCommande(id, idligneEntreeFournisseur,quantite);
 	    }
 
 	   

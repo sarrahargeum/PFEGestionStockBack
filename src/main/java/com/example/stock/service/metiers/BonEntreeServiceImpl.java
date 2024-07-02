@@ -10,34 +10,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.exception.EntityNotFoundException;
-import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
 import com.example.stock.model.Article;
-import com.example.stock.model.BonEntreFournisseur;
+import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.model.Fournisseur;
-import com.example.stock.model.LigneEntreeFournisseur;
+import com.example.stock.model.LigneEntree;
 import com.example.stock.model.MVTStock;
 import com.example.stock.model.TypeStock;
 import com.example.stock.repository.ArticleRepository;
-import com.example.stock.repository.BonEntreFournisseurRepository;
+import com.example.stock.repository.BonEntreeRepository;
 import com.example.stock.repository.FournisseurRepository;
-import com.example.stock.repository.LigneEntreeFournisseurRepository;
-import com.example.stock.service.BonEntreFournisseurService;
+import com.example.stock.repository.LigneEntreeRepository;
+import com.example.stock.service.BonEntreeService;
 import com.example.stock.service.MVTStockService;
 import com.example.stock.validator.BonEntreeFournisseurValidator;
 
-import ch.qos.logback.core.spi.ErrorCodes;
-import io.micrometer.common.util.StringUtils;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class BonEntreFournisseurServiceImpl implements BonEntreFournisseurService{
+public class BonEntreeServiceImpl implements BonEntreeService{
 	
 	
 	@Autowired
-	BonEntreFournisseurRepository bonEntreFournisseurRepository;
+	BonEntreeRepository bonEntreeRepository;
 
 	@Autowired
 	FournisseurRepository fournisseurRepository;
@@ -46,14 +44,14 @@ public class BonEntreFournisseurServiceImpl implements BonEntreFournisseurServic
 	ArticleRepository articleRepository;
 
 	@Autowired
-	LigneEntreeFournisseurRepository ligneEntreeFournisseurRepository;
+	LigneEntreeRepository ligneEntreeFournisseurRepository;
 	
 	@Autowired
 	MVTStockService mvtStockService;
 
 
 	@Override
-	public BonEntreFournisseur save(BonEntreFournisseur bonentreFourni) {
+	public BonEntree save(BonEntree bonentreFourni) {
 
 	    List<String> errors = BonEntreeFournisseurValidator.validate(bonentreFourni);
 
@@ -71,8 +69,8 @@ public class BonEntreFournisseurServiceImpl implements BonEntreFournisseurServic
 	  
 
 	    List<String> articleErrors = new ArrayList<>();
-	    if (bonentreFourni.getLigneEntreeFournisseurs() != null) {
-	        bonentreFourni.getLigneEntreeFournisseurs().forEach(ligCmdFrs -> {
+	    if (bonentreFourni.getLigneEntrees() != null) {
+	        bonentreFourni.getLigneEntrees().forEach(ligCmdFrs -> {
 	            if (ligCmdFrs.getArticle() != null) {
 	                Optional<Article> article = articleRepository.findById(ligCmdFrs.getArticle().getId());
 	                if (article.isEmpty()) {
@@ -86,17 +84,17 @@ public class BonEntreFournisseurServiceImpl implements BonEntreFournisseurServic
 
 	   
 	    bonentreFourni.setDateCommande(Instant.now());
-	    BonEntreFournisseur savedCmdFrs = bonEntreFournisseurRepository.save(bonentreFourni);
+	    BonEntree savedCmdFrs = bonEntreeRepository.save(bonentreFourni);
 
-	    if (bonentreFourni.getLigneEntreeFournisseurs() != null) {
-	        bonentreFourni.getLigneEntreeFournisseurs().forEach(ligCmdFrs -> {
-	            LigneEntreeFournisseur ligneEntreeFournisseur = new LigneEntreeFournisseur();
-	            ligneEntreeFournisseur.setBonEntreFournisseur(savedCmdFrs);
-	            ligneEntreeFournisseur.setArticle(ligCmdFrs.getArticle());
-	            ligneEntreeFournisseur.setQuantite(ligCmdFrs.getQuantite());
-	            ligneEntreeFournisseur.setIdMagasin(savedCmdFrs.getIdMagasin());
+	    if (bonentreFourni.getLigneEntrees() != null) {
+	        bonentreFourni.getLigneEntrees().forEach(ligCmdFrs -> {
+	            LigneEntree ligneEntree = new LigneEntree();
+	            ligneEntree.setBonEntree(savedCmdFrs);
+	            ligneEntree.setArticle(ligCmdFrs.getArticle());
+	            ligneEntree.setQuantite(ligCmdFrs.getQuantite());
+	            ligneEntree.setIdMagasin(savedCmdFrs.getIdMagasin());
 
-	            LigneEntreeFournisseur savedLigne = ligneEntreeFournisseurRepository.save(ligneEntreeFournisseur);
+	            LigneEntree savedLigne = ligneEntreeFournisseurRepository.save(ligneEntree);
 
 	            effectuerEntree(savedLigne);
 	        });
@@ -105,7 +103,7 @@ public class BonEntreFournisseurServiceImpl implements BonEntreFournisseurServic
 	    return savedCmdFrs;
 	}
 
-private void effectuerEntree(LigneEntreeFournisseur lig) {
+private void effectuerEntree(LigneEntree lig) {
     MVTStock mvtStkDto = MVTStock.builder()
         .article(lig.getArticle())
         .dateMvt(Instant.now())
@@ -119,20 +117,20 @@ private void effectuerEntree(LigneEntreeFournisseur lig) {
 	  
 
 		@Override
-		public BonEntreFournisseur findById(Integer id) {
+		public BonEntree findById(Integer id) {
 			 if (id == null) {
 			      log.error("Commande fournisseur ID is NULL");
 			      return null;
 			    }
-			    return bonEntreFournisseurRepository.findById(id)
+			    return bonEntreeRepository.findById(id)
 			        .orElseThrow(() -> new EntityNotFoundException(
 			            "Aucune commande fournisseur n'a ete trouve avec l'ID " + id ));
 		}
 
 		
 		@Override
-		public BonEntreFournisseur findByCode(String code) {
-		    return bonEntreFournisseurRepository.findBonEntreFournisseurByCode(code)
+		public BonEntree findByCode(String code) {
+		    return bonEntreeRepository.findBonEntreeByCode(code)
 		        .orElseThrow(() -> new EntityNotFoundException(
 		            "Aucune commande fournisseur n'a ete trouve avec le CODE " + code));
 		}
@@ -145,31 +143,31 @@ private void effectuerEntree(LigneEntreeFournisseur lig) {
 				      log.error("Commande fournisseur ID is NULL");
 				      return;
 				    }
-				    List<LigneEntreeFournisseur> ligneEntreeFournisseurs = ligneEntreeFournisseurRepository.findAllByBonEntreFournisseurId(id);
-				    if (!ligneEntreeFournisseurs.isEmpty()) {
+				    List<LigneEntree> ligneEntrees = ligneEntreeFournisseurRepository.findAllByBonEntreeId(id);
+				    if (!ligneEntrees.isEmpty()) {
 				      throw new InvalidOperationException("Impossible de supprimer une commande fournisseur deja utilise");
 				    }
-				    bonEntreFournisseurRepository.deleteById(id);
+				    bonEntreeRepository.deleteById(id);
 				  
 			
 		}
 		
 
 		@Override
-		public List<BonEntreFournisseur> findAll() {
-			  return bonEntreFournisseurRepository.findAll().stream()
+		public List<BonEntree> findAll() {
+			  return bonEntreeRepository.findAll().stream()
 				        .collect(Collectors.toList());
 		}
 	
 
 		@Override
-		public BonEntreFournisseur updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
+		public BonEntree updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
 			checkIdCommande(idCommande);
 			checkEtatCommande(idCommande);		 
-		    BonEntreFournisseur commandeFournisseur = checkEtatCommande(idCommande);
+		    BonEntree commandeFournisseur = checkEtatCommande(idCommande);
 		    commandeFournisseur.setEtatCommande(etatCommande);
 
-		    BonEntreFournisseur savedCommande = bonEntreFournisseurRepository.save(commandeFournisseur);
+		    BonEntree savedCommande = bonEntreeRepository.save(commandeFournisseur);
 
 		    if (commandeFournisseur.isBonFournisseurLivree()) {
 		        updateMvtStk(idCommande);
@@ -178,8 +176,8 @@ private void effectuerEntree(LigneEntreeFournisseur lig) {
 		    return savedCommande;
 		}
 
-		private BonEntreFournisseur checkEtatCommande(Integer idCommande) {
-		    return bonEntreFournisseurRepository.findById(idCommande)
+		private BonEntree checkEtatCommande(Integer idCommande) {
+		    return bonEntreeRepository.findById(idCommande)
 		        .orElseThrow(() -> new EntityNotFoundException(
 		            "Aucune commande fournisseur n'a ete trouve avec l'ID " + idCommande));
 		}
@@ -192,7 +190,7 @@ private void effectuerEntree(LigneEntreeFournisseur lig) {
 			  }
 
 		private void updateMvtStk(Integer idCommande) {
-		    List<LigneEntreeFournisseur> ligneEntreeFournisseurs = ligneEntreeFournisseurRepository.findAllByBonEntreFournisseurId(idCommande);
+		    List<LigneEntree> ligneEntreeFournisseurs = ligneEntreeFournisseurRepository.findAllByBonEntreeId(idCommande);
 		    ligneEntreeFournisseurs.forEach(lig -> {
 		        MVTStock mvtStk = MVTStock.builder()
 		            .article(lig.getArticle())
@@ -213,7 +211,7 @@ private void effectuerEntree(LigneEntreeFournisseur lig) {
 			  }
 		  
 		  @Override
-		  public BonEntreFournisseur updateQuantiteCommande(Integer idCommande, Integer idligneEntreeFournisseur, Integer quantite) {
+		  public BonEntree updateQuantiteCommande(Integer idCommande, Integer idligneEntreeFournisseur, Integer quantite) {
 		    checkIdCommande(idCommande);
 		    checkIdLigneCommande(idligneEntreeFournisseur);
 
@@ -222,18 +220,18 @@ private void effectuerEntree(LigneEntreeFournisseur lig) {
 		      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec une quantite null ou ZERO");
 		    }
 
-		    BonEntreFournisseur commandeFournisseur = checkEtatCommande(idCommande);
-		    Optional<LigneEntreeFournisseur> ligneFournisseurOptional = findLigneCommandeFournisseur(idligneEntreeFournisseur);
+		    BonEntree commandeFournisseur = checkEtatCommande(idCommande);
+		    Optional<LigneEntree> ligneFournisseurOptional = findLigneCommandeFournisseur(idligneEntreeFournisseur);
 
-		    LigneEntreeFournisseur ligneFounisseur = ligneFournisseurOptional.get();
+		    LigneEntree ligneFounisseur = ligneFournisseurOptional.get();
 		    ligneFounisseur.setQuantite(quantite);
 		    ligneEntreeFournisseurRepository.save(ligneFounisseur);
 
 		    return commandeFournisseur;
 		  }		 
 
-		  private Optional<LigneEntreeFournisseur> findLigneCommandeFournisseur(Integer idligneEntreeFournisseur) {
-			    Optional<LigneEntreeFournisseur> ligneCommandeFournisseurOptional = ligneEntreeFournisseurRepository.findById(idligneEntreeFournisseur);
+		  private Optional<LigneEntree> findLigneCommandeFournisseur(Integer idligneEntreeFournisseur) {
+			    Optional<LigneEntree> ligneCommandeFournisseurOptional = ligneEntreeFournisseurRepository.findById(idligneEntreeFournisseur);
 			    if (ligneCommandeFournisseurOptional.isEmpty()) {
 			      throw new EntityNotFoundException(
 			          "Aucune ligne commande fournisseur n'a ete trouve avec l'ID " + idligneEntreeFournisseur);
