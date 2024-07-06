@@ -27,7 +27,6 @@ public class MVTStock {
     @Column(name = "idmagasin")
     private Integer idMagasin;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;

@@ -32,7 +32,7 @@ public class Article {
    private Magasin magasin;
 
 
-    @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
+ @OneToMany( mappedBy = "article")
     private List<MVTStock>  stocks;
 
    @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")

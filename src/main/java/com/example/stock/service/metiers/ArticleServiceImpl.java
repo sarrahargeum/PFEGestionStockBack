@@ -1,5 +1,6 @@
 package com.example.stock.service.metiers;
 
+import com.example.stock.dto.ArticleDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
@@ -54,43 +55,53 @@ public class ArticleServiceImpl  implements ArticleService {
     private static  Log log = LogFactory.getLog(ArticleServiceImpl.class);
 
 
-
-	
-
     @Override
-    public Article findById(Integer id) {
+    public ArticleDto findById(Integer id) {
         if (id == null) {
             log.error("Article ID is null");
             return null;
         }
-        return articleRepository.findById(id)
-                .orElseThrow(()->
-                        new EntityNotFoundException(
-                                "Aucun article avec l'ID = " + id + " n'ete trouve dans la BDD")
-                );
+        return articleRepository.findById(id).map(ArticleDto::fromEntity).orElseThrow(() ->
+        new EntityNotFoundException(
+            "Aucun article avec l'ID = " + id + " n' ete trouve dans la BDD")
+    );
     }
 
-    @Override
-    public Article findByCodeArticle(String code) {
+   /* @Override
+    public ArticleDto findByCodeArticle(String code) {
         if (!StringUtils.hasLength(code)) {
             log.error("Article CODE is null");
             return null;
         }
+        return articleRepository.findByCodeArticle(code).map(ArticleDto::fromEntity)
+                .orElseThrow(() ->
+                    new EntityNotFoundException(
+                        "Aucun article avec le CODE = " + codeArticle + " n' ete trouve dans la BDD",
+                        ErrorCodes.ARTICLE_NOT_FOUND)
+                );
 
-        return articleRepository.findByCodeArticle(code);
-    }
+    }*/
 
     @Override
-    public List<Article> getAllArticle() {
-        return articleRepository.findAll();
+    public List<ArticleDto> getAllArticle() {
+    	 return articleRepository.findAll().stream()
+    		        .map(ArticleDto::fromEntity)
+    		        .collect(Collectors.toList());
     }
+    
+   
     
 
       
 
-    public Article retrieveArticle (Integer id){
-        Article art = articleRepository.findById(id).get();
-        return  art;
+    public ArticleDto retrieveArticle (Integer id){ if (id == null) {
+        log.error("Article ID is null");
+        return null;
+    }
+    return articleRepository.findById(id).map(ArticleDto::fromEntity).orElseThrow(() ->
+    new EntityNotFoundException(
+        "Aucun article avec l'ID = " + id + " n' ete trouve dans la BDD")
+);
     }
 
 
@@ -98,7 +109,7 @@ public class ArticleServiceImpl  implements ArticleService {
     
 	
     
-    public void update(Integer id, Article Article) {
+    public void update(Integer id, ArticleDto Article) {
         Optional<Article> arti = articleRepository.findById(id);
         if (arti.isPresent()) {
         	Article article = arti.get();
@@ -108,14 +119,14 @@ public class ArticleServiceImpl  implements ArticleService {
 	        article.setTauxTva(Article.getTauxTva());
 	       // article.setCategory(Article.getCategory());
 	       
-           Article art = articleRepository.save(article);
+	        Article art = articleRepository.save(article);
         }
 		
     }
     
     
 
-    public Article deleteArticle(Integer id) {
+    public ArticleDto deleteArticle(Integer id) {
         articleRepository.deleteById(id);
         return null;
     }

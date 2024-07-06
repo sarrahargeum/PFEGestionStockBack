@@ -1,5 +1,6 @@
 package com.example.stock.controller;
 
+import com.example.stock.dto.ArticleDto;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
 import com.example.stock.model.Magasin;
@@ -50,7 +51,7 @@ public class ArticleController {
     
     
     @PostMapping("/add")
-    public ResponseEntity<Article> ajoutArticle(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<ArticleDto> ajoutArticle(@RequestParam("file") MultipartFile file,
     		@RequestParam("article")String article,
     		@RequestParam("categoryId") Integer categoryId,
     		@RequestParam("magasinId") Integer magasinId
@@ -93,53 +94,54 @@ public class ArticleController {
     
     arti.setImage(newFileName);    
     Article art = articleRepository.save(arti);
+	return null;
     
-    if(art != null) {
+   /* if(art != null) {
     	return new ResponseEntity<>(art,HttpStatus.OK);
     }
     else {
     	return new ResponseEntity<>(art,HttpStatus.BAD_REQUEST);
 
-    }
+    }*/
     }
 
     @GetMapping("/{idArticle}")
-    public Article findById(@PathVariable("idArticle") Integer id) {
+    public ArticleDto findById(@PathVariable("idArticle") Integer id) {
         return articleService.findById(id);
     }
 
 
-    @GetMapping("/filter/{code}")
-    public Article findByCodeArticle(@PathVariable String code) {
+   /* @GetMapping("/filter/{code}")
+    public ArticleDto findByCodeArticle(@PathVariable String code) {
         return articleService.findByCodeArticle(code);
-    }
+    }*/
 
 
     
     @GetMapping(path="/Imgarticles/{id}")
 	 public byte[] getPhoto(@PathVariable("id") Integer id) throws Exception{
-		 Article Article   = articleRepository.findById(id).get();
+    	Article Article   = articleRepository.findById(id).get();
 		 return Files.readAllBytes(Paths.get(context.getRealPath("/Images/")+Article.getImage()));
 	 }
     
     
     
     @GetMapping("/allArticle")
-    public List<Article> getAllArticle() {
+    public List<ArticleDto> getAllArticle() {
         return articleService.getAllArticle();
     }
     
     
 
     @PutMapping("/update/{id}")
-    public void update(@PathVariable Integer id, @RequestBody Article article) {
+    public void update(@PathVariable Integer id, @RequestBody ArticleDto article) {
         articleService.update(id, article);
     }
     
   
 
     @GetMapping("/retrieve-article/{id}")
-    public Article retrieveArticle(@PathVariable("id") Integer id) {
+    public ArticleDto retrieveArticle(@PathVariable("id") Integer id) {
         return articleService.retrieveArticle(id);
     }
     
