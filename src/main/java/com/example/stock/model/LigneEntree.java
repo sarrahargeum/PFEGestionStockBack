@@ -21,17 +21,17 @@ public class LigneEntree {
     private Integer id;
     private Integer quantite;
     private Float prixUnitaire;
+    
+    @Enumerated(EnumType.STRING)
+    private EtatCommande etatCommande;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "idbonEntree")
     private BonEntree bonEntree;
-
-    @Enumerated(EnumType.STRING)
-    private EtatCommande etatCommande;
 
     @Column(name = "idmagasin")
     private Integer idMagasin;

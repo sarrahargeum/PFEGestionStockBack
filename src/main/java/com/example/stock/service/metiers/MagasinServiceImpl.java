@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Category;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.model.Magasin;
@@ -26,11 +28,10 @@ public class MagasinServiceImpl implements MagasinService {
 	
 	@Override
 	public Magasin ajouterMagasin(Magasin mg) {
-		// TODO Auto-generated method stub
-		return magasinRepository.save(mg);
-	}
-
+			return	magasinRepository.save(mg);
+    }
 	
+		
 	public void updateMagasin(Integer id, Magasin magasin) {
 	   
 		Optional<Magasin> mgInfo = magasinRepository.findById(id);
@@ -38,8 +39,10 @@ public class MagasinServiceImpl implements MagasinService {
 	    if (mgInfo.isPresent()) {
 	        Magasin mg = mgInfo.get();
 	        mg.setDescription(magasin.getDescription()); 
+	        mg.setNom(magasin.getNom()); 
 	        mg.setEmail(magasin.getEmail());
 	        mg.setNumTel(magasin.getNumTel());
+	        mg.setSiteWeb(magasin.getSiteWeb());
 
 	        magasinRepository.save(mg); 
 	    } 
@@ -47,21 +50,26 @@ public class MagasinServiceImpl implements MagasinService {
 	  }
 	
 	   public Magasin retrieveMagasin (Integer magasinId){
-		   Magasin mg = magasinRepository.findById(magasinId).get();
-	        return  mg;
+		   if (magasinRepository == null) {
+	            log.error("Magasin ID is null");
+	            return null;
+	        }
+	        return magasinRepository.findById(magasinId).orElseThrow(() ->
+	        new EntityNotFoundException(
+	            "Aucun MAgasin avec l'ID = " + magasinId + " n' ete trouve dans la BDD")
+	    );
 	    }
 
 	@Override
 	public Magasin deleteMagasin(Integer id) {
-		// TODO Auto-generated method stub
 		 magasinRepository.deleteById(id);
 	        return null;	}
 
 	@Override
 	public List<Magasin> findAll() {
-		// TODO Auto-generated method stub
-        return magasinRepository.findAll().stream().collect(Collectors.toList());
-	}
+		return magasinRepository.findAll().stream()
+		        .collect(Collectors.toList());
+    	    }	
 
 	
  

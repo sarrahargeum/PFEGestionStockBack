@@ -1,6 +1,5 @@
 package com.example.stock.controller;
 
-import com.example.stock.dto.ArticleDto;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
 import com.example.stock.model.Magasin;
@@ -51,7 +50,7 @@ public class ArticleController {
     
     
     @PostMapping("/add")
-    public ResponseEntity<ArticleDto> ajoutArticle(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<Article> ajoutArticle(@RequestParam("file") MultipartFile file,
     		@RequestParam("article")String article,
     		@RequestParam("categoryId") Integer categoryId,
     		@RequestParam("magasinId") Integer magasinId
@@ -106,7 +105,7 @@ public class ArticleController {
     }
 
     @GetMapping("/{idArticle}")
-    public ArticleDto findById(@PathVariable("idArticle") Integer id) {
+    public Article findById(@PathVariable("idArticle") Integer id) {
         return articleService.findById(id);
     }
 
@@ -127,21 +126,21 @@ public class ArticleController {
     
     
     @GetMapping("/allArticle")
-    public List<ArticleDto> getAllArticle() {
+    public List<Article> getAllArticle() {
         return articleService.getAllArticle();
     }
     
     
 
     @PutMapping("/update/{id}")
-    public void update(@PathVariable Integer id, @RequestBody ArticleDto article) {
+    public void update(@PathVariable Integer id, @RequestBody Article article) {
         articleService.update(id, article);
     }
     
   
 
     @GetMapping("/retrieve-article/{id}")
-    public ArticleDto retrieveArticle(@PathVariable("id") Integer id) {
+    public Article retrieveArticle(@PathVariable("id") Integer id) {
         return articleService.retrieveArticle(id);
     }
     

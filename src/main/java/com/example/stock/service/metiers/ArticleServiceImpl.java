@@ -1,6 +1,5 @@
 package com.example.stock.service.metiers;
 
-import com.example.stock.dto.ArticleDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
@@ -56,12 +55,12 @@ public class ArticleServiceImpl  implements ArticleService {
 
 
     @Override
-    public ArticleDto findById(Integer id) {
+    public Article findById(Integer id) {
         if (id == null) {
             log.error("Article ID is null");
             return null;
         }
-        return articleRepository.findById(id).map(ArticleDto::fromEntity).orElseThrow(() ->
+        return articleRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException(
             "Aucun article avec l'ID = " + id + " n' ete trouve dans la BDD")
     );
@@ -83,9 +82,8 @@ public class ArticleServiceImpl  implements ArticleService {
     }*/
 
     @Override
-    public List<ArticleDto> getAllArticle() {
+    public List<Article> getAllArticle() {
     	 return articleRepository.findAll().stream()
-    		        .map(ArticleDto::fromEntity)
     		        .collect(Collectors.toList());
     }
     
@@ -94,11 +92,12 @@ public class ArticleServiceImpl  implements ArticleService {
 
       
 
-    public ArticleDto retrieveArticle (Integer id){ if (id == null) {
+    public Article retrieveArticle (Integer id){ 
+    	if (id == null) {
         log.error("Article ID is null");
         return null;
     }
-    return articleRepository.findById(id).map(ArticleDto::fromEntity).orElseThrow(() ->
+    return articleRepository.findById(id).orElseThrow(() ->
     new EntityNotFoundException(
         "Aucun article avec l'ID = " + id + " n' ete trouve dans la BDD")
 );
@@ -109,7 +108,7 @@ public class ArticleServiceImpl  implements ArticleService {
     
 	
     
-    public void update(Integer id, ArticleDto Article) {
+    public void update(Integer id, Article Article) {
         Optional<Article> arti = articleRepository.findById(id);
         if (arti.isPresent()) {
         	Article article = arti.get();
@@ -126,7 +125,7 @@ public class ArticleServiceImpl  implements ArticleService {
     
     
 
-    public ArticleDto deleteArticle(Integer id) {
+    public Article deleteArticle(Integer id) {
         articleRepository.deleteById(id);
         return null;
     }

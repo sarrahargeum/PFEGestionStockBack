@@ -43,7 +43,6 @@ public class UserController {
   
 
     @GetMapping("/all")
-    @ResponseBody
     public List<User> findAll() {
         return userServices.findAll();
     }

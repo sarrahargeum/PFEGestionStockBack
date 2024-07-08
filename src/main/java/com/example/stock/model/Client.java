@@ -1,8 +1,10 @@
 package com.example.stock.model;
 
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,6 +44,6 @@ public class Client {
   
 
     @OneToMany(mappedBy = "client")
-    private List<BonSortie> bonSorties;
+    private Set<BonSortie> bonSorties;
 
 }

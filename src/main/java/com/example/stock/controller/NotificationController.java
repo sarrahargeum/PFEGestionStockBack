@@ -40,7 +40,7 @@ public class NotificationController {
         notification.setType("Vente"); // or "Achat" depending on the context
         notification.setMessage("Order " + orderId + " needs validation.");
         notification.setDateNotification(new Date());
-        notification.setDestinataire(user);
+    //    notification.setDestinataire(user);
 
         notificationRepository.save(notification);
     }

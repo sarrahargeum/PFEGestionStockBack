@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @NoArgsConstructor
@@ -21,9 +25,7 @@ public class BonSortie {
     private String code;
     private Instant dateCommande;
 
-    @ManyToOne
-    @JoinColumn(name = "idclient")
-    private Client client;
+ 
     
     @Column(name = "etatcommande")
     @Enumerated(EnumType.STRING)
@@ -32,8 +34,12 @@ public class BonSortie {
     @Column(name = "idmagasin")
     private Integer idMagasin;
     
+    @ManyToOne
+    @JoinColumn(name = "idclient")
+    private Client client;
+    
     @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL)
-    private List<LigneSortie> ligneSorties;
+    private Set<LigneSortie> ligneSorties;
     
     public boolean isBonSortieLivree() {
         return EtatCommande.LIVREE.equals(this.etatCommande);

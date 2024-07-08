@@ -1,6 +1,8 @@
 package com.example.stock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,14 +27,15 @@ public class Fournisseur {
 
     private String prenom;
     private String adresse;
+    private String mail;
     private String numTel;
 
     @ManyToOne
-    @JoinColumn(name = "idmagasin")
-    private Magasin magasin;
+    @JoinColumn(name = "magasinId")
+   private Magasin magasin;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "fournisseur")
+   
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "fournisseur")
     private List<BonEntree> bonEntrees;
 
 }

@@ -23,7 +23,7 @@ public class LigneSortie {
 
     private Float prixUnitaire;
 
-    @JsonIgnore
+  
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;
@@ -31,7 +31,7 @@ public class LigneSortie {
     @Column(name = "idmagasin")
     private Integer idMagasin;
 
-    @JsonIgnore
+   
     @ManyToOne
     @JoinColumn(name = "bon_sortie_id")
     private BonSortie bonSortie;

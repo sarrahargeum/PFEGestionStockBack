@@ -1,7 +1,10 @@
 package com.example.stock.service.metiers;
 
+
+import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
+import com.example.stock.model.Client;
 import com.example.stock.model.User;
 import com.example.stock.repository.CategoryRepository;
 import com.example.stock.service.CategoryService;
@@ -27,13 +30,15 @@ public class CategoryServiveImpl implements CategoryService {
 
     @Override
     public Category ajouterCategory(Category ca) {
-        return categoryRepository.save(ca);
-    }
+   		 return categoryRepository.save(ca);
+   	}
 
+    
     @Override
     public List<Category> findAll() {
-        return categoryRepository.findAll().stream().collect(Collectors.toList());
-    }
+    	return categoryRepository.findAll().stream()
+		        .collect(Collectors.toList());
+    	    }
 
 
     public Category deleteCategory(Integer id) {
@@ -43,9 +48,19 @@ public class CategoryServiveImpl implements CategoryService {
     
     
     public Category retrieveCategory (Integer categoryId){
-        Category cat = categoryRepository.findById(categoryId).get();
-        return  cat;
-    }
+    	if (categoryId == null) {
+            log.error("Ca&tegory ID is null");
+            return null;
+        }
+        return categoryRepository.findById(categoryId).orElseThrow(() ->
+        new EntityNotFoundException(
+            "Aucun Category avec l'ID = " + categoryId + " n' ete trouve dans la BDD")
+    );
+        }
+    	
+    	
+    	
+    
 
     
 	  public void updateCategorie(Integer id, Category Category) {

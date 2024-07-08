@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,14 +34,14 @@ public class BonEntree {
     @Column(name = "idmagasin")
     private Integer idMagasin;
 
-    @JsonIgnore
+  
     @ManyToOne
     @JoinColumn(name = "idfournisseur")
     private Fournisseur fournisseur;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy =  "bonEntree")
-    private List<LigneEntree> ligneEntrees;
+ 
+    @OneToMany(mappedBy =  "bonEntree")
+    private Set<LigneEntree> ligneEntrees;
 
     
     public boolean isBonFournisseurLivree() {

@@ -1,6 +1,8 @@
 package com.example.stock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +34,6 @@ public class User implements UserDetails {
 
  
     @Column(name = "activation_key", length = 20)
-    @JsonIgnore
     private String activationKey;
  
     
@@ -45,10 +46,8 @@ public class User implements UserDetails {
     @JoinColumn(name = "idmagasin")
     private Magasin magasin;
 
-    @OneToMany(mappedBy = "destinataire")
-    private List<Notification> notifications;
- 
-    
+  /*  @OneToMany(fetch = FetchType.LAZY,mappedBy = "destinataire")
+    private List<Notification> notifications;*/
     
     public User(String firstname, String lastname, String email) {
         this.firstname = firstname;

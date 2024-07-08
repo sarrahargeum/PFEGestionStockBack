@@ -2,8 +2,7 @@ package com.example.stock.service;
 
 import java.util.List;
 
-import com.example.stock.model.Category;
-import com.example.stock.model.Fournisseur;
+
 import com.example.stock.model.Magasin;
 
 public interface MagasinService {

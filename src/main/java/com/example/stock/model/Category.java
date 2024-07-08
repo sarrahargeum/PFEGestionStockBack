@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @NoArgsConstructor
@@ -24,8 +27,9 @@ public class Category {
     @Column(name = "designation")
     private String designation;
 
-    @OneToMany( fetch = FetchType.LAZY)
-    private List<Article> articles;
+    @OneToMany( mappedBy = "category")
+    private Set<Article> articles;
+
 
 
     	

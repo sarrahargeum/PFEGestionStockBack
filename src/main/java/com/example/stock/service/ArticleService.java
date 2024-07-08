@@ -1,6 +1,5 @@
 package com.example.stock.service;
 
-import com.example.stock.dto.ArticleDto;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
 
@@ -14,18 +13,18 @@ import java.util.List;
 public interface ArticleService {
 
 
-    ArticleDto findById(Integer id);
+    Article findById(Integer id);
 
    // ArticleDto findByCodeArticle(String codeArticle);
     
    
-   void update(Integer id, ArticleDto Article);
-   ArticleDto deleteArticle(Integer id);
+   void update(Integer id, Article Article);
+   Article deleteArticle(Integer id);
     
-     ArticleDto retrieveArticle (Integer id);
+     Article retrieveArticle (Integer id);
 	
 
-	List<ArticleDto> getAllArticle();
+	List<Article> getAllArticle();
 
     
  

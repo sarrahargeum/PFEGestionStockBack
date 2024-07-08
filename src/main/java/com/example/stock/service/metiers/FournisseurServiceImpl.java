@@ -35,6 +35,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 	    if (forniInfo.isPresent()) {
 	        Fournisseur four = forniInfo.get();
 	        four.setNom(fournisseur.getNom()); 
+	        four.setMail(fournisseur.getMail()); 
 	        four.setPrenom(fournisseur.getPrenom());
 	        four.setAdresse(fournisseur.getAdresse());
 	        four.setNumTel(fournisseur.getNumTel());

@@ -4,6 +4,10 @@ package com.example.stock.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @NoArgsConstructor
@@ -22,24 +26,24 @@ public class Article {
  
     private String image;
 
-    @ManyToOne( fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
 
   
-  @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "magasinId")
-   private Magasin magasin;
+    private Magasin magasin;
 
 
- @OneToMany( mappedBy = "article")
-    private List<MVTStock>  stocks;
+    @OneToMany( mappedBy = "article")
+    private Set<MVTStock>  stocks;
 
-   @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
-    private List<LigneEntree> ligneEntrees;
+    @OneToMany( mappedBy = "article")
+    private Set<LigneEntree> ligneEntrees;
    
-    @OneToMany( fetch = FetchType.LAZY,mappedBy = "article")
-    private List<LigneSortie> ligneSorties;
+    @OneToMany( mappedBy = "article")
+    private Set<LigneSortie> ligneSorties;
 
 
 
