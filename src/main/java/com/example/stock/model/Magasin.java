@@ -36,6 +36,6 @@ public class Magasin {
     @OneToMany
        private Set<Article> articles;
         
-   @OneToMany(mappedBy = "magasin")
-    private Set<User> users;
+  
+   
 }

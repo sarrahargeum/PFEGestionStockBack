@@ -37,9 +37,8 @@ public class Client {
     private String adresse;
     private String numTel;
 
-    @ManyToOne
-    @JoinColumn(name = "idmagasin")
-    private Magasin magasin;
+    private Integer idMagasin;
+
 
   
 

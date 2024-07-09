@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.exception.EntityNotFoundException;
+import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
 import com.example.stock.model.Article;
 import com.example.stock.model.BonEntree;
@@ -56,7 +57,7 @@ public class BonSortieServiceImpl implements BonSortieService {
 
 
 	@Override
-	public BonSortie save(BonSortie bonSortie) {
+	/*public BonSortie save(BonSortie bonSortie) {
 
 	    List<String> errors = BonSortieValidator.validate(bonSortie);
 
@@ -104,7 +105,63 @@ public class BonSortieServiceImpl implements BonSortieService {
 	            });
 	        }
 	        return savedBonSortie;
+	    }*/
+	
+	public BonSortie save(BonSortie bonSortie) {
+
+	    List<String> errors = BonSortieValidator.validate(bonSortie);
+
+	    if (!errors.isEmpty()) {
+	      log.error("Commande client n'est pas valide");
+	      throw new InvalidEntityException("La commande client n'est pas valide");
 	    }
+
+	    if (bonSortie.getId() != null && bonSortie.isBonSortieLivree()) {
+	      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+	    }
+
+	    Optional<Client> client = clientRepository.findById(bonSortie.getClient().getId());
+	    if (client.isEmpty()) {
+	      log.warn("Client with ID {} was not found in the DB", bonSortie.getClient().getId());
+	      throw new EntityNotFoundException("Aucun client avec l'ID" + bonSortie.getClient().getId() + " n'a ete trouve dans la BDD");
+	    }
+
+	    List<String> articleErrors = new ArrayList<>();
+
+	    if (bonSortie.getLigneSorties() != null) {
+	    	bonSortie.getLigneSorties().forEach(ligCmdClt -> {
+	        if (ligCmdClt.getArticle() != null) {
+	          Optional<Article> article = articleRepository.findById(ligCmdClt.getArticle().getId());
+	          if (article.isEmpty()) {
+	            articleErrors.add("L'article avec l'ID " + ligCmdClt.getArticle().getId() + " n'existe pas");
+	          }
+	        } else {
+	          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
+	        }
+	      });
+	    }
+
+	    if (!articleErrors.isEmpty()) {
+	      log.warn("");
+	      throw new InvalidEntityException("Article n'existe pas dans la BDD");
+	    }
+	    bonSortie.setDateCommande(Instant.now());
+	    BonSortie savedCmdClt = bonSortieRepository.save(bonSortie.toEntity(bonSortie));
+
+	    if (bonSortie.getLigneSorties() != null) {
+	    	bonSortie.getLigneSorties().forEach(ligCmdClt -> {
+	        LigneSortie ligneCommandeClient = LigneSortie.toEntity(ligCmdClt);
+	        ligneCommandeClient.setBonSortie(bonSortie);
+	        ligneCommandeClient.setIdMagasin(bonSortie.getIdMagasin());
+	        LigneSortie savedLigneCmd = ligneSortieRepository.save(ligneCommandeClient);
+
+	        effectuerSortie(savedLigneCmd);
+	      });
+	    }
+
+	    return BonSortie.fromEntity(savedCmdClt);
+	  }
+
 
 
 private void effectuerSortie(LigneSortie lig) {

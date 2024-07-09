@@ -37,5 +37,21 @@ public class LigneEntree {
     private Integer idMagasin;
 
   
+    
+    public static LigneEntree toEntity(LigneEntree dto) {
+        if (dto == null) {
+          return null;
+        }
+        LigneEntree ligneEntree = new LigneEntree();
+        ligneEntree.setId(dto.getId());
+        ligneEntree.setQuantite(dto.getQuantite());
+        ligneEntree.setPrixUnitaire(dto.getPrixUnitaire());
+        ligneEntree.setArticle(dto.getArticle());
+        ligneEntree.setBonEntree(dto.getBonEntree());
+        ligneEntree.setIdMagasin(dto.getIdMagasin());
+        ligneEntree.setEtatCommande(dto.getEtatCommande());
+        return ligneEntree;
+      }
+    
 
 }

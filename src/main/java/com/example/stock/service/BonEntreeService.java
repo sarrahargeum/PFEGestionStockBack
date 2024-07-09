@@ -7,7 +7,7 @@ import com.example.stock.model.EtatCommande;
 
 public interface BonEntreeService {
 	
-	BonEntree save(BonEntree bonentreFourni);
+	BonEntree save(BonEntree BEntree);
 	BonEntree findById(Integer id);
 
 	BonEntree findByCode(String code);

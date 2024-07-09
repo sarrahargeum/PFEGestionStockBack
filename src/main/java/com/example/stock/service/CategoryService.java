@@ -2,6 +2,10 @@ package com.example.stock.service;
 
 
 import com.example.stock.model.Category;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.List;
 
 
@@ -14,7 +18,7 @@ public interface CategoryService {
     Category deleteCategory(Integer id);
     
     List<Category> findAll();
-    
+    public void generateEcel (HttpServletResponse response) throws IOException;
     
     Category retrieveCategory (Integer categoryId);
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.exception.EntityNotFoundException;
+import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
 import com.example.stock.model.Article;
 import com.example.stock.model.BonEntree;
@@ -51,57 +52,65 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 
 
 	@Override
-	public BonEntree save(BonEntree bonentreFourni) {
+	 public BonEntree save(BonEntree BEntree) {
 
-	    List<String> errors = BonEntreeFournisseurValidator.validate(bonentreFourni);
+		 List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
 
-	    if (bonentreFourni.getFournisseur() == null || bonentreFourni.getFournisseur().getId() == null) {
-	        errors.add("Fournisseur is required and must have a valid ID");
-	    } else {
-	        Optional<Fournisseur> fournisseur = fournisseurRepository.findById(bonentreFourni.getFournisseur().getId());
-	        if (fournisseur.isEmpty()) {
-	            errors.add("Fournisseur with ID " + bonentreFourni.getFournisseur().getId() + " does not exist");
-	        } else {
-	            bonentreFourni.setFournisseur(fournisseur.get());
-	        }
-	    }
+		    if (!errors.isEmpty()) {
+		      log.error("Commande fournisseur n'est pas valide");
+		      throw new InvalidEntityException("La commande fournisseur n'est pas valide");
+		    }
 
-	  
+		    if (BEntree.getId() != null && BEntree.isBonFournisseurLivree()) {
+		      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+		    }
 
-	    List<String> articleErrors = new ArrayList<>();
-	    if (bonentreFourni.getLigneEntrees() != null) {
-	        bonentreFourni.getLigneEntrees().forEach(ligCmdFrs -> {
-	            if (ligCmdFrs.getArticle() != null) {
-	                Optional<Article> article = articleRepository.findById(ligCmdFrs.getArticle().getId());
-	                if (article.isEmpty()) {
-	                    articleErrors.add("L'article avec l'ID " + ligCmdFrs.getArticle().getId() + " n'existe pas");
-	                }
-	            } else {
-	                articleErrors.add("Impossible d'enregistrer une commande avec un article NULL");
-	            }
-	        });
-	    }
+		    Optional<Fournisseur> fournisseur = fournisseurRepository.findById(BEntree.getFournisseur().getId());
+		    if (fournisseur.isEmpty()) {
+		      log.warn("Fournisseur with ID {} was not found in the DB", BEntree.getFournisseur().getId());
+		      throw new EntityNotFoundException("Aucun fournisseur avec l'ID" + BEntree.getFournisseur().getId() + " n'a ete trouve dans la BDD");
+		    }
 
-	   
-	    bonentreFourni.setDateCommande(Instant.now());
-	    BonEntree savedCmdFrs = bonEntreeRepository.save(bonentreFourni);
+		    List<String> articleErrors = new ArrayList<>();
 
-	    if (bonentreFourni.getLigneEntrees() != null) {
-	        bonentreFourni.getLigneEntrees().forEach(ligCmdFrs -> {
-	            LigneEntree ligneEntree = new LigneEntree();
-	            ligneEntree.setBonEntree(savedCmdFrs);
-	            ligneEntree.setArticle(ligCmdFrs.getArticle());
-	            ligneEntree.setQuantite(ligCmdFrs.getQuantite());
-	            ligneEntree.setIdMagasin(savedCmdFrs.getIdMagasin());
+		    if (BEntree.getLigneEntrees() != null) {
+		    	BEntree.getLigneEntrees().forEach(ligCmdFrs -> {
+		        if (ligCmdFrs.getArticle() != null) {
+		          Optional<Article> article = articleRepository.findById(ligCmdFrs.getArticle().getId());
+		          if (article.isEmpty()) {
+		            articleErrors.add("L'article avec l'ID " + ligCmdFrs.getArticle().getId() + " n'existe pas");
+		          }
+		        } else {
+		          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
+		        }
+		      });
+		    }
 
-	            LigneEntree savedLigne = ligneEntreeFournisseurRepository.save(ligneEntree);
+		    if (!articleErrors.isEmpty()) {
+		      log.warn("");
+		      throw new InvalidEntityException("Article n'existe pas dans la BDD");
+		    }
+		    BEntree.setDateCommande(Instant.now());
+		    
+		    BonEntree savedCmdFrs = bonEntreeRepository.save(BonEntree.toEntity(BEntree));
 
-	            effectuerEntree(savedLigne);
-	        });
-	    }
+		    if (BEntree.getLigneEntrees() != null) {
+		    	BEntree.getLigneEntrees().forEach(ligCmdFrs -> {
+		        LigneEntree ligneEntree = LigneEntree.toEntity(ligCmdFrs);
+		        ligneEntree.setBonEntree(savedCmdFrs);
+		        ligneEntree.setIdMagasin(savedCmdFrs.getIdMagasin());
+		        LigneEntree saveLigne = ligneEntreeFournisseurRepository.save(ligneEntree);
 
-	    return savedCmdFrs;
+		        effectuerEntree(saveLigne);
+		      });
+		    }
+		    return BonEntree.fromEntity(savedCmdFrs);
+
 	}
+
+	
+	
+	
 
 private void effectuerEntree(LigneEntree lig) {
     MVTStock mvtStkDto = MVTStock.builder()

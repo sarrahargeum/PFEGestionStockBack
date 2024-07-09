@@ -8,7 +8,17 @@ import com.example.stock.model.Client;
 import com.example.stock.model.User;
 import com.example.stock.repository.CategoryRepository;
 import com.example.stock.service.CategoryService;
+
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,4 +88,37 @@ public class CategoryServiveImpl implements CategoryService {
 		         
 		  }
 	  }
+	  
+	  
+	  public void generateEcel(HttpServletResponse response) throws IOException {
+	        List<Category> categories = categoryRepository.findAll();
+	        Workbook workbook = new HSSFWorkbook();
+	        Sheet sheet = workbook.createSheet("cat info");
+	        Row row = sheet.createRow(0);
+
+	        row.createCell(0).setCellValue("ID");
+	        row.createCell(1).setCellValue("code");
+	        row.createCell(2).setCellValue("description");
+
+	        int dataRowIndex = 1;
+	        for (Category category : categories) {
+	            Row dataRow = sheet.createRow(dataRowIndex);
+	            dataRow.createCell(0).setCellValue(category.getId());
+	            dataRow.createCell(1).setCellValue(category.getCode());
+	            dataRow.createCell(2).setCellValue(category.getDesignation());
+	            dataRowIndex++;
+	        }
+
+	        try (ServletOutputStream ops = response.getOutputStream()) {
+	            workbook.write(ops);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } finally {
+	            workbook.close();
+	        }
+	    }
+
+
+
+	  
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,17 +61,13 @@ public class CategoryController {
     
     
     @GetMapping("/export/excel")
-    public void exportToExcel(HttpServletResponse response) {
-    	System.out.println("Export to Excel....");
+    public void exportToExcel(HttpServletResponse response) throws IOException {
     	response.setContentType("application/octet-stream");
-    	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-    	String currentDateTime = dateFormatter.format(new Date());
-    	String headerKey = "Content-Disposition";
-    	String heagerValue = "attachment; filename=categories_"+ currentDateTime + ".xlsx";
-    	response.setHeader(headerKey, heagerValue);
-    	List<Category> listCategories= categoryService.findAll();
-    //	CategorieExcel excel = new CategorieExcel(ListCategorie)
-       // excel.export(response);
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=courses.xls";
+        response.setHeader(headerKey, headerValue);
+
+        categoryService.generateEcel(response);
     }
 
 }

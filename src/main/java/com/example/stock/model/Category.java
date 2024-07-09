@@ -27,7 +27,7 @@ public class Category {
     @Column(name = "designation")
     private String designation;
 
-    @OneToMany( mappedBy = "category")
+    @OneToMany( mappedBy = "category", fetch = FetchType.LAZY)
     private Set<Article> articles;
 
 
