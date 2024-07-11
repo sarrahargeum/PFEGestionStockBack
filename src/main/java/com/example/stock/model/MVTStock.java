@@ -2,13 +2,20 @@ package com.example.stock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.Instant;
+import java.util.Set;
 
 
 @Data
 @Entity
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "Mvtstock")
 

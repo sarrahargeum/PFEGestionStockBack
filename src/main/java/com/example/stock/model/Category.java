@@ -26,7 +26,7 @@ public class Category {
 
     @Column(name = "designation")
     private String designation;
-
+    //private Integer idMagasin;
     @OneToMany( mappedBy = "category", fetch = FetchType.LAZY)
     private Set<Article> articles;
 

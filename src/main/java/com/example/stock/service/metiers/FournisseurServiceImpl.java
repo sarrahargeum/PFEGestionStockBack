@@ -7,9 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.stock.model.Category;
+import com.example.stock.dto.FournisseurDto;
 import com.example.stock.model.Fournisseur;
-import com.example.stock.repository.CategoryRepository;
 import com.example.stock.repository.FournisseurRepository;
 import com.example.stock.service.FournisseurService;
 
@@ -56,8 +55,10 @@ public class FournisseurServiceImpl implements FournisseurService {
 	}
 
 	@Override
-	public List<Fournisseur> findAll() {
-        return fournisseurRepository.findAll().stream().collect(Collectors.toList());
+	public List<FournisseurDto> findAll() {
+		return fournisseurRepository.findAll().stream()
+		        .map(FournisseurDto::fromEntity)
+		        .collect(Collectors.toList());
 	}
 	
     public Fournisseur retrieveFournisseur (Integer fournisseurId){

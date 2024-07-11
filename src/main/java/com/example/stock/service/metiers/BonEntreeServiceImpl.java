@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
@@ -163,9 +164,10 @@ private void effectuerEntree(LigneEntree lig) {
 		
 
 		@Override
-		public List<BonEntree> findAll() {
-			  return bonEntreeRepository.findAll().stream()
-				        .collect(Collectors.toList());
+		public List<BonEntreeDto> findAll() {
+			return bonEntreeRepository.findAll().stream()
+			        .map(BonEntreeDto::fromEntity)
+			        .collect(Collectors.toList());
 		}
 	
 

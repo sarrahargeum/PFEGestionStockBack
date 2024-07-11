@@ -1,6 +1,5 @@
 package com.example.stock.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -33,10 +31,10 @@ public class BonEntree {
     private EtatCommande etatCommande;
 
     @Column(name = "idmagasin")
+    
     private Integer idMagasin;
-
   
-    @ManyToOne
+    @ManyToOne 
     @JoinColumn(name = "idfournisseur")
     private Fournisseur fournisseur;
 

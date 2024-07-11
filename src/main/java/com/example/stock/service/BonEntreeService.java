@@ -2,6 +2,7 @@ package com.example.stock.service;
 
 import java.util.List;
 
+import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
 
@@ -14,7 +15,7 @@ public interface BonEntreeService {
 	
 	 void delete(Integer id);
 	 
-	  List<BonEntree> findAll();
+	  List<BonEntreeDto> findAll();
 	  
 	  
 	  BonEntree updateEtatCommande(Integer idCommande, EtatCommande etatCommande);

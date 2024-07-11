@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
-import com.example.stock.repository.BonEntreeRepository;
 import com.example.stock.service.BonEntreeService;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -41,9 +40,10 @@ public class BonEntreeController {
 	    }
 	    
 	    @GetMapping( "/allBF")
-	    public List<BonEntree> findAll() {
+	    public List<BonEntreeDto> findAll() {
 	      return bonEntreeService.findAll();
 	    }
+	  
 	    
 	    @GetMapping("/retreive/{idbonEntrefournisseur}")
 	    BonEntree findById(@PathVariable("idbonEntrefournisseur") Integer id) {

@@ -1,7 +1,6 @@
 package com.example.stock.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -30,9 +28,8 @@ public class Fournisseur {
     private String mail;
     private String numTel;
 
-    @ManyToOne
-    @JoinColumn(name = "magasinId")
-   private Magasin magasin;
+  
+   private Integer idMagasin;
 
    
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "fournisseur")
