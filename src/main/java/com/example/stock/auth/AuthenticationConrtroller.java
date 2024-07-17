@@ -32,9 +32,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationConrtroller {
 
-    private  JwtService jwtService;
-    private  JwtAuthenticationFilter jwtAuthenticationFilter;
-    private  AuthenticationManagerBuilder authenticationManagerBuilder;
+     JwtService jwtService;
+      JwtAuthenticationFilter jwtAuthenticationFilter;
+     AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private  Logger log = LoggerFactory.getLogger(User.class);
     @Autowired
@@ -45,9 +45,15 @@ public class AuthenticationConrtroller {
     
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest request) {
-        String text ="Votre compte est préte, mais encore désactivée ";
-        String subject=" votre compte est préte";
+    	 
         User user = service.register(request);
+        	String email = user.getEmail();
+    	    String password = user.getPassword();
+    	    String text = "Votre compte est prêt, mais encore désactivé. \n" +
+                    "Email: " + email + "\n" +
+                    "Mot de passe: " + password;
+        String subject=" votre compte est préte";
+      //  User user = service.register(request);
      
         try {
             mailSenderService.sendSimpleMessageToNewUser(user.getEmail(),subject,text);

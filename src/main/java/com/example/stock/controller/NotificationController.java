@@ -9,39 +9,58 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
-import com.example.stock.model.Notification;
 import com.example.stock.model.User;
 import com.example.stock.repository.NotificationRepository;
 import com.example.stock.repository.UserRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/notofication")
 public class NotificationController {
 	
-    @Autowired
+   /* @Autowired
     NotificationRepository notificationRepository;
 	
 
     @Autowired
     UserRepository userRepository;
+    
 
-    @MessageMapping("/notification")
-    @SendTo("/topic/notifications")
-    public Notification sendNotification(Notification notification) {
-        return notification;
-    }
+    */
+	  @Autowired
+	    private SimpMessagingTemplate messagingTemplate;
 
-    public void notifyOrderValidated(Integer orderId,Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+	 @MessageMapping("/notify")
+	    @SendTo("/topic/notifications")
+	    public Notification notify(Notification notification) {
+		 System.out.println("eli yji");
+	        return new Notification(HtmlUtils.htmlEscape(notification.getMessage()));
+	        
+	    }
 
-        Notification notification = new Notification();
-        notification.setType("Vente"); // or "Achat" depending on the context
-        notification.setMessage("Order " + orderId + " needs validation.");
-        notification.setDateNotification(new Date());
-    //    notification.setDestinataire(user);
+	  
 
-        notificationRepository.save(notification);
-    }
-}
+	    public void sendNotification(String message) {
+	        Notification notification = new Notification(message);
+	        messagingTemplate.convertAndSend("/topic/notifications", notification);
+	    }
+	}
+
+	class Notification {
+	    private String message;
+
+	    public Notification() {}
+
+	    public Notification(String message) {
+	        this.message = message;
+	    }
+
+	    public String getMessage() {
+	        return message;
+	    }
+
+	    public void setMessage(String message) {
+	        this.message = message;
+	    }
+	}

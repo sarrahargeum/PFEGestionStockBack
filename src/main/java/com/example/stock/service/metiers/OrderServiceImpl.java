@@ -9,7 +9,7 @@ import com.example.stock.service.OrderService;
 @Service
 public class OrderServiceImpl implements OrderService{
 	
-	  @Autowired
+	 /* @Autowired
 	    NotificationController notificationController;
 
 	    public void validateOrder(Integer orderId, Integer userId) {
@@ -17,6 +17,6 @@ public class OrderServiceImpl implements OrderService{
 	    	
 	        // Send WebSocket notification
 	        notificationController.notifyOrderValidated(orderId , userId);
-	    }
+	    }*/
 
 }

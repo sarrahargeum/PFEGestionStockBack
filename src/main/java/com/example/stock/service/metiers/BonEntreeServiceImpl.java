@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.stock.controller.NotificationController;
 import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.exception.InvalidEntityException;
@@ -45,15 +46,18 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 	@Autowired
 	ArticleRepository articleRepository;
 
+	
 	@Autowired
 	LigneEntreeRepository ligneEntreeFournisseurRepository;
 	
 	@Autowired
 	MVTStockService mvtStockService;
 
+	@Autowired
+	NotificationController notificationController;
 
-	@Override
-	 public BonEntree save(BonEntree BEntree) {
+	
+/*	 public BonEntree save(BonEntree BEntree) {
 
 		 List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
 
@@ -108,7 +112,33 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		    return BonEntree.fromEntity(savedCmdFrs);
 
 	}
+*/
+		
 
+
+	   
+
+	    @Override
+	    public BonEntree save(BonEntree BEntree) {
+	        List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
+
+	        if (!errors.isEmpty()) {
+	            log.error("Commande fournisseur n'est pas valide");
+	            throw new InvalidEntityException("La commande fournisseur n'est pas valide");
+	        }
+
+	        if (BEntree.getId() != null && BEntree.isBonFournisseurLivree()) {
+	            throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+	        }
+
+	        // Save the BonEntree to the database (assuming you have a repository for this)
+	        BonEntree savedBonEntree = bonEntreeRepository.save(BEntree);
+
+	        // Send WebSocket notification
+	        notificationController.sendNotification("Commande " + savedBonEntree.getId() + " saved. Please update status.");
+
+	        return savedBonEntree;
+	    }
 	
 	
 	
