@@ -1,19 +1,16 @@
 package com.example.stock.controller;
 
-import java.util.Date;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
 
-import com.example.stock.model.User;
-import com.example.stock.repository.NotificationRepository;
-import com.example.stock.repository.UserRepository;
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -34,7 +31,7 @@ public class NotificationController {
 	 @MessageMapping("/notify")
 	    @SendTo("/topic/notifications")
 	    public Notification notify(Notification notification) {
-		 System.out.println("eli yji");
+		// System.out.println("eli yji");
 	        return new Notification(HtmlUtils.htmlEscape(notification.getMessage()));
 	        
 	    }

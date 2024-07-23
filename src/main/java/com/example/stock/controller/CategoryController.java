@@ -8,14 +8,16 @@ import com.example.stock.service.CategoryService;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -64,10 +66,17 @@ public class CategoryController {
     public void exportToExcel(HttpServletResponse response) throws IOException {
     	response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=courses.xls";
+        String headerValue = "attachment; filename=categorys.xls";
         response.setHeader(headerKey, headerValue);
 
         categoryService.generateEcel(response);
     }
+
+    
+   /* @PostMapping("/upload-customers-data")
+    public ResponseEntity<?> uploadCustomersData(@RequestParam("file")MultipartFile file){
+        this.categoryService.saveCustomersToDatabase(file);
+        return ResponseEntity.ok(Map.of("Message" , "Customers data uploaded and saved to database successfully"));
+    }*/
 
 }

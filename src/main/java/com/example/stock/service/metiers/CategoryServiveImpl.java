@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -120,5 +121,15 @@ public class CategoryServiveImpl implements CategoryService {
 
 
 
+	/*  public void saveCustomersToDatabase(MultipartFile file){
+	        if(ExcelUploadService.isValidExcelFile(file)){
+	            try {
+	                List<Category> customers = ExcelUploadService.getCustomersDataFromExcel(file.getInputStream());
+	                this.categoryRepository.saveAll(customers);
+	            } catch (IOException e) {
+	                throw new IllegalArgumentException("The file is not a valid excel file");
+	            }
+	        }
+	    }*/
 	  
 }

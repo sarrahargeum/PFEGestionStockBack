@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,6 +35,10 @@ public class AuthenticationConrtroller {
      JwtService jwtService;
       JwtAuthenticationFilter jwtAuthenticationFilter;
      AuthenticationManagerBuilder authenticationManagerBuilder;
+     
+     @Autowired
+     PasswordEncoder passwordEncoder;
+   
 
     private  Logger log = LoggerFactory.getLogger(User.class);
     @Autowired
@@ -48,6 +52,7 @@ public class AuthenticationConrtroller {
     	 
         User user = service.register(request);
         	String email = user.getEmail();
+
     	    String password = user.getPassword();
     	    String text = "Votre compte est prêt, mais encore désactivé. \n" +
                     "Email: " + email + "\n" +

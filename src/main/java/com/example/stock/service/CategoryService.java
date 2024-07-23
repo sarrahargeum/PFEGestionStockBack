@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 
 public interface CategoryService {
 
@@ -21,4 +23,6 @@ public interface CategoryService {
     public void generateEcel (HttpServletResponse response) throws IOException;
     
     Category retrieveCategory (Integer categoryId);
+    
+  //  public void saveCustomersToDatabase(MultipartFile file);
 }
