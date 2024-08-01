@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.dto.FournisseurDto;
+import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.repository.FournisseurRepository;
 import com.example.stock.service.FournisseurService;
@@ -20,10 +21,29 @@ public class FournisseurServiceImpl implements FournisseurService {
 	@Autowired
 	FournisseurRepository fournisseurRepository;
 	
-	@Override
-	public Fournisseur ajouterFournisseur(Fournisseur four ) {
-		 return fournisseurRepository.save(four);
-	}
+	public FournisseurDto ajouterFournisseur(FournisseurDto dto) {
+	 
+	    return FournisseurDto.fromEntity(
+	        fournisseurRepository.save(
+	            FournisseurDto.toEntity(dto)
+	        )
+	    );
+	  }
+	
+	
+
+	  @Override
+	  public FournisseurDto retrieveFournisseur(Integer id) {
+	    if (id == null) {
+	      log.error("Fournisseur ID is null");
+	      return null;
+	    }
+	    return fournisseurRepository.findById(id)
+	        .map(FournisseurDto::fromEntity)
+	        .orElseThrow(() -> new EntityNotFoundException(
+	            "Aucun fournisseur avec l'ID = " + id + " n' ete trouve dans la BDD")
+	        );
+	  }
 
 
 	
@@ -60,11 +80,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 		        .map(FournisseurDto::fromEntity)
 		        .collect(Collectors.toList());
 	}
-	
-    public Fournisseur retrieveFournisseur (Integer fournisseurId){
-    	Fournisseur four = fournisseurRepository.findById(fournisseurId).get();
-        return  four;
-    }
+
 	
 
 }

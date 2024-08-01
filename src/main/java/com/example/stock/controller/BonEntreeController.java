@@ -28,14 +28,18 @@ public class BonEntreeController {
 	 @Autowired
 	     BonEntreeService bonEntreeService;
 
-	    @PostMapping("/saveBF")
-	    public ResponseEntity<BonEntree> saveBonEntreFournisseur(@RequestBody BonEntree bonEntreFournisseur) {
-	        BonEntree savedBonEntreFournisseur = bonEntreeService.save(bonEntreFournisseur);
-	        return ResponseEntity.ok(savedBonEntreFournisseur);
-	    }
+	 
+	  
+	  @PostMapping("/saveBF")
+	  BonEntreeDto save(@RequestBody BonEntreeDto bonEntreFournisseur) {
+	    return bonEntreeService.save(bonEntreFournisseur);
+	  }
+
+	 
+
 	    
 	    @GetMapping("/retreive-code/{code}")
-	    public BonEntree findByCode(@PathVariable("code") String code){
+	    public BonEntreeDto findByCode(@PathVariable("code") String code){
 	      return bonEntreeService.findByCode(code);
 	    }
 	    
@@ -46,7 +50,7 @@ public class BonEntreeController {
 	  
 	    
 	    @GetMapping("/retreive/{idbonEntrefournisseur}")
-	    BonEntree findById(@PathVariable("idbonEntrefournisseur") Integer id) {
+	    BonEntreeDto findById(@PathVariable("idbonEntrefournisseur") Integer id) {
 	    return bonEntreeService.findById(id);
 	    }
 	    
@@ -58,14 +62,15 @@ public class BonEntreeController {
 	    
 	    
 	    @PutMapping("/update/etat/{id}/{etatCommande}")
-	    BonEntree updateEtatCommande(@PathVariable("id") Integer id, @PathVariable("etatCommande") EtatCommande etatCommande) {
+	    BonEntreeDto updateEtatCommande(@PathVariable("id") Integer id, @PathVariable("etatCommande") EtatCommande etatCommande) {
+	    	
 	    return bonEntreeService.updateEtatCommande(id, etatCommande);
 	
 	    }
 	    
 	    
 	    @PutMapping("/quantite/{id}/{idligneEntreeFournisseur}/{quantite}")
-	    BonEntree updateQuantiteCommande(@PathVariable("id") Integer id,
+	    BonEntreeDto updateQuantiteCommande(@PathVariable("id") Integer id,
 	    		@PathVariable("idligneEntreeFournisseur") Integer idligneEntreeFournisseur, @PathVariable("quantite") Integer quantite)
  {
 	      return bonEntreeService.updateQuantiteCommande(id, idligneEntreeFournisseur,quantite);

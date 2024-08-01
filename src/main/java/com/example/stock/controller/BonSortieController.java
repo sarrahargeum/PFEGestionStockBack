@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.stock.dto.BonSortieDto;
 import com.example.stock.model.BonSortie;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.service.BonSortieService;
@@ -26,23 +28,24 @@ public class BonSortieController {
 	     BonSortieService bonSortieService;
 
 	    @PostMapping("/saveBS")
-	    public ResponseEntity<BonSortie> saveBonSortie(@RequestBody BonSortie bonSortie) {
-	    	BonSortie savedBonSortie = bonSortieService.save(bonSortie);
-	        return ResponseEntity.ok(savedBonSortie);
+	    BonSortieDto save(@RequestBody BonSortieDto bonSortie) {
+		    return bonSortieService.save(bonSortie);
+
+	    
 	    }
 	    
 	    @GetMapping("/retreive-code/{code}")
-	    public BonSortie findByCode(@PathVariable("code") String code){
+	    public BonSortieDto findByCode(@PathVariable("code") String code){
 	      return bonSortieService.findByCode(code);
 	    }
 	    
 	    @GetMapping( "/allBS")
-	    public List<BonSortie> findAll() {
+	    public List<BonSortieDto> findAll() {
 	      return bonSortieService.findAll();
 	    }
 	    
 	    @GetMapping("/retreive/{idbonSortie}")
-	    BonSortie findById(@PathVariable("idbonEntrefournisseur") Integer id) {
+	    BonSortieDto findById(@PathVariable("idbonEntrefournisseur") Integer id) {
 	    return bonSortieService.findById(id);
 	    }
 	    
@@ -54,15 +57,15 @@ public class BonSortieController {
 	    
 	    
 	    @PutMapping("/update/etat/{id}/{etatCommande}")
-	    BonSortie updateEtatCommande(@PathVariable("id") Integer id, @PathVariable("etatCommande") EtatCommande etatCommande) {
+	    BonSortieDto updateEtatCommande(@PathVariable("id") Integer id, @PathVariable("etatCommande") EtatCommande etatCommande) {
 	    return bonSortieService.updateEtatCommande(id, etatCommande);
 	
 	    }
 	    
 	    
 	    @PutMapping("/quantite/{id}/{idligneSortie}/{quantite}")
-	    BonSortie updateQuantiteCommande(@PathVariable("id") Integer id,
-	    		@PathVariable("idligneEntreeFournisseur") Integer idligneSortie, @PathVariable("quantite") Integer quantite)
+	    BonSortieDto updateQuantiteCommande(@PathVariable("id") Integer id,
+	    		@PathVariable("idligneSortie") Integer idligneSortie, @PathVariable("quantite") Integer quantite)
 {
 	      return bonSortieService.updateQuantiteCommande(id, idligneSortie,quantite);
 	    }

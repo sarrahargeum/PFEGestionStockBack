@@ -38,18 +38,5 @@ public class LigneSortie {
     private BonSortie bonSortie;
     
     
-    public static LigneSortie toEntity(LigneSortie dto) {
-        if (dto == null) {
-          return null;
-        }
-        LigneSortie ligneSortie = new LigneSortie();
-        ligneSortie.setId(dto.getId());
-        ligneSortie.setQuantite(dto.getQuantite());
-        ligneSortie.setPrixUnitaire(dto.getPrixUnitaire());
-        ligneSortie.setArticle(dto.getArticle());
-        ligneSortie.setBonSortie(dto.getBonSortie());
-        ligneSortie.setIdMagasin(dto.getIdMagasin());
-        ligneSortie.setEtatCommande(dto.getEtatCommande());
-        return ligneSortie;
-      }
+
 }

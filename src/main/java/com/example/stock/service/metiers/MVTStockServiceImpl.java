@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.model.Category;
 import com.example.stock.model.Fournisseur;
@@ -44,20 +45,17 @@ public class MVTStockServiceImpl implements MVTStockService {
 	}
 
 	@Override
-	public List<MVTStock> mvtStkArticle(Integer idArticle) {
+	public List<MVTStockDto> mvtStkArticle(Integer idArticle) {
 
 	    return mvtrepository.findAllByArticleId(idArticle);
 	}
 
 	
 
-	  @Override
-	  public MVTStock entreeStock(MVTStock mvt) {
-	    return entreePositive(mvt, TypeStock.ENTREE);
-	  }
+	
 	  
 	  
-	  private MVTStock entreePositive(MVTStock mvt, TypeStock typeMvtStk) {
+	  private MVTStockDto entreePositive(MVTStockDto mvt, TypeStock typeMvtStk) {
 		    List<String> errors = StockValidator.validate(mvt);
 		    if (!errors.isEmpty()) {
 		      log.error("Article is not valid {}", mvt);
@@ -66,31 +64,36 @@ public class MVTStockServiceImpl implements MVTStockService {
 		    mvt.setQuantite(
 		    		 Math.abs(mvt.getQuantite())
 		    );
-		    mvt.setTypestock(typeMvtStk);
-		    return 
-		        mvtrepository.save(mvt);
+		    mvt.setTypeMvt(typeMvtStk);
+		    return  MVTStockDto.fromEntity(
+		        mvtrepository.save(MVTStockDto.toEntity(mvt)));
 		  }
 	  
-	  private MVTStock sortieNegative(MVTStock mvt, TypeStock typeMvtStk) {
-		    List<String> errors = StockValidator.validate(mvt);
+	  private MVTStockDto sortieNegative(MVTStockDto dto, TypeStock typeMvtStk) {
+		    List<String> errors = StockValidator.validate(dto);
 		    if (!errors.isEmpty()) {
-		      log.error("Article is not valid {}", mvt);
+		      log.error("Article is not valid {}", dto);
 		      throw new InvalidEntityException("Le mouvement du stock n'est pas valide", errors);
 		    }
-		    mvt.setQuantite(
+		    dto.setQuantite(
 
-		            mvt.getQuantite() * -1
+		            dto.getQuantite() * -1
 		        
 		    );
-		    mvt.setTypestock(typeMvtStk);
-		    return 
-		        mvtrepository.save(mvt);
+		    dto.setTypeMvt(typeMvtStk);
+		    return  MVTStockDto.fromEntity(
+			        mvtrepository.save(MVTStockDto.toEntity(dto)));
 		    
 		  }
 
-	  @Override
-	  public MVTStock sortieStock(MVTStock dto) {
-	    return sortieNegative(dto, TypeStock.SORTIE);
-	  }
+	@Override
+	public MVTStockDto entreeStock(MVTStockDto mvt) {
+		 return entreePositive(mvt, TypeStock.ENTREE);
+	}
+
+	@Override
+	public MVTStockDto sortieStock(MVTStockDto dto) {
+		 return sortieNegative(dto, TypeStock.SORTIE);
+	}
 	  
 }

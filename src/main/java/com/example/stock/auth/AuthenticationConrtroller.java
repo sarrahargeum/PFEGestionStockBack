@@ -38,6 +38,7 @@ public class AuthenticationConrtroller {
      
      @Autowired
      PasswordEncoder passwordEncoder;
+    
    
 
     private  Logger log = LoggerFactory.getLogger(User.class);
@@ -46,6 +47,7 @@ public class AuthenticationConrtroller {
 
     @Autowired
     MailServiceImpl mailSenderService;
+
     
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest request) {
@@ -54,6 +56,8 @@ public class AuthenticationConrtroller {
         	String email = user.getEmail();
 
     	    String password = user.getPassword();
+    	    
+    	
     	    String text = "Votre compte est prêt, mais encore désactivé. \n" +
                     "Email: " + email + "\n" +
                     "Mot de passe: " + password;

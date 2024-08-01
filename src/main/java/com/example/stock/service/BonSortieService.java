@@ -2,6 +2,7 @@ package com.example.stock.service;
 
 import java.util.List;
 
+import com.example.stock.dto.BonSortieDto;
 import com.example.stock.model.BonEntree;
 import com.example.stock.model.BonSortie;
 import com.example.stock.model.EtatCommande;
@@ -9,17 +10,17 @@ import com.example.stock.model.EtatCommande;
 public interface BonSortieService {
 	
 	
-	BonSortie save(BonSortie bonSortie);
-	BonSortie findById(Integer id);
+	BonSortieDto save(BonSortieDto bonSortie);
+	BonSortieDto findById(Integer id);
 
-	BonSortie findByCode(String code);
+	BonSortieDto findByCode(String code);
 	
 	 void delete(Integer id);
 	 
-	  List<BonSortie> findAll();
+	  List<BonSortieDto> findAll();
 	  
 	  
-	  BonSortie updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
+	  BonSortieDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
 
-	  BonSortie updateQuantiteCommande(Integer idCommande, Integer idligneSortie, Integer quantite);
+	  BonSortieDto updateQuantiteCommande(Integer idCommande, Integer idligneSortie, Integer quantite);
 }

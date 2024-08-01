@@ -1,5 +1,8 @@
 package com.example.stock.service;
 
+import com.example.stock.dto.ArticleDto;
+import com.example.stock.dto.LigneEntreeDto;
+import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
 
@@ -26,6 +29,11 @@ public interface ArticleService {
 
 	List<Article> getAllArticle();
 
+	  List<LigneSortieDto> findHistoriaueCommandeClient(Integer idArticle);
+
+	  List<LigneEntreeDto> findHistoriqueCommandeFournisseur(Integer idArticle);
+
+	  List<ArticleDto> findAllArticleByIdCategory(Integer idCategory);
     
  
 }

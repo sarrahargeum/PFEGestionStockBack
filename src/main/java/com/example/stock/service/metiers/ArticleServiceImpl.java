@@ -1,11 +1,16 @@
 package com.example.stock.service.metiers;
 
+import com.example.stock.dto.ArticleDto;
+import com.example.stock.dto.LigneEntreeDto;
+import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
 import com.example.stock.model.Magasin;
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.CategoryRepository;
+import com.example.stock.repository.LigneEntreeRepository;
+import com.example.stock.repository.LigneSortieRepository;
 import com.example.stock.repository.MagasinRepository;
 import com.example.stock.service.ArticleService;
 import com.google.common.io.Files;
@@ -47,6 +52,12 @@ public class ArticleServiceImpl  implements ArticleService {
 	
 	@Autowired
     MagasinRepository magasinRepository;
+	
+	@Autowired
+	LigneEntreeRepository ligneEntreeRepository;
+	
+	@Autowired
+	LigneSortieRepository ligneSortieRepository;
 	
     @Autowired ServletContext context;
 
@@ -131,7 +142,26 @@ public class ArticleServiceImpl  implements ArticleService {
     }
 
 
+    @Override
+    public List<LigneSortieDto> findHistoriaueCommandeClient(Integer idArticle) {
+      return ligneSortieRepository.findAllByArticleId(idArticle).stream()
+          .map(LigneSortieDto::fromEntity)
+          .collect(Collectors.toList());
+    }
 
+    @Override
+    public List<LigneEntreeDto> findHistoriqueCommandeFournisseur(Integer idArticle) {
+      return ligneEntreeRepository.findAllByArticleId(idArticle).stream()
+          .map(LigneEntreeDto::fromEntity)
+          .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ArticleDto> findAllArticleByIdCategory(Integer idCategory) {
+      return articleRepository.findAllByCategoryId(idCategory).stream()
+          .map(ArticleDto::fromEntity)
+          .collect(Collectors.toList());
+    }
 
 
 

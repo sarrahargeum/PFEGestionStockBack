@@ -32,7 +32,9 @@ import java.util.Optional;
 
 public class AuthenticationService {
     private final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
-     @Autowired
+    
+    
+    @Autowired
      UserRepository repository;
     
       @Autowired

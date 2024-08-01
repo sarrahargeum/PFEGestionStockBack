@@ -10,7 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.controller.NotificationController;
+import com.example.stock.dto.ArticleDto;
 import com.example.stock.dto.BonEntreeDto;
+import com.example.stock.dto.FournisseurDto;
+import com.example.stock.dto.LigneEntreeDto;
+import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
@@ -57,7 +61,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 	NotificationController notificationController;
 
 	
-/*	 public BonEntree save(BonEntree BEntree) {
+	 public BonEntreeDto save(BonEntreeDto BEntree) {
 
 		 List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
 
@@ -66,7 +70,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		      throw new InvalidEntityException("La commande fournisseur n'est pas valide");
 		    }
 
-		    if (BEntree.getId() != null && BEntree.isBonFournisseurLivree()) {
+		    if (BEntree.getId() != null && BEntree.isCommandeLivree()) {
 		      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
 		    }
 
@@ -97,11 +101,11 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		    }
 		    BEntree.setDateCommande(Instant.now());
 		    
-		    BonEntree savedCmdFrs = bonEntreeRepository.save(BonEntree.toEntity(BEntree));
+		    BonEntree savedCmdFrs = bonEntreeRepository.save(BonEntreeDto.toEntity(BEntree));
 
 		    if (BEntree.getLigneEntrees() != null) {
 		    	BEntree.getLigneEntrees().forEach(ligCmdFrs -> {
-		        LigneEntree ligneEntree = LigneEntree.toEntity(ligCmdFrs);
+		        LigneEntree ligneEntree = LigneEntreeDto.toEntity(ligCmdFrs);
 		        ligneEntree.setBonEntree(savedCmdFrs);
 		        ligneEntree.setIdMagasin(savedCmdFrs.getIdMagasin());
 		        LigneEntree saveLigne = ligneEntreeFournisseurRepository.save(ligneEntree);
@@ -109,17 +113,29 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		        effectuerEntree(saveLigne);
 		      });
 		    }
-		    return BonEntree.fromEntity(savedCmdFrs);
+		      // Send WebSocket notification
+	        notificationController.sendNotification("Commande " + savedCmdFrs.getId() + " saved. Please update status.");
+	        return BonEntreeDto.fromEntity(savedCmdFrs);
+		 
 
 	}
-*/
+	  private void effectuerEntree(LigneEntree lig) {
+		    MVTStockDto mvtStkDto = MVTStockDto.builder()
+		        .article(ArticleDto.fromEntity(lig.getArticle()))
+		        .dateMvt(Instant.now())
+		        .typeMvt(TypeStock.ENTREE)
+		        .quantite(lig.getQuantite())
+		        .idMagasin(lig.getIdMagasin())
+		        .build();
+		    mvtStockService.entreeStock(mvtStkDto);
+		  }
 		
 
 
 	   
 
-	    @Override
-	    public BonEntree save(BonEntree BEntree) {
+	   /* @Override
+	    public BonEntreeDto save(BonEntreeDto BEntree) {
 	        List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
 
 	        if (!errors.isEmpty()) {
@@ -127,51 +143,43 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 	            throw new InvalidEntityException("La commande fournisseur n'est pas valide");
 	        }
 
-	        if (BEntree.getId() != null && BEntree.isBonFournisseurLivree()) {
+	        if (BEntree.getId() != null && BEntree.isCommandeLivree()) {
 	            throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
 	        }
 
 	        // Save the BonEntree to the database (assuming you have a repository for this)
-	        BonEntree savedBonEntree = bonEntreeRepository.save(BEntree);
-
+	        BonEntree savedBonEntree = bonEntreeRepository.save(BonEntreeDto.toEntity(BEntree));
+	        
 	        // Send WebSocket notification
 	        notificationController.sendNotification("Commande " + savedBonEntree.getId() + " saved. Please update status.");
+	        return BonEntreeDto.fromEntity(savedBonEntree);
 
-	        return savedBonEntree;
-	    }
+	        
+	    }*/
 	
 	
 	
 
-private void effectuerEntree(LigneEntree lig) {
-    MVTStock mvtStkDto = MVTStock.builder()
-        .article(lig.getArticle())
-        .dateMvt(Instant.now())
-        .typestock(TypeStock.ENTREE)
-        .quantite(lig.getQuantite())
-        .idMagasin(lig.getIdMagasin())
-        .build();
-    mvtStockService.entreeStock(mvtStkDto);
+
+
+@Override
+public BonEntreeDto findById(Integer id) {
+  if (id == null) {
+    log.error("Commande fournisseur ID is NULL");
+    return null;
+  }
+  return bonEntreeRepository.findById(id)
+      .map(BonEntreeDto::fromEntity)
+      .orElseThrow(() -> new EntityNotFoundException(
+          "Aucune commande fournisseur n'a ete trouve avec l'ID " + id));
 }
-
-	  
-
-		@Override
-		public BonEntree findById(Integer id) {
-			 if (id == null) {
-			      log.error("Commande fournisseur ID is NULL");
-			      return null;
-			    }
-			    return bonEntreeRepository.findById(id)
-			        .orElseThrow(() -> new EntityNotFoundException(
-			            "Aucune commande fournisseur n'a ete trouve avec l'ID " + id ));
-		}
 
 		
 		@Override
-		public BonEntree findByCode(String code) {
+		public BonEntreeDto findByCode(String code) {
 		    return bonEntreeRepository.findBonEntreeByCode(code)
-		        .orElseThrow(() -> new EntityNotFoundException(
+		    		.map(BonEntreeDto::fromEntity)
+		    		.orElseThrow(() -> new EntityNotFoundException(
 		            "Aucune commande fournisseur n'a ete trouve avec le CODE " + code));
 		}
 
@@ -199,29 +207,31 @@ private void effectuerEntree(LigneEntree lig) {
 			        .map(BonEntreeDto::fromEntity)
 			        .collect(Collectors.toList());
 		}
-	
+		
 
 		@Override
-		public BonEntree updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
+		public BonEntreeDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
 			checkIdCommande(idCommande);
 			checkEtatCommande(idCommande);		 
-		    BonEntree commandeFournisseur = checkEtatCommande(idCommande);
+		    BonEntreeDto commandeFournisseur = checkEtatCommande(idCommande);
 		    commandeFournisseur.setEtatCommande(etatCommande);
 
-		    BonEntree savedCommande = bonEntreeRepository.save(commandeFournisseur);
+		    BonEntree savedCommande = bonEntreeRepository.save(BonEntreeDto.toEntity(commandeFournisseur));
 
-		    if (commandeFournisseur.isBonFournisseurLivree()) {
+		    if (commandeFournisseur.isCommandeLivree()) {
 		        updateMvtStk(idCommande);
 		    }
-
-		    return savedCommande;
+		    return BonEntreeDto.fromEntity(savedCommande);
+		   
 		}
 
-		private BonEntree checkEtatCommande(Integer idCommande) {
-		    return bonEntreeRepository.findById(idCommande)
-		        .orElseThrow(() -> new EntityNotFoundException(
-		            "Aucune commande fournisseur n'a ete trouve avec l'ID " + idCommande));
-		}
+		  private BonEntreeDto checkEtatCommande(Integer idCommande) {
+			  BonEntreeDto commandeFournisseur = findById(idCommande);
+			    if (commandeFournisseur.isCommandeLivree()) {
+			      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+			    }
+			    return commandeFournisseur;
+			  }
 		
 		  private void checkIdCommande(Integer idCommande) {
 			    if (idCommande == null) {
@@ -229,20 +239,15 @@ private void effectuerEntree(LigneEntree lig) {
 			      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un ID null");
 			    }
 			  }
+		  private void updateMvtStk(Integer idCommande) {
+			    List<LigneEntree> ligneCommandeFournisseur = ligneEntreeFournisseurRepository.findAllByBonEntreeId(idCommande);
+			    ligneCommandeFournisseur.forEach(lig -> {
+			      effectuerEntree(lig);
+			    });
+			  }
 
-		private void updateMvtStk(Integer idCommande) {
-		    List<LigneEntree> ligneEntreeFournisseurs = ligneEntreeFournisseurRepository.findAllByBonEntreeId(idCommande);
-		    ligneEntreeFournisseurs.forEach(lig -> {
-		        MVTStock mvtStk = MVTStock.builder()
-		            .article(lig.getArticle())
-		            .dateMvt(Instant.now())
-		            .typestock(TypeStock.ENTREE)
-		            .quantite(lig.getQuantite())
-		            .idMagasin(lig.getIdMagasin())
-		            .build();
-		        mvtStockService.entreeStock(mvtStk);
-		    });
-		}
+
+
 
 		  private void checkIdLigneCommande(Integer idligneEntreeFournisseur) {
 			    if (idligneEntreeFournisseur == null) {
@@ -252,7 +257,7 @@ private void effectuerEntree(LigneEntree lig) {
 			  }
 		  
 		  @Override
-		  public BonEntree updateQuantiteCommande(Integer idCommande, Integer idligneEntreeFournisseur, Integer quantite) {
+		  public BonEntreeDto updateQuantiteCommande(Integer idCommande, Integer idligneEntreeFournisseur, Integer quantite) {
 		    checkIdCommande(idCommande);
 		    checkIdLigneCommande(idligneEntreeFournisseur);
 
@@ -261,7 +266,7 @@ private void effectuerEntree(LigneEntree lig) {
 		      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec une quantite null ou ZERO");
 		    }
 
-		    BonEntree commandeFournisseur = checkEtatCommande(idCommande);
+		    BonEntreeDto commandeFournisseur = checkEtatCommande(idCommande);
 		    Optional<LigneEntree> ligneFournisseurOptional = findLigneCommandeFournisseur(idligneEntreeFournisseur);
 
 		    LigneEntree ligneFounisseur = ligneFournisseurOptional.get();
@@ -280,5 +285,25 @@ private void effectuerEntree(LigneEntree lig) {
 			    return ligneCommandeFournisseurOptional;
 			  }
 
+
+		  public BonEntreeDto updateFournisseur(Integer idCommande, Integer idFournisseur) {
+		    checkIdCommande(idCommande);
+		    if (idFournisseur == null) {
+		      log.error("L'ID du fournisseur is NULL");
+		      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un ID fournisseur null");
+		    }
+		    BonEntreeDto commandeFournisseur = checkEtatCommande(idCommande);
+		    Optional<Fournisseur> fournisseurOptional = fournisseurRepository.findById(idFournisseur);
+		    if (fournisseurOptional.isEmpty()) {
+		      throw new EntityNotFoundException(
+		          "Aucun fournisseur n'a ete trouve avec l'ID " + idFournisseur);
+		    }
+		    commandeFournisseur.setFournisseur(FournisseurDto.fromEntity(fournisseurOptional.get()));
+
+		    return BonEntreeDto.fromEntity(
+		    		bonEntreeRepository.save(BonEntreeDto.toEntity(commandeFournisseur))
+		    );
+		  }
 		  
+		 
 }

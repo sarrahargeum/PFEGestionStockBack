@@ -56,7 +56,6 @@ C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\e
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\repository\LigneEntreeRepository.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\exception\InvalidOperationException.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\service\MVTStockService.java
-C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\service\OrderService.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\dto\ClientDto.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\dto\LigneSortieDto.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\dto\MagasinDto.java
@@ -96,5 +95,4 @@ C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\e
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\service\MagasinService.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\dto\MVTStockDto.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\repository\BonEntreeRepository.java
-C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\service\metiers\OrderServiceImpl.java
 C:\Users\Lenovo\Desktop\pfeEsprit\PFEGestionStockBack-master\src\main\java\com\example\stock\config\SwaggerConfig.java

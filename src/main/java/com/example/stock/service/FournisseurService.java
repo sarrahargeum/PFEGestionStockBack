@@ -7,10 +7,11 @@ import com.example.stock.model.Fournisseur;
 
 public interface FournisseurService {
 	
-	Fournisseur ajouterFournisseur(Fournisseur four);
+	FournisseurDto ajouterFournisseur(FournisseurDto dto);
 	 void  updateFournisseur(Integer id, Fournisseur fournisseur);
 	Fournisseur deleteFournisseur(Integer id);
     List<FournisseurDto> findAll();
-    Fournisseur retrieveFournisseur (Integer fournisseurId);
+    
+    public FournisseurDto retrieveFournisseur(Integer id);
 
 }

@@ -1,5 +1,6 @@
 package com.example.stock.repository;
 
+import com.example.stock.dto.MVTStockDto;
 import com.example.stock.model.MVTStock;
 
 import java.math.BigDecimal;
@@ -18,5 +19,5 @@ public interface MVTStockRepository extends JpaRepository<MVTStock, Integer> {
 	  @Query("select sum(m.quantite) from MVTStock m where m.article.id = :idArticle")
 	  Integer stockReelArticle(@Param("idArticle") Integer idArticle);
 
-	  List<MVTStock> findAllByArticleId(Integer idArticle);
+	  List<MVTStockDto> findAllByArticleId(Integer idArticle);
 }

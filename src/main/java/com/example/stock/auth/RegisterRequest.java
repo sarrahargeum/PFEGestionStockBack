@@ -21,5 +21,4 @@ public class RegisterRequest {
     private Magasin magasins;
     private  Roles roles ;
 	
-
 }

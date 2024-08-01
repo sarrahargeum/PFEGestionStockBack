@@ -21,9 +21,9 @@ public class LigneEntree {
     private Integer quantite;
     private Float prixUnitaire;
     
-    @Enumerated(EnumType.STRING)
+   /* @Enumerated(EnumType.STRING)
     private EtatCommande etatCommande;
-
+*/
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;
@@ -37,20 +37,7 @@ public class LigneEntree {
 
   
     
-    public static LigneEntree toEntity(LigneEntree dto) {
-        if (dto == null) {
-          return null;
-        }
-        LigneEntree ligneEntree = new LigneEntree();
-        ligneEntree.setId(dto.getId());
-        ligneEntree.setQuantite(dto.getQuantite());
-        ligneEntree.setPrixUnitaire(dto.getPrixUnitaire());
-        ligneEntree.setArticle(dto.getArticle());
-        ligneEntree.setBonEntree(dto.getBonEntree());
-        ligneEntree.setIdMagasin(dto.getIdMagasin());
-        ligneEntree.setEtatCommande(dto.getEtatCommande());
-        return ligneEntree;
-      }
+
     
 
 }

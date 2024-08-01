@@ -8,17 +8,20 @@ import com.example.stock.model.EtatCommande;
 
 public interface BonEntreeService {
 	
-	BonEntree save(BonEntree BEntree);
-	BonEntree findById(Integer id);
+	BonEntreeDto save(BonEntreeDto BEntree);
+	BonEntreeDto findById(Integer id);
 
-	BonEntree findByCode(String code);
+	BonEntreeDto findByCode(String code);
 	
 	 void delete(Integer id);
 	 
 	  List<BonEntreeDto> findAll();
 	  
 	  
-	  BonEntree updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
+	  BonEntreeDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
 
-	   BonEntree updateQuantiteCommande(Integer idCommande, Integer idligneEntreeFournisseur, Integer quantite);
+	  BonEntreeDto updateQuantiteCommande(Integer idCommande, Integer idligneEntreeFournisseur, Integer quantite);
+	   
+	   BonEntreeDto updateFournisseur(Integer idCommande, Integer idFournisseur);
+
 }

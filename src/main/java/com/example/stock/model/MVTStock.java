@@ -29,8 +29,8 @@ public class MVTStock {
     
     @Column(name = "typestock")
     @Enumerated(EnumType.STRING)
-    private TypeStock typestock;
-
+    private TypeStock typeMvt;
+    
     @Column(name = "idmagasin")
     private Integer idMagasin;
 

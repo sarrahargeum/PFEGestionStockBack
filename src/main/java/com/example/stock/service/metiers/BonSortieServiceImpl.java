@@ -9,6 +9,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.stock.controller.NotificationController;
+import com.example.stock.dto.ArticleDto;
+import com.example.stock.dto.BonEntreeDto;
+import com.example.stock.dto.BonSortieDto;
+import com.example.stock.dto.LigneEntreeDto;
+import com.example.stock.dto.LigneSortieDto;
+import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
@@ -54,67 +61,18 @@ public class BonSortieServiceImpl implements BonSortieService {
 	
 	@Autowired
 	MVTStockService mvtStockService;
+	
+	@Autowired
+	NotificationController notificationController;
 
+	
 
-	@Override
-	/*public BonSortie save(BonSortie bonSortie) {
+	
+/*	public BonSortie save(BonSortie bonSortie) {
 
 	    List<String> errors = BonSortieValidator.validate(bonSortie);
-
-	    if (bonSortie.getClient() == null || bonSortie.getClient().getId() == null) {
-	        errors.add("Client is required and must have a valid ID");
-	    } else {
-	        Optional<Client> client = clientRepository.findById(bonSortie.getClient().getId());
-	        if (client.isEmpty()) {
-	            errors.add("client with ID " + bonSortie.getClient().getId() + " does not exist");
-	        } else {
-	            bonSortie.setClient(client.get());
-	        }
-	    }
-
-	  
-
-	    List<String> articleErrors = new ArrayList<>();
-	    if (bonSortie.getLigneSorties() != null) {
-	    	bonSortie.getLigneSorties().forEach(ligCmdCLts -> {
-	            if (ligCmdCLts.getArticle() != null) {
-	                Optional<Article> article = articleRepository.findById(ligCmdCLts.getArticle().getId());
-	                if (article.isEmpty()) {
-	                    articleErrors.add("L'article avec l'ID " + ligCmdCLts.getArticle().getId() + " n'existe pas");
-	                }
-	            } else {
-	                articleErrors.add("Impossible d'enregistrer une commande avec un article NULL");
-	            }
-	        });
-	    }
 
 	   
-	    bonSortie.setDateCommande(Instant.now());
-	    BonSortie savedBonSortie  = bonSortieRepository.save(bonSortie);
-	  
-	    if (bonSortie.getLigneSorties() != null) {
-	            bonSortie.getLigneSorties().forEach(ligneCmdSortie -> {
-	                LigneSortie ligneClient = new LigneSortie(); 
-	                
-	                ligneClient.setBonSortie(savedBonSortie);
-	                ligneClient.setArticle(ligneCmdSortie.getArticle());
-	                ligneClient.setPrixUnitaire(ligneCmdSortie.getPrixUnitaire());
-	                ligneClient.setQuantite(ligneCmdSortie.getQuantite());
-	                ligneClient.setIdMagasin(bonSortie.getIdMagasin()); 
-	                ligneSortieRepository.save(ligneClient);
-	            });
-	        }
-	        return savedBonSortie;
-	    }*/
-	
-	public BonSortie save(BonSortie bonSortie) {
-
-	    List<String> errors = BonSortieValidator.validate(bonSortie);
-
-	    if (!errors.isEmpty()) {
-	      log.error("Commande client n'est pas valide");
-	      throw new InvalidEntityException("La commande client n'est pas valide");
-	    }
 
 	    if (bonSortie.getId() != null && bonSortie.isBonSortieLivree()) {
 	      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
@@ -148,16 +106,6 @@ public class BonSortieServiceImpl implements BonSortieService {
 	    bonSortie.setDateCommande(Instant.now());
 	    BonSortie savedCmdClt = bonSortieRepository.save(bonSortie.toEntity(bonSortie));
 
-	    if (bonSortie.getLigneSorties() != null) {
-	    	bonSortie.getLigneSorties().forEach(ligCmdClt -> {
-	        LigneSortie ligneCommandeClient = LigneSortie.toEntity(ligCmdClt);
-	        ligneCommandeClient.setBonSortie(bonSortie);
-	        ligneCommandeClient.setIdMagasin(bonSortie.getIdMagasin());
-	        LigneSortie savedLigneCmd = ligneSortieRepository.save(ligneCommandeClient);
-
-	        effectuerSortie(savedLigneCmd);
-	      });
-	    }
 
 	    return BonSortie.fromEntity(savedCmdClt);
 	  }
@@ -165,33 +113,104 @@ public class BonSortieServiceImpl implements BonSortieService {
 
 
 private void effectuerSortie(LigneSortie lig) {
-    MVTStock mvtStkDto = MVTStock.builder()
-        .article(lig.getArticle())
-        .dateMvt(Instant.now())
-        .typestock(TypeStock.ENTREE)
-        .quantite(lig.getQuantite())
-        .idMagasin(lig.getIdMagasin())
-        .build();
-    mvtStockService.entreeStock(mvtStkDto);
-}
+	 MVTStockDto mvtStkDto = MVTStockDto.builder()
+		        .article(ArticleDto.fromEntity(lig.getArticle()))
+		        .dateMvt(Instant.now())
+		        .typeMvt(TypeStock.SORTIE)
+		        .quantite(lig.getQuantite())
+		        .idMagasin(lig.getIdMagasin())
+		        .build();
+    mvtStockService.sortieStock(mvtStkDto);
+}*/
 
 	  
+	 public BonSortieDto save(BonSortieDto BSortie) {
 
-		@Override
-		public BonSortie findById(Integer id) {
+		 List<String> errors = BonSortieValidator.validate(BSortie);
+
+		 if (!errors.isEmpty()) {
+		      log.error("Commande client n'est pas valide");
+		      throw new InvalidEntityException("La commande client n'est pas valide");
+		    }
+
+		    if (BSortie.getId() != null && BSortie.isCommandeLivree()) {
+		      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+		    }
+
+		    Optional<Client> client = clientRepository.findById(BSortie.getClient().getId());
+		    if (client.isEmpty()) {
+		      log.warn("Client with ID {} was not found in the DB", BSortie.getClient().getId());
+		      throw new EntityNotFoundException("Aucun client avec l'ID" + BSortie.getClient().getId() + " n'a ete trouve dans la BDD");
+		    }
+
+		    List<String> articleErrors = new ArrayList<>();
+
+		    if (BSortie.getLigneSorties() != null) {
+		    	BSortie.getLigneSorties().forEach(ligCmdCls -> {
+		        if (ligCmdCls.getArticle() != null) {
+		          Optional<Article> article = articleRepository.findById(ligCmdCls.getArticle().getId());
+		          if (article.isEmpty()) {
+		            articleErrors.add("L'article avec l'ID " + ligCmdCls.getArticle().getId() + " n'existe pas");
+		          }
+		        } else {
+		          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
+		        }
+		      });
+		    }
+
+		    if (!articleErrors.isEmpty()) {
+		      log.warn("");
+		      throw new InvalidEntityException("Article n'existe pas dans la BDD");
+		    }
+		    BSortie.setDateCommande(Instant.now());
+		    
+		    BonSortie savedCmdCls = bonSortieRepository.save(BonSortieDto.toEntity(BSortie));
+
+		    if (BSortie.getLigneSorties() != null) {
+		    	BSortie.getLigneSorties().forEach(ligCmdClt -> {
+		          LigneSortie ligneCommandeClient = LigneSortieDto.toEntity(ligCmdClt);
+		          ligneCommandeClient.setBonSortie(savedCmdCls);
+		          ligneCommandeClient.setIdMagasin(BSortie.getIdMagasin());
+		          LigneSortie savedLigneCmd = ligneSortieRepository.save(ligneCommandeClient);
+
+		          effectuerSortie(savedLigneCmd);
+		        });
+		      }
+		      // Send WebSocket notification
+	        notificationController.sendNotification("Commande " + savedCmdCls.getId() + " saved. Please update status.");
+	        return BonSortieDto.fromEntity(savedCmdCls);
+	}
+	 
+	  private void effectuerSortie(LigneSortie lig) {
+		    MVTStockDto mvtStkDto = MVTStockDto.builder()
+		        .article(ArticleDto.fromEntity(lig.getArticle()))
+		        .dateMvt(Instant.now())
+		        .typeMvt(TypeStock.SORTIE)
+		        .quantite(lig.getQuantite())
+		        .idMagasin(lig.getIdMagasin())
+		        .build();
+		    mvtStockService.sortieStock(mvtStkDto);
+		  }
+		
+
+	
+		public BonSortieDto findById(Integer id) {
 			 if (id == null) {
 			      log.error("Commande client ID is NULL");
 			      return null;
 			    }
 			    return bonSortieRepository.findById(id)
-			        .orElseThrow(() -> new EntityNotFoundException(
-			            "Aucune commande client n'a ete trouve avec l'ID " + id ));
+			    		.map(BonSortieDto::fromEntity)
+			    	      .orElseThrow(() -> new EntityNotFoundException(
+			    	          "Aucune commande client n'a ete trouve avec l'ID" + id));
+			       
 		}
 
 		
 		@Override
-		public BonSortie findByCode(String code) {
+		public BonSortieDto findByCode(String code) {
 		    return bonSortieRepository.findBonSortieByCode(code)
+		    		.map(BonSortieDto::fromEntity)
 		        .orElseThrow(() -> new EntityNotFoundException(
 		            "Aucune commande client n'a ete trouve avec le CODE " + code));
 		}
@@ -210,38 +229,43 @@ private void effectuerSortie(LigneSortie lig) {
 				    }
 				    bonSortieRepository.deleteById(id);
 				  
-			
-		}
+			}
 		
 
 		@Override
-		public List<BonSortie> findAll() {
-			  return bonSortieRepository.findAll().stream()
-				        .collect(Collectors.toList());
+		public List<BonSortieDto> findAll() {
+
+			return bonSortieRepository.findAll().stream()
+			        .map(BonSortieDto::fromEntity)
+			        .collect(Collectors.toList());
+	
 		}
 	
 
 		@Override
-		public BonSortie updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
+		public BonSortieDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
 			checkIdCommande(idCommande);
 			checkEtatCommande(idCommande);		 
-			BonSortie commandeCli = checkEtatCommande(idCommande);
-		    commandeCli.setEtatCommande(etatCommande);
+			BonSortieDto commandeClient = checkEtatCommande(idCommande);
+			commandeClient.setEtatCommande(etatCommande);
 
-		    BonSortie savedCommande = bonSortieRepository.save(commandeCli);
+		    BonSortie savedCommande = bonSortieRepository.save(BonSortieDto.toEntity(commandeClient));
 
-		    if (commandeCli.isBonSortieLivree()) {
+		    if (commandeClient.isCommandeLivree()) {
 		        updateMvtStk(idCommande);
 		    }
-
-		    return savedCommande;
+		    return BonSortieDto.fromEntity(savedCommande);
 		}
 
-		private BonSortie checkEtatCommande(Integer idCommande) {
-		    return bonSortieRepository.findById(idCommande)
-		        .orElseThrow(() -> new EntityNotFoundException(
-		            "Aucune commande client  n'a ete trouve avec l'ID " + idCommande));
-		}
+		  private BonSortieDto checkEtatCommande(Integer idCommande) {
+			  BonSortieDto commandeClient = findById(idCommande);
+			    if (commandeClient.isCommandeLivree()) {
+			      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+			    }
+			    return commandeClient;
+			  }
+		
+	
 		
 		  private void checkIdCommande(Integer idCommande) {
 			    if (idCommande == null) {
@@ -250,19 +274,14 @@ private void effectuerSortie(LigneSortie lig) {
 			    }
 			  }
 
-		private void updateMvtStk(Integer idCommande) {
-		    List<LigneSortie> ligneSorties = ligneSortieRepository.findAllByBonSortieId(idCommande);
-		    ligneSorties.forEach(lig -> {
-		        MVTStock mvtStk = MVTStock.builder()
-		            .article(lig.getArticle())
-		            .dateMvt(Instant.now())
-		            .typestock(TypeStock.SORTIE)
-		            .quantite(lig.getQuantite())
-		            .idMagasin(lig.getIdMagasin())
-		            .build();
-		        mvtStockService.sortieStock(mvtStk);
-		    });
-		}
+		  private void updateMvtStk(Integer idCommande) {
+			    List<LigneSortie> ligneCommandeClients = ligneSortieRepository.findAllByBonSortieId(idCommande);
+			    ligneCommandeClients.forEach(lig -> {
+			     // effectuerSortie(lig);
+			    });
+			  }
+		  
+		
 
 		  private void checkIdLigneCommande(Integer idligneSortie) {
 			    if (idligneSortie == null) {
@@ -272,7 +291,7 @@ private void effectuerSortie(LigneSortie lig) {
 			  }
 		  
 		  @Override
-		  public BonSortie updateQuantiteCommande(Integer idCommande, Integer idligneSortie, Integer quantite) {
+		  public BonSortieDto updateQuantiteCommande(Integer idCommande, Integer idligneSortie, Integer quantite) {
 		    checkIdCommande(idCommande);
 		    checkIdLigneCommande(idligneSortie);
 
@@ -281,7 +300,7 @@ private void effectuerSortie(LigneSortie lig) {
 		      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec une quantite null ou ZERO");
 		    }
 
-		    BonSortie commandeClient = checkEtatCommande(idCommande);
+		    BonSortieDto commandeClient = checkEtatCommande(idCommande);
 		    Optional<LigneSortie> ligneSortieOptional = findLigneCommandeClient(idligneSortie);
 
 		    LigneSortie ligneSortie = ligneSortieOptional.get();

@@ -1,5 +1,8 @@
 package com.example.stock.controller;
 
+import com.example.stock.dto.ArticleDto;
+import com.example.stock.dto.LigneEntreeDto;
+import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
 import com.example.stock.model.Magasin;
@@ -144,42 +147,29 @@ public class ArticleController {
         return articleService.retrieveArticle(id);
     }
     
-   /* @PutMapping("/update/{id}")
-    public void update(@PathVariable Integer id,@RequestParam("file") MultipartFile file,
-			 @RequestParam("article") String article) throws JsonParseException , JsonMappingException , Exception {
-     Article art = new ObjectMapper().readValue(article, Article.class);
-        	deleteArticleImage(art);
-        	 String filename = file.getOriginalFilename();
-     	    String newFileName = FilenameUtils.getBaseName(filename)+"."+FilenameUtils.getExtension(filename);
-     	    art.setImage(newFileName);
-            articleService.update(id, art);
-           
-           ajoutArticle(file, article, id, id);
-       
-    }
-    
-    private void deleteArticleImage(Article article)
-    {
-    	System.out.println( " Delete Article Image");
-         try { 
-        	 File file = new File (context.getRealPath("/Images/"+article.getImage()));
-             System.out.println(article.getImage());
-              if(file.delete()) { 
-                System.out.println(file.getName() + " is deleted!");
-             } else {
-                System.out.println("Delete operation is failed.");
-                }
-          }
-            catch(Exception e)
-            {
-                System.out.println("Failed to Delete image !!");
-            }
-    }*/
-    
+
     
     @DeleteMapping("/delete/{id}")
     public void deleteArticle(@PathVariable Integer id) {
         articleService.deleteArticle(id);
+    }
+    
+    @GetMapping( "/historique/commandeclient/{id}")
+    List<LigneSortieDto> findHistoriaueCommandeClient(@PathVariable("id") Integer idArticle){
+        return articleService.findHistoriaueCommandeClient(idArticle);
+    }
+
+    @GetMapping( "/historique/commandefournisseur/{id}")
+    List<LigneEntreeDto> findHistoriqueCommandeFournisseur(@PathVariable("id") Integer idArticle){
+        return articleService.findHistoriqueCommandeFournisseur(idArticle);
+
+    }
+
+    @GetMapping( "/filter/category/{id}")
+    List<ArticleDto> findAllArticleByIdCategory(@PathVariable("id") Integer idCategory){
+        return articleService.findAllArticleByIdCategory(idCategory);
+    	
+    	
     }
 
 

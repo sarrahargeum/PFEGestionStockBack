@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.stock.dto.ClientDto;
+import com.example.stock.dto.FournisseurDto;
+import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Client;
 import com.example.stock.repository.ClientRepository;
 import com.example.stock.service.ClientService;
@@ -22,10 +25,27 @@ public class ClientServiceImpl implements ClientService {
 	
 	
 	
-	@Override
-	public Client ajouterClient(Client cli ) {
-		 return clientRepository.save(cli);
-	}
+	  public ClientDto ajouterClient(ClientDto dto) {
+		 
+
+		    return ClientDto.fromEntity(
+		        clientRepository.save(
+		            ClientDto.toEntity(dto)
+		        )
+		    );
+		  }
+
+		  public ClientDto findById(Integer id) {
+		    if (id == null) {
+		      log.error("Client ID is null");
+		      return null;
+		    }
+		    return clientRepository.findById(id)
+		        .map(ClientDto::fromEntity)
+		        .orElseThrow(() -> new EntityNotFoundException(
+		            "Aucun Client avec l'ID = " + id + " n' ete trouve dans la BDD")
+		        );
+		  }
 
 
 	
@@ -55,15 +75,19 @@ public class ClientServiceImpl implements ClientService {
         return null;
 	}
 
+
 	@Override
-	public List<Client> findAll() {
-        return clientRepository.findAll().stream().collect(Collectors.toList());
+	public List<ClientDto> findAll() {
+		return clientRepository.findAll().stream()
+		        .map(ClientDto::fromEntity)
+		        .collect(Collectors.toList());
 	}
-	
     public Client retrieveClient (Integer clientId){
     	Client cl = clientRepository.findById(clientId).get();
         return  cl;
     }
+
+
 	
 
 }

@@ -27,8 +27,8 @@ public class FournisseurController {
 	    FournisseurService fournisseurService;
 
 	    @PostMapping("/addFour")
-	    public  Fournisseur ajouterFournisseur(@RequestBody Fournisseur four){
-	        return fournisseurService.ajouterFournisseur(four);
+	    public  FournisseurDto ajouterFournisseur(@RequestBody FournisseurDto dto){
+	        return fournisseurService.ajouterFournisseur(dto);
 	        }
 
 	    @GetMapping("/all")
@@ -36,17 +36,17 @@ public class FournisseurController {
 	      return fournisseurService.findAll();
 	    }
 	    
-	    
+	    @GetMapping("/{id}")
+	    FournisseurDto retrieveFournisseur(@PathVariable("id") Integer id) {
+	    return fournisseurService.retrieveFournisseur(id);
+	    }
 	
 	    @PutMapping("/update/{id}")
 	    public void updateFournisseur(@PathVariable("id") Integer id,@RequestBody Fournisseur fournisseur) {
 	        fournisseurService.updateFournisseur(id, fournisseur);
 	    }
 	    
-	    @GetMapping("/retrieve-fournisseur/{id}")
-	    public Fournisseur retrieveFournisseur(@PathVariable("id") Integer fourniseurId) {
-	        return fournisseurService.retrieveFournisseur(fourniseurId);
-	    }
+	 
 	    
 	    @DeleteMapping("/delete/{id}")
 	    public void deleteFournisseur(@PathVariable Integer id) {

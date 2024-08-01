@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.stock.dto.ClientDto;
+import com.example.stock.dto.FournisseurDto;
 import com.example.stock.model.Client;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.service.ClientService;
@@ -28,18 +30,15 @@ public class ClientController {
     ClientService clientService;
 
     @PostMapping("/addCli")
-    public  Client ajouterClient(@RequestBody Client cli){
-        return clientService.ajouterClient(cli);
+    public  ClientDto ajouterClient(@RequestBody ClientDto dto){
+        return clientService.ajouterClient(dto);
         }
 
-    @GetMapping("/all")
-    @ResponseBody
-    public List<Client> findAll() {
 
-        return clientService.findAll();
+    @GetMapping("/all")
+    public List<ClientDto> findAll() {
+      return clientService.findAll();
     }
-    
-    
 
     @PutMapping("/update/{id}")
     public void updateClient(@PathVariable("id") Integer id,@RequestBody Client client) {
