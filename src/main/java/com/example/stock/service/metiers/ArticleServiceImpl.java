@@ -5,37 +5,23 @@ import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
-import com.example.stock.model.Category;
-import com.example.stock.model.Magasin;
+
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.CategoryRepository;
 import com.example.stock.repository.LigneEntreeRepository;
 import com.example.stock.repository.LigneSortieRepository;
 import com.example.stock.repository.MagasinRepository;
 import com.example.stock.service.ArticleService;
-import com.google.common.io.Files;
 
 import jakarta.servlet.ServletContext;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
-import java.nio.file.Paths;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

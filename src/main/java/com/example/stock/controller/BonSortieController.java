@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.stock.dto.BonSortieDto;
-import com.example.stock.model.BonSortie;
+import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.service.BonSortieService;
 
@@ -65,13 +65,29 @@ public class BonSortieController {
 	    
 	    @PutMapping("/quantite/{id}/{idligneSortie}/{quantite}")
 	    BonSortieDto updateQuantiteCommande(@PathVariable("id") Integer id,
-	    		@PathVariable("idligneSortie") Integer idligneSortie, @PathVariable("quantite") Integer quantite)
-{
+	    		@PathVariable("idligneSortie") Integer idligneSortie, @PathVariable("quantite") Integer quantite){
 	      return bonSortieService.updateQuantiteCommande(id, idligneSortie,quantite);
 	    }
 
-	   
+	    @PutMapping("/commandesclients/update/client/{idCommande}/{idClient}")
+	    ResponseEntity<BonSortieDto> updateClient(@PathVariable("idCommande") Integer idCommande, @PathVariable("idClient") Integer idClient){
+	      return ResponseEntity.ok(bonSortieService.updateClient(idCommande, idClient));
+	    }
 
+	    @PutMapping( "/commandesclients/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
+	    ResponseEntity<BonSortieDto> updateArticle(@PathVariable("idCommande") Integer idCommande,
+	        @PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("idArticle") Integer idArticle) {
+	        return ResponseEntity.ok(bonSortieService.updateArticle(idCommande, idLigneCommande, idArticle));
+	      }
 
+	    @GetMapping("/commandesclients/lignesCommande/{idCommande}")
+	    ResponseEntity<List<LigneSortieDto>> findAllLignesCommandesClientByCommandeClientId(@PathVariable("idCommande") Integer idCommande) {
+	        return ResponseEntity.ok(bonSortieService.findAllLignesCommandesClientByCommandeClientId(idCommande));
+	      }
+	    
+	    @DeleteMapping("/commandesclients/delete/article/{idCommande}/{idLigneCommande}")
+	    ResponseEntity<BonSortieDto> deleteArticle(@PathVariable("idCommande") Integer idCommande, @PathVariable("idLigneCommande") Integer idLigneCommande){
+	        return ResponseEntity.ok(bonSortieService.deleteArticle(idCommande, idLigneCommande));
+	      }
 
 }

@@ -2,10 +2,8 @@ package com.example.stock.auth;
 
 import com.example.stock.config.JwtAuthenticationFilter;
 import com.example.stock.config.JwtService;
-import com.example.stock.exception.ErrorMessage;
 import com.example.stock.model.User;
-import com.example.stock.repository.UserRepository;
-import com.example.stock.service.UserService;
+
 import com.example.stock.service.metiers.MailServiceImpl;
 import jakarta.mail.MessagingException;
 
@@ -38,10 +36,10 @@ public class AuthenticationConrtroller {
      
      @Autowired
      PasswordEncoder passwordEncoder;
-    
-   
+       
 
     private  Logger log = LoggerFactory.getLogger(User.class);
+    
     @Autowired
     AuthenticationService service;
 
@@ -55,9 +53,7 @@ public class AuthenticationConrtroller {
         User user = service.register(request);
         	String email = user.getEmail();
 
-    	    String password = user.getPassword();
-    	    
-    	
+    	    String password = user.getPassword();   	        	
     	    String text = "Votre compte est prêt, mais encore désactivé. \n" +
                     "Email: " + email + "\n" +
                     "Mot de passe: " + password;

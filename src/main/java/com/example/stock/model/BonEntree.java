@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.Set;
 
-import com.example.stock.dto.FournisseurDto;
 
 @Getter
 @Setter
@@ -44,8 +43,5 @@ public class BonEntree {
     @OneToMany(mappedBy =  "bonEntree")
     private Set<LigneEntree> ligneEntrees;
 
-    
-
- 
     
 }

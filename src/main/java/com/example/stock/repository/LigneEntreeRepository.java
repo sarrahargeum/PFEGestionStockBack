@@ -13,4 +13,7 @@ public interface LigneEntreeRepository extends JpaRepository<LigneEntree, Intege
     List<LigneEntree> findAllByBonEntreeId(Integer bonEntreeId);
 
 	  List<LigneEntree> findAllByArticleId(Integer idCommande);
+	 // List<LigneEntree> findAllByCommandeFournisseurId(Integer idCommande);
+
+	  
 }

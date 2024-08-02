@@ -23,7 +23,6 @@ import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.model.LigneEntree;
-import com.example.stock.model.MVTStock;
 import com.example.stock.model.TypeStock;
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.BonEntreeRepository;
@@ -31,6 +30,7 @@ import com.example.stock.repository.FournisseurRepository;
 import com.example.stock.repository.LigneEntreeRepository;
 import com.example.stock.service.BonEntreeService;
 import com.example.stock.service.MVTStockService;
+import com.example.stock.validator.ArticleValidator;
 import com.example.stock.validator.BonEntreeFournisseurValidator;
 
 
@@ -182,8 +182,7 @@ public BonEntreeDto findById(Integer id) {
 		    		.orElseThrow(() -> new EntityNotFoundException(
 		            "Aucune commande fournisseur n'a ete trouve avec le CODE " + code));
 		}
-
-		
+	
 
 		@Override
 		public void delete(Integer id) {
@@ -304,6 +303,60 @@ public BonEntreeDto findById(Integer id) {
 		    		bonEntreeRepository.save(BonEntreeDto.toEntity(commandeFournisseur))
 		    );
 		  }
+		
 		  
-		 
+		  public BonEntreeDto updateArticle(Integer idCommande, Integer idLigneCommande, Integer idArticle) {
+			    checkIdCommande(idCommande);
+			    checkIdLigneCommande(idLigneCommande);
+			    checkIdArticle(idArticle, "nouvel");
+
+			    BonEntreeDto commandeFournisseur = checkEtatCommande(idCommande);
+
+			    Optional<LigneEntree> ligneCommandeFournisseur = findLigneCommandeFournisseur(idLigneCommande);
+
+			    Optional<Article> articleOptional = articleRepository.findById(idArticle);
+			    if (articleOptional.isEmpty()) {
+			      throw new EntityNotFoundException(
+			          "Aucune article n'a ete trouve avec l'ID " + idArticle);
+			    }
+
+			    List<String> errors = ArticleValidator.validate(ArticleDto.fromEntity(articleOptional.get()));
+			    if (!errors.isEmpty()) {
+			      throw new InvalidEntityException("Article invalid", errors);
+			    }
+
+			    LigneEntree ligneCommandeFournisseurToSaved = ligneCommandeFournisseur.get();
+			    ligneCommandeFournisseurToSaved.setArticle(articleOptional.get());
+			    ligneEntreeFournisseurRepository.save(ligneCommandeFournisseurToSaved);
+
+			    return commandeFournisseur;
+			  }
+
+		  
+		  
+		  private void checkIdArticle(Integer idArticle, String msg) {
+			    if (idArticle == null) {
+			      log.error("L'ID de " + msg + " is NULL");
+			      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un " + msg + " ID article null");
+			    }
+			  }
+	
+		  
+		  public BonEntreeDto deleteArticle(Integer idCommande, Integer idLigneCommande) {
+		    checkIdCommande(idCommande);
+		    checkIdLigneCommande(idLigneCommande);
+
+		    BonEntreeDto commandeFournisseur = checkEtatCommande(idCommande);
+		    // Just to check the LigneCommandeFournisseur and inform the fournisseur in case it is absent
+		    findLigneCommandeFournisseur(idLigneCommande);
+		    ligneEntreeFournisseurRepository.deleteById(idLigneCommande);
+
+		    return commandeFournisseur;
+		  }	 
+		  
+		  public List<LigneEntreeDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(Integer idCommande) {
+			    return ligneEntreeFournisseurRepository.findAllByBonEntreeId(idCommande).stream()
+			        .map(LigneEntreeDto::fromEntity)
+			        .collect(Collectors.toList());
+			  }
 }

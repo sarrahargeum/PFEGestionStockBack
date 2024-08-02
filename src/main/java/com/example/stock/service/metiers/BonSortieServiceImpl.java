@@ -13,6 +13,7 @@ import com.example.stock.controller.NotificationController;
 import com.example.stock.dto.ArticleDto;
 import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.BonSortieDto;
+import com.example.stock.dto.ClientDto;
 import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.dto.MVTStockDto;
@@ -39,6 +40,7 @@ import com.example.stock.repository.LigneSortieRepository;
 import com.example.stock.service.BonEntreeService;
 import com.example.stock.service.BonSortieService;
 import com.example.stock.service.MVTStockService;
+import com.example.stock.validator.ArticleValidator;
 import com.example.stock.validator.BonEntreeFournisseurValidator;
 import com.example.stock.validator.BonSortieValidator;
 
@@ -319,7 +321,81 @@ private void effectuerSortie(LigneSortie lig) {
 			    return ligneCommandeClientOptional;
 			  }
 
+		  @Override
+		  public BonSortieDto updateClient(Integer idCommande, Integer idClient) {
+			    checkIdCommande(idCommande);
+			    if (idClient == null) {
+			      log.error("L'ID du client is NULL");
+			      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un ID client null");
+			    }
+			    BonSortieDto commandeClient = checkEtatCommande(idCommande);
+			    Optional<Client> clientOptional = clientRepository.findById(idClient);
+			    if (clientOptional.isEmpty()) {
+			      throw new EntityNotFoundException(
+			          "Aucun client n'a ete trouve avec l'ID " + idClient);
+			    }
+			    commandeClient.setClient(ClientDto.fromEntity(clientOptional.get()));
+
+			    return BonSortieDto.fromEntity(
+			        bonSortieRepository.save(BonSortieDto.toEntity(commandeClient))
+			    );
+			  }
+
 		  
+		  @Override
+		  public BonSortieDto updateArticle(Integer idCommande, Integer idLigneCommande, Integer idArticle) {
+		    checkIdCommande(idCommande);
+		    checkIdLigneCommande(idLigneCommande);
+		    checkIdArticle(idArticle, "nouvel");
 
+		    BonSortieDto commandeClient = checkEtatCommande(idCommande);
 
+		    Optional<LigneSortie> ligneCommandeClient = findLigneCommandeClient(idLigneCommande);
+
+		    Optional<Article> articleOptional = articleRepository.findById(idArticle);
+		    if (articleOptional.isEmpty()) {
+		      throw new EntityNotFoundException(
+		          "Aucune article n'a ete trouve avec l'ID " + idArticle);
+		    }
+
+		    List<String> errors = ArticleValidator.validate(ArticleDto.fromEntity(articleOptional.get()));
+		    if (!errors.isEmpty()) {
+		      throw new InvalidEntityException("Article invalid", errors);
+		    }
+
+		    LigneSortie ligneCommandeClientToSaved = ligneCommandeClient.get();
+		    ligneCommandeClientToSaved.setArticle(articleOptional.get());
+		    ligneSortieRepository.save(ligneCommandeClientToSaved);
+
+		    return commandeClient;
+		  }
+		  
+		  private void checkIdArticle(Integer idArticle, String msg) {
+			    if (idArticle == null) {
+			      log.error("L'ID de " + msg + " is NULL");
+			      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un " + msg + " ID article null");
+			    }
+		  }
+		  
+		  @Override
+		  public BonSortieDto deleteArticle(Integer idCommande, Integer idLigneCommande) {
+		    checkIdCommande(idCommande);
+		    checkIdLigneCommande(idLigneCommande);
+
+		    BonSortieDto commandeClient = checkEtatCommande(idCommande);
+		    // Just to check the LigneCommandeClient and inform the client in case it is absent
+		    findLigneCommandeClient(idLigneCommande);
+		    ligneSortieRepository.deleteById(idLigneCommande);
+
+		    return commandeClient;
+		  }	  
+		  
+		  @Override
+		  public List<LigneSortieDto> findAllLignesCommandesClientByCommandeClientId(Integer idCommande) {
+		    return ligneSortieRepository.findAllByBonSortieId(idCommande).stream()
+		        .map(LigneSortieDto::fromEntity)
+		        .collect(Collectors.toList());
+		  }
+
+		  
 }

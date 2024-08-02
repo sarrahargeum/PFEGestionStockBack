@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.stock.dto.BonEntreeDto;
+import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.service.BonEntreeService;
@@ -70,11 +71,24 @@ public class BonEntreeController {
 	    
 	    
 	    @PutMapping("/quantite/{id}/{idligneEntreeFournisseur}/{quantite}")
-	    BonEntreeDto updateQuantiteCommande(@PathVariable("id") Integer id,
-	    		@PathVariable("idligneEntreeFournisseur") Integer idligneEntreeFournisseur, @PathVariable("quantite") Integer quantite)
- {
+	    BonEntreeDto updateQuantiteCommande(@PathVariable("id") Integer id,@PathVariable("idligneEntreeFournisseur") Integer idligneEntreeFournisseur, @PathVariable("quantite") Integer quantite){
 	      return bonEntreeService.updateQuantiteCommande(id, idligneEntreeFournisseur,quantite);
 	    }
-
-	   
+	    
+	    
+	    @PutMapping("/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
+	    BonEntreeDto updateArticle(@PathVariable("idCommande") Integer idCommande,@PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("idArticle") Integer idArticle) {
+	        return bonEntreeService.updateArticle(idCommande, idLigneCommande, idArticle);
+	      }
+	    
+	    @DeleteMapping("/delete/article/{idCommande}/{idLigneCommande}")
+	    BonEntreeDto deleteArticle(@PathVariable("idCommande") Integer idCommande, @PathVariable("idLigneCommande") Integer idLigneCommande){
+	        return bonEntreeService.deleteArticle(idCommande, idLigneCommande);
+	      }
+	    
+	    @GetMapping("/lignesCommande/{idCommande}")
+	    List<LigneEntreeDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(@PathVariable("idCommande") Integer idCommande) {
+	        return bonEntreeService.findAllLignesCommandesFournisseurByCommandeFournisseurId(idCommande);
+	      }
+	    
 }
