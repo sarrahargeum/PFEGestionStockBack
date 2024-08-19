@@ -179,7 +179,7 @@ private void effectuerSortie(LigneSortie lig) {
 		        });
 		      }
 		      // Send WebSocket notification
-	        notificationController.sendNotification("Commande " + savedCmdCls.getId() + " saved. Please update status.");
+	      //  notificationController.sendNotification("Commande " + savedCmdCls.getId() + " saved. Please update status.");
 	        return BonSortieDto.fromEntity(savedCmdCls);
 	}
 	 

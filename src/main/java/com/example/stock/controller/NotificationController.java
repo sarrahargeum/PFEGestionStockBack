@@ -1,7 +1,5 @@
 package com.example.stock.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -12,7 +10,7 @@ import org.springframework.web.util.HtmlUtils;
 
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 public class NotificationController {
 	
@@ -28,7 +26,7 @@ public class NotificationController {
 	  @Autowired
 	    private SimpMessagingTemplate messagingTemplate;
 
-	 @MessageMapping("/notify")
+	 /*@MessageMapping("/notify")
 	    @SendTo("/topic/notifications")
 	    public Notification notify(Notification notification) {
 		// System.out.println("eli yji");
@@ -41,6 +39,11 @@ public class NotificationController {
 	    public void sendNotification(String message) {
 	        Notification notification = new Notification(message);
 	        messagingTemplate.convertAndSend("/topic/notifications", notification);
+	    }*/
+	  @MessageMapping("/hello")
+	    @SendTo("/topic/greetings")
+	    public String greeting(String message) {
+	        return "Hello, " + message + "!";
 	    }
 	}
 

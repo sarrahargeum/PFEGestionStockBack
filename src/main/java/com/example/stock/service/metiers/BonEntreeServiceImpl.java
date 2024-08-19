@@ -114,7 +114,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		      });
 		    }
 		      // Send WebSocket notification
-	        notificationController.sendNotification("Commande " + savedCmdFrs.getId() + " saved. Please update status.");
+	      //  notificationController.sendNotification("Commande " + savedCmdFrs.getId() + " saved. Please update status.");
 	        return BonEntreeDto.fromEntity(savedCmdFrs);
 		 
 

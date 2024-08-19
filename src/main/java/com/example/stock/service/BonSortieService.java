@@ -24,12 +24,14 @@ public interface BonSortieService {
 	  BonSortieDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
 
 	  BonSortieDto updateQuantiteCommande(Integer idCommande, Integer idligneSortie, Integer quantite);
+	  
 	  BonSortieDto updateClient(Integer idCommande, Integer idClient);
 
 	  BonSortieDto updateArticle(Integer idCommande, Integer idLigneCommande, Integer newIdArticle);
 
 	  // Delete article ==> delete LigneCommandeClient
 	  BonSortieDto deleteArticle(Integer idCommande, Integer idLigneCommande);
+	  
 	  List<LigneSortieDto> findAllLignesCommandesClientByCommandeClientId(Integer idCommande);
 
 }

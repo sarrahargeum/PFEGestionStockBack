@@ -2,9 +2,13 @@ package com.example.stock.dto;
 
 import com.example.stock.model.Article;
 import com.example.stock.model.Magasin;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
 import lombok.Data;
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 @Builder
 @Data
@@ -17,10 +21,12 @@ public class ArticleDto {
 	    private Float tauxTva;
 	 
 	    private String image;
-
-  private CategoryDto category;
+	    
+	    private CategoryDto category;
 
   private MagasinDto magasin;
+
+  @JsonCreator
 
   public static ArticleDto fromEntity(Article article) {
     if (article == null) {
