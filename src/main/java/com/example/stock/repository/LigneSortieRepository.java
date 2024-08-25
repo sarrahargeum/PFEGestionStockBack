@@ -1,5 +1,7 @@
 package com.example.stock.repository;
 
+import com.example.stock.model.Article;
+import com.example.stock.model.BonSortie;
 import com.example.stock.model.LigneEntree;
 import com.example.stock.model.LigneSortie;
 
@@ -14,4 +16,10 @@ public interface LigneSortieRepository extends JpaRepository<LigneSortie, Intege
 	 List<LigneSortie> findAllByBonSortieId(Integer bonSortieId);
 
 	  List<LigneSortie> findAllByArticleId(Integer idCommande);
+	  
+	    void deleteByBonSortie(BonSortie bonSortie); // Use the correct property name
+
+	    void deleteByArticle(Article article);
+	//    void deleteByBon(BonSortie bonSortie);
+
 }

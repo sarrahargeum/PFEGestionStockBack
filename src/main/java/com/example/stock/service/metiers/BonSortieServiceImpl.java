@@ -44,6 +44,7 @@ import com.example.stock.validator.ArticleValidator;
 import com.example.stock.validator.BonEntreeFournisseurValidator;
 import com.example.stock.validator.BonSortieValidator;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
@@ -396,6 +397,18 @@ private void effectuerSortie(LigneSortie lig) {
 		        .map(LigneSortieDto::fromEntity)
 		        .collect(Collectors.toList());
 		  }
+		  @Transactional
+		  public BonSortieDto deleteBonSortie(Integer id) {
+			   
+			  BonSortie bonSortie = bonSortieRepository.findById(id)
+		                .orElseThrow(() -> new EntityNotFoundException("BonSortie not found"));
 
-		  
+		        // Delete related LigneSortie entities
+		        ligneSortieRepository.deleteByBonSortie(bonSortie);  // Use the correct property name
+
+		        // Now delete the BonSortie entity
+		        bonSortieRepository.delete(bonSortie);
+				return null;
+			}
+
 }

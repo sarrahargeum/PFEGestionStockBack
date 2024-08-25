@@ -5,15 +5,17 @@ import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
-
+import com.example.stock.model.MVTStock;
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.CategoryRepository;
 import com.example.stock.repository.LigneEntreeRepository;
 import com.example.stock.repository.LigneSortieRepository;
+import com.example.stock.repository.MVTStockRepository;
 import com.example.stock.repository.MagasinRepository;
 import com.example.stock.service.ArticleService;
 
 import jakarta.servlet.ServletContext;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.logging.Log;
@@ -47,7 +49,8 @@ public class ArticleServiceImpl  implements ArticleService {
 	
     @Autowired ServletContext context;
 
-	
+	@Autowired
+	MVTStockRepository mvtStockRepository ;
     private static  Log log = LogFactory.getLog(ArticleServiceImpl.class);
 
 
@@ -121,13 +124,27 @@ public class ArticleServiceImpl  implements ArticleService {
     }
     
     
+    @Transactional
 
     public Article deleteArticle(Integer id) {
-        articleRepository.deleteById(id);
-        return null;
+      /*  articleRepository.deleteById(id);
+        return null*/
+    	
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Article not found"));
+
+        // Delete related entities
+        ligneSortieRepository.deleteByArticle(article);
+        ligneEntreeRepository.deleteByArticle(article);
+        mvtStockRepository.deleteByArticle(article);
+
+        // Now delete the article
+        articleRepository.delete(article);
+		return article;
     }
-
-
+      
+    
+  
     @Override
     public List<LigneSortieDto> findHistoriaueCommandeClient(Integer idArticle) {
       return ligneSortieRepository.findAllByArticleId(idArticle).stream()

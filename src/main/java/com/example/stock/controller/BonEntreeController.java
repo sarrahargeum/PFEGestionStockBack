@@ -91,4 +91,12 @@ public class BonEntreeController {
 	        return bonEntreeService.findAllLignesCommandesFournisseurByCommandeFournisseurId(idCommande);
 	      }
 	    
+	    @DeleteMapping("/deleteCmd/{id}")
+	    BonEntreeDto deleteBonEntree(@PathVariable Integer id) {
+	       
+	           return bonEntreeService.deleteBonEntree(id);
+	           
+	        
+	    }
+	    
 }

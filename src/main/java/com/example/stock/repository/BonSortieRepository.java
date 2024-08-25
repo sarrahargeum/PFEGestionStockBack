@@ -1,6 +1,5 @@
 package com.example.stock.repository;
 
-import com.example.stock.model.BonEntree;
 import com.example.stock.model.BonSortie;
 
 import java.util.List;

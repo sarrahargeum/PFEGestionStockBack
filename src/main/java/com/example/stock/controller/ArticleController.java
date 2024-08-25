@@ -21,7 +21,6 @@ import jakarta.servlet.ServletContext;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,13 +96,7 @@ public class ArticleController {
     Article art = articleRepository.save(arti);
 	return null;
     
-   /* if(art != null) {
-    	return new ResponseEntity<>(art,HttpStatus.OK);
-    }
-    else {
-    	return new ResponseEntity<>(art,HttpStatus.BAD_REQUEST);
-
-    }*/
+   
     }
 
     @GetMapping("/{idArticle}")

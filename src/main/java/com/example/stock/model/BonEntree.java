@@ -35,12 +35,12 @@ public class BonEntree {
     
     private Integer idMagasin;
   
-    @ManyToOne 
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "idfournisseur")
     private Fournisseur fournisseur;
 
  
-    @OneToMany(mappedBy =  "bonEntree")
+    @OneToMany(mappedBy = "bonEntree", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LigneEntree> ligneEntrees;
 
     

@@ -36,13 +36,17 @@ public class Article {
     private Magasin magasin;
 
 
-    @OneToMany( mappedBy = "article")
+    //@OneToMany( mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
+
     private Set<MVTStock>  stocks;
 
-    @OneToMany( mappedBy = "article")
+    @OneToMany( mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<LigneEntree> ligneEntrees;
    
-    @OneToMany( mappedBy = "article")
+  //  @OneToMany( mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
+
     private Set<LigneSortie> ligneSorties;
 
 

@@ -359,4 +359,29 @@ public BonEntreeDto findById(Integer id) {
 			        .map(LigneEntreeDto::fromEntity)
 			        .collect(Collectors.toList());
 			  }
+		  
+		  
+		  public BonEntreeDto deleteBonEntree(Integer id) {
+			    // Find the BonEntree entry
+			    Optional<BonEntree> optionalBonEntree = bonEntreeRepository.findById(id);
+			    if (optionalBonEntree.isEmpty()) {
+			        throw new EntityNotFoundException("Aucun BonEntree avec l'ID " + id + " n'a ete trouve dans la BDD");
+			    }
+
+			    BonEntree bonEntree = optionalBonEntree.get();
+
+			    // Delete related LigneEntrees
+			    if (bonEntree.getLigneEntrees() != null) {
+			        bonEntree.getLigneEntrees().forEach(ligneEntree -> {
+			            ligneEntreeFournisseurRepository.deleteById(ligneEntree.getId());
+			        });
+			    }
+
+			    // Delete the BonEntree entry
+			    bonEntreeRepository.deleteById(id);
+
+			    // Optionally return the deleted BonEntreeDto
+			    return BonEntreeDto.fromEntity(bonEntree);
+			}
+
 }

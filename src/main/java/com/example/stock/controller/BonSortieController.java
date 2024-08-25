@@ -3,6 +3,7 @@ package com.example.stock.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.LigneSortieDto;
+import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.service.BonSortieService;
 
@@ -26,7 +29,6 @@ public class BonSortieController {
 
 	 @Autowired
 	     BonSortieService bonSortieService;
-
 	    @PostMapping("/saveBS")
 	    BonSortieDto save(@RequestBody BonSortieDto bonSortie) {
 		    return bonSortieService.save(bonSortie);
@@ -89,5 +91,12 @@ public class BonSortieController {
 	    ResponseEntity<BonSortieDto> deleteArticle(@PathVariable("idCommande") Integer idCommande, @PathVariable("idLigneCommande") Integer idLigneCommande){
 	        return ResponseEntity.ok(bonSortieService.deleteArticle(idCommande, idLigneCommande));
 	      }
-
+	    
+	    @DeleteMapping("/deleteCmd/{id}")
+	   BonSortieDto deleteBonSortie(@PathVariable Integer id) {
+	           return bonSortieService.deleteBonSortie(id);
+	           
+	        
+	    }
+	    
 }

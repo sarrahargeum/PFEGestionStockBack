@@ -2,6 +2,7 @@ package com.example.stock.service;
 
 import java.util.List;
 
+import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.model.BonEntree;
@@ -33,5 +34,6 @@ public interface BonSortieService {
 	  BonSortieDto deleteArticle(Integer idCommande, Integer idLigneCommande);
 	  
 	  List<LigneSortieDto> findAllLignesCommandesClientByCommandeClientId(Integer idCommande);
+	BonSortieDto deleteBonSortie(Integer id);
 
 }

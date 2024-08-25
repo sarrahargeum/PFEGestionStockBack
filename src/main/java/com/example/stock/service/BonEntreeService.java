@@ -31,5 +31,6 @@ public interface BonEntreeService {
 	   BonEntreeDto deleteArticle(Integer idCommande, Integer idLigneCommande);
 	   
 	   List<LigneEntreeDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(Integer idCommande);
+	BonEntreeDto deleteBonEntree(Integer id);
 
 }

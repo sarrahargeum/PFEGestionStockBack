@@ -1,7 +1,6 @@
 package com.example.stock.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,8 +21,7 @@ public class LigneSortie {
     private Integer quantite;
 
     private Float prixUnitaire;
-    @Enumerated(EnumType.STRING)
-    private EtatCommande etatCommande;
+  
   
     @ManyToOne
     @JoinColumn(name = "idarticle")
@@ -34,7 +32,7 @@ public class LigneSortie {
 
    
     @ManyToOne
-    @JoinColumn(name = "bon_sortie_id")
+    @JoinColumn(name = "idbonSortie")
     private BonSortie bonSortie;
     
     

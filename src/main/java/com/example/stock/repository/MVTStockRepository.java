@@ -1,6 +1,7 @@
 package com.example.stock.repository;
 
 import com.example.stock.dto.MVTStockDto;
+import com.example.stock.model.Article;
 import com.example.stock.model.MVTStock;
 
 import java.math.BigDecimal;
@@ -20,4 +21,7 @@ public interface MVTStockRepository extends JpaRepository<MVTStock, Integer> {
 	  Integer stockReelArticle(@Param("idArticle") Integer idArticle);
 
 	  List<MVTStockDto> findAllByArticleId(Integer idArticle);
+	    
+	    void deleteByArticle(Article article);
+
 }

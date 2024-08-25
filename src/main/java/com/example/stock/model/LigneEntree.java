@@ -28,9 +28,13 @@ public class LigneEntree {
     @JoinColumn(name = "idarticle")
     private Article article;
 
-    @ManyToOne
-    @JoinColumn(name = "idbonEntree")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idbonEntree",  nullable = false)
     private BonEntree bonEntree;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fournisseur_id")  // Ensure this matches your database column
+    private Fournisseur fournisseur;
 
     @Column(name = "idmagasin")
     private Integer idMagasin;
