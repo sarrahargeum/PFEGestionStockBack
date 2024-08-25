@@ -40,7 +40,7 @@ public class BonEntree {
     private Fournisseur fournisseur;
 
  
-    @OneToMany(mappedBy = "bonEntree", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "bonEntree", cascade = CascadeType.ALL)
     private Set<LigneEntree> ligneEntrees;
 
     

@@ -32,7 +32,7 @@ public class Fournisseur {
    private Integer idMagasin;
 
    
-   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fournisseur", orphanRemoval = true)
+   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fournisseur")
     private List<BonEntree> bonEntrees;
 
 }

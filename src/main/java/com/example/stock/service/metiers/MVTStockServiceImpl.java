@@ -1,8 +1,6 @@
 package com.example.stock.service.metiers;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.InvalidEntityException;
-import com.example.stock.model.Category;
-import com.example.stock.model.Fournisseur;
-import com.example.stock.model.MVTStock;
+
 import com.example.stock.model.TypeStock;
 import com.example.stock.model.User;
 import com.example.stock.repository.MVTStockRepository;
@@ -21,7 +17,6 @@ import com.example.stock.service.ArticleService;
 import com.example.stock.service.MVTStockService;
 import com.example.stock.validator.StockValidator;
 
-import ch.qos.logback.core.spi.ErrorCodes;
 
 
 @Service

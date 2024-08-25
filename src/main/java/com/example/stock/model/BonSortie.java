@@ -40,7 +40,7 @@ public class BonSortie {
     @JoinColumn( name = "idclient")
     private Client client;
     
-    @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL)
     private Set<LigneSortie> ligneSorties;
     
     
