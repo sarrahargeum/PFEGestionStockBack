@@ -1,6 +1,8 @@
 package com.example.stock.repository;
 
 import com.example.stock.model.Article;
+import com.example.stock.model.BonEntree;
+import com.example.stock.model.BonSortie;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.model.LigneEntree;
 
@@ -17,8 +19,8 @@ public interface LigneEntreeRepository extends JpaRepository<LigneEntree, Intege
 	  List<LigneEntree> findAllByArticleId(Integer idCommande);
 	    void deleteByArticle(Article article);
 
-	        void deleteByFournisseur( Fournisseur fournisseur);
 	   
+		    void deleteByBonEntree(BonEntree bonEntree); 
 
 	  
 }

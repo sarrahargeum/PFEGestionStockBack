@@ -5,7 +5,6 @@ import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
-import com.example.stock.model.MVTStock;
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.CategoryRepository;
 import com.example.stock.repository.LigneEntreeRepository;

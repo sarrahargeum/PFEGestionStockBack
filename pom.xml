@@ -159,6 +159,22 @@
     <version>1.16.18</version>
     <scope>provided</scope>
 </dependency>
+
+ <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
+    <!-- Flying Saucer for HTML to PDF conversion -->
+    <dependency>
+        <groupId>org.xhtmlrenderer</groupId>
+        <artifactId>flying-saucer-pdf</artifactId>
+        <version>9.1.22</version>
+    </dependency>
+
+    <!-- iText dependency -->
+  
+
 	</dependencies>
 
 	<build>

@@ -17,9 +17,8 @@ public interface LigneSortieRepository extends JpaRepository<LigneSortie, Intege
 
 	  List<LigneSortie> findAllByArticleId(Integer idCommande);
 	  
-	    void deleteByBonSortie(BonSortie bonSortie); // Use the correct property name
+	    void deleteByBonSortie(BonSortie bonSortie); 
 
 	    void deleteByArticle(Article article);
-	//    void deleteByBon(BonSortie bonSortie);
 
 }

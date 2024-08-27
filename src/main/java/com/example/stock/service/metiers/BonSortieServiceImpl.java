@@ -71,62 +71,7 @@ public class BonSortieServiceImpl implements BonSortieService {
 	
 
 	
-/*	public BonSortie save(BonSortie bonSortie) {
 
-	    List<String> errors = BonSortieValidator.validate(bonSortie);
-
-	   
-
-	    if (bonSortie.getId() != null && bonSortie.isBonSortieLivree()) {
-	      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
-	    }
-
-	    Optional<Client> client = clientRepository.findById(bonSortie.getClient().getId());
-	    if (client.isEmpty()) {
-	      log.warn("Client with ID {} was not found in the DB", bonSortie.getClient().getId());
-	      throw new EntityNotFoundException("Aucun client avec l'ID" + bonSortie.getClient().getId() + " n'a ete trouve dans la BDD");
-	    }
-
-	    List<String> articleErrors = new ArrayList<>();
-
-	    if (bonSortie.getLigneSorties() != null) {
-	    	bonSortie.getLigneSorties().forEach(ligCmdClt -> {
-	        if (ligCmdClt.getArticle() != null) {
-	          Optional<Article> article = articleRepository.findById(ligCmdClt.getArticle().getId());
-	          if (article.isEmpty()) {
-	            articleErrors.add("L'article avec l'ID " + ligCmdClt.getArticle().getId() + " n'existe pas");
-	          }
-	        } else {
-	          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
-	        }
-	      });
-	    }
-
-	    if (!articleErrors.isEmpty()) {
-	      log.warn("");
-	      throw new InvalidEntityException("Article n'existe pas dans la BDD");
-	    }
-	    bonSortie.setDateCommande(Instant.now());
-	    BonSortie savedCmdClt = bonSortieRepository.save(bonSortie.toEntity(bonSortie));
-
-
-	    return BonSortie.fromEntity(savedCmdClt);
-	  }
-
-
-
-private void effectuerSortie(LigneSortie lig) {
-	 MVTStockDto mvtStkDto = MVTStockDto.builder()
-		        .article(ArticleDto.fromEntity(lig.getArticle()))
-		        .dateMvt(Instant.now())
-		        .typeMvt(TypeStock.SORTIE)
-		        .quantite(lig.getQuantite())
-		        .idMagasin(lig.getIdMagasin())
-		        .build();
-    mvtStockService.sortieStock(mvtStkDto);
-}*/
-
-	  
 	 public BonSortieDto save(BonSortieDto BSortie) {
 
 		 List<String> errors = BonSortieValidator.validate(BSortie);
@@ -397,6 +342,7 @@ private void effectuerSortie(LigneSortie lig) {
 		        .map(LigneSortieDto::fromEntity)
 		        .collect(Collectors.toList());
 		  }
+		  
 		  @Transactional
 		  public BonSortieDto deleteBonSortie(Integer id) {
 			   
@@ -404,8 +350,7 @@ private void effectuerSortie(LigneSortie lig) {
 		                .orElseThrow(() -> new EntityNotFoundException("BonSortie not found"));
 
 		        // Delete related LigneSortie entities
-		        ligneSortieRepository.deleteByBonSortie(bonSortie);  // Use the correct property name
-
+		        ligneSortieRepository.deleteByBonSortie(bonSortie);
 		        // Now delete the BonSortie entity
 		        bonSortieRepository.delete(bonSortie);
 				return null;

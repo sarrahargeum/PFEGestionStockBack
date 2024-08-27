@@ -21,9 +21,7 @@ public class LigneEntree {
     private Integer quantite;
     private Float prixUnitaire;
     
-   /* @Enumerated(EnumType.STRING)
-    private EtatCommande etatCommande;
-*/
+  
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;
@@ -32,9 +30,6 @@ public class LigneEntree {
     @JoinColumn(name = "idbonEntree",  nullable = false)
     private BonEntree bonEntree;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fournisseur_id")  // Ensure this matches your database column
-    private Fournisseur fournisseur;
 
     @Column(name = "idmagasin")
     private Integer idMagasin;

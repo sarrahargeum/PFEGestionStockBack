@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.example.stock.controller.NotificationController;
 import com.example.stock.dto.ArticleDto;
 import com.example.stock.dto.BonEntreeDto;
+import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.FournisseurDto;
 import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.MVTStockDto;
@@ -20,6 +21,7 @@ import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
 import com.example.stock.model.Article;
 import com.example.stock.model.BonEntree;
+import com.example.stock.model.BonSortie;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.model.LigneEntree;
@@ -33,7 +35,7 @@ import com.example.stock.service.MVTStockService;
 import com.example.stock.validator.ArticleValidator;
 import com.example.stock.validator.BonEntreeFournisseurValidator;
 
-
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -360,7 +362,7 @@ public BonEntreeDto findById(Integer id) {
 			        .collect(Collectors.toList());
 			  }
 		  
-		  
+		  @Transactional
 		  public BonEntreeDto deleteBonEntree(Integer id) {
 			    // Find the BonEntree entry
 			    Optional<BonEntree> optionalBonEntree = bonEntreeRepository.findById(id);
@@ -371,17 +373,14 @@ public BonEntreeDto findById(Integer id) {
 			    BonEntree bonEntree = optionalBonEntree.get();
 
 			    // Delete related LigneEntrees
-			    if (bonEntree.getLigneEntrees() != null) {
-			        bonEntree.getLigneEntrees().forEach(ligneEntree -> {
-			            ligneEntreeFournisseurRepository.deleteById(ligneEntree.getId());
-			        });
-			    }
+			   
+			            ligneEntreeFournisseurRepository.deleteByBonEntree(bonEntree);
 
 			    // Delete the BonEntree entry
-			    bonEntreeRepository.deleteById(id);
+			    bonEntreeRepository.delete(bonEntree);
 
 			    // Optionally return the deleted BonEntreeDto
-			    return BonEntreeDto.fromEntity(bonEntree);
+			    return null;
 			}
-
+		 
 }
