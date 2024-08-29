@@ -13,8 +13,7 @@ public class LigneSortieDto {
 
   private ArticleDto article;
 
-  @JsonIgnore
-  private BonSortieDto commandeClient;
+  private BonSortieDto bonSortie;
 
   private Integer quantite;
 

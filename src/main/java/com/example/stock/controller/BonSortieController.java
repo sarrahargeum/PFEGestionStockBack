@@ -47,7 +47,7 @@ public class BonSortieController {
 	    }
 	    
 	    @GetMapping("/retreive/{idbonSortie}")
-	    BonSortieDto findById(@PathVariable("idbonEntrefournisseur") Integer id) {
+	    BonSortieDto findById(@PathVariable("idbonSortie") Integer id) {
 	    return bonSortieService.findById(id);
 	    }
 	    

@@ -16,7 +16,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "article")
 public class Article {
 
-    @Id
+    public Article(String string, String string2) {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String code;

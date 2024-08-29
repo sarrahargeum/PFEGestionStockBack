@@ -34,46 +34,14 @@ public class BonSortie {
     @Column(name = "idmagasin")
     private Integer idMagasin;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn( name = "idclient")
     private Client client;
     
-    @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<LigneSortie> ligneSorties;
     
-    
-    public static BonSortie toEntity(BonSortie dto) {
-        if (dto == null) {
-          return null;
-        }
-        BonSortie bonSortie = new BonSortie();
-        bonSortie.setId(dto.getId());
-        bonSortie.setCode(dto.getCode());
-        bonSortie.setDateCommande(dto.getDateCommande());
-        bonSortie.setClient(dto.getClient());
-        bonSortie.setIdMagasin(dto.getIdMagasin());
-        bonSortie.setEtatCommande(dto.getEtatCommande());
-        return bonSortie;
-      }
-    
-    public static BonSortie fromEntity(BonSortie bonSortie) {
-        if (bonSortie == null) {
-          return null;
-        }
-        return BonSortie.builder()
-            .id(bonSortie.getId())
-            .code(bonSortie.getCode())
-            .dateCommande(bonSortie.getDateCommande())
-            .client(bonSortie.getClient())
-            .etatCommande(bonSortie.getEtatCommande())
-            .idMagasin(bonSortie.getIdMagasin())
-            .build();
-      } 
-    
-    
-    public boolean isBonSortieLivree() {
-        return EtatCommande.LIVREE.equals(this.etatCommande);
-      }
+   
     
     
   

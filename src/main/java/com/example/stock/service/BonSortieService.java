@@ -13,8 +13,7 @@ public interface BonSortieService {
 	
 	
 	BonSortieDto save(BonSortieDto bonSortie);
-	BonSortieDto findById(Integer id);
-
+ BonSortieDto findById(Integer id);
 	BonSortieDto findByCode(String code);
 	
 	 void delete(Integer id);

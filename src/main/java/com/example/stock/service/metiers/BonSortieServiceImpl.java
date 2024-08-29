@@ -142,18 +142,6 @@ public class BonSortieServiceImpl implements BonSortieService {
 		
 
 	
-		public BonSortieDto findById(Integer id) {
-			 if (id == null) {
-			      log.error("Commande client ID is NULL");
-			      return null;
-			    }
-			    return bonSortieRepository.findById(id)
-			    		.map(BonSortieDto::fromEntity)
-			    	      .orElseThrow(() -> new EntityNotFoundException(
-			    	          "Aucune commande client n'a ete trouve avec l'ID" + id));
-			       
-		}
-
 		
 		@Override
 		public BonSortieDto findByCode(String code) {
@@ -356,4 +344,33 @@ public class BonSortieServiceImpl implements BonSortieService {
 				return null;
 			}
 
+		  
+		  @Override
+		  public BonSortieDto findById(Integer id) {
+		      if (id == null) {
+		          log.error("BonSortie ID is NULL");
+		          return null;
+		      }
+
+		      return bonSortieRepository.findById(id)
+		          .map(bonSortie -> {
+		              // Initialisation des LigneSorties
+		              bonSortie.getLigneSorties().size();
+
+		              BonSortieDto dto = BonSortieDto.fromEntity(bonSortie);
+		              dto.setLigneSorties(
+		                  bonSortie.getLigneSorties() != null ?
+		                      bonSortie.getLigneSorties().stream()
+		                          .map(LigneSortieDto::fromEntity)
+		                          .collect(Collectors.toList()) : null
+		              );
+		              return dto;
+		          })
+		          .orElseThrow(() -> new EntityNotFoundException(
+		              "Aucun BonSortie trouvé avec l'ID " + id
+		          ));
+		  }
+
+		  
+		  
 }

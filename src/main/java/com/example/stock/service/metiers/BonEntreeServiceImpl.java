@@ -166,15 +166,25 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 
 @Override
 public BonEntreeDto findById(Integer id) {
-  if (id == null) {
-    log.error("Commande fournisseur ID is NULL");
-    return null;
-  }
-  return bonEntreeRepository.findById(id)
-      .map(BonEntreeDto::fromEntity)
-      .orElseThrow(() -> new EntityNotFoundException(
-          "Aucune commande fournisseur n'a ete trouve avec l'ID " + id));
+    if (id == null) {
+        log.error("Commande fournisseur ID is NULL");
+        return null;
+    }
+    return bonEntreeRepository.findById(id)
+        .map(bonEntree -> {
+            BonEntreeDto dto = BonEntreeDto.fromEntity(bonEntree);
+            dto.setLigneEntrees(
+                bonEntree.getLigneEntrees() != null ?
+                bonEntree.getLigneEntrees().stream()
+                    .map(LigneEntreeDto::fromEntity)
+                    .collect(Collectors.toList()) : null
+            );
+            return dto;
+        })
+        .orElseThrow(() -> new EntityNotFoundException(
+            "Aucune commande fournisseur n'a ete trouve avec l'ID " + id));
 }
+
 
 		
 		@Override

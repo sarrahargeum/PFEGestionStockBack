@@ -32,7 +32,6 @@ public class BonEntree {
     private EtatCommande etatCommande;
 
     @Column(name = "idmagasin")
-    
     private Integer idMagasin;
   
     @ManyToOne (fetch = FetchType.LAZY)
@@ -40,8 +39,7 @@ public class BonEntree {
     private Fournisseur fournisseur;
 
  
-    @OneToMany(mappedBy = "bonEntree", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bonEntree", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<LigneEntree> ligneEntrees;
-
     
 }

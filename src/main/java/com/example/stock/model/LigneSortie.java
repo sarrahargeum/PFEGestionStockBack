@@ -31,7 +31,7 @@ public class LigneSortie {
     private Integer idMagasin;
 
    
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idbonSortie")
     private BonSortie bonSortie;
     
