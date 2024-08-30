@@ -20,7 +20,7 @@ public interface MVTStockRepository extends JpaRepository<MVTStock, Integer> {
 	  @Query("select sum(m.quantite) from MVTStock m where m.article.id = :idArticle")
 	  Integer stockReelArticle(@Param("idArticle") Integer idArticle);
 
-	  List<MVTStockDto> findAllByArticleId(Integer idArticle);
+	  List<MVTStock> findAllByArticleId(Integer idArticle);
 	    
 	    void deleteByArticle(Article article);
 

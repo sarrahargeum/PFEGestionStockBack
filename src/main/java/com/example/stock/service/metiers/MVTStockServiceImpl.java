@@ -1,6 +1,7 @@
 package com.example.stock.service.metiers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.InvalidEntityException;
-
+import com.example.stock.model.MVTStock;
 import com.example.stock.model.TypeStock;
 import com.example.stock.model.User;
 import com.example.stock.repository.MVTStockRepository;
@@ -41,8 +42,12 @@ public class MVTStockServiceImpl implements MVTStockService {
 
 	@Override
 	public List<MVTStockDto> mvtStkArticle(Integer idArticle) {
+	    List<MVTStock> mvtStocks = mvtrepository.findAllByArticleId(idArticle);
 
-	    return mvtrepository.findAllByArticleId(idArticle);
+	    // Mapper manuellement les entités MVTStock à MVTStockDto
+	    return mvtStocks.stream()
+	        .map(MVTStockDto::fromEntity)
+	        .collect(Collectors.toList());
 	}
 
 	
@@ -90,5 +95,8 @@ public class MVTStockServiceImpl implements MVTStockService {
 	public MVTStockDto sortieStock(MVTStockDto dto) {
 		 return sortieNegative(dto, TypeStock.SORTIE);
 	}
+	
+	 
+	
 	  
 }

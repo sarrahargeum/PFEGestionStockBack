@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -354,16 +355,22 @@ public class BonSortieServiceImpl implements BonSortieService {
 
 		      return bonSortieRepository.findById(id)
 		          .map(bonSortie -> {
-		              // Initialisation des LigneSorties
-		              bonSortie.getLigneSorties().size();
+		              // Initialiser et charger les LigneSorties
+		              Set<LigneSortie> ligneSortiesSet = bonSortie.getLigneSorties();
+		              List<LigneSortieDto> ligneSortiesDtoList = new ArrayList<>();
 
+		              if (ligneSortiesSet != null) {
+		                  ligneSortiesDtoList = ligneSortiesSet.stream()
+		                      .map(LigneSortieDto::fromEntity)
+		                      .collect(Collectors.toList());
+		              }
+
+		              // Convertir BonSortie en BonSortieDto
 		              BonSortieDto dto = BonSortieDto.fromEntity(bonSortie);
-		              dto.setLigneSorties(
-		                  bonSortie.getLigneSorties() != null ?
-		                      bonSortie.getLigneSorties().stream()
-		                          .map(LigneSortieDto::fromEntity)
-		                          .collect(Collectors.toList()) : null
-		              );
+
+		              // Ajouter les LigneSorties converties au DTO
+		              dto.setLigneSorties(ligneSortiesDtoList);
+
 		              return dto;
 		          })
 		          .orElseThrow(() -> new EntityNotFoundException(
@@ -371,6 +378,5 @@ public class BonSortieServiceImpl implements BonSortieService {
 		          ));
 		  }
 
-		  
 		  
 }

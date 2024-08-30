@@ -32,7 +32,7 @@ public class LigneSortie {
 
    
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idbonSortie")
+    @JoinColumn(name = "idbonSortie",  nullable = false)
     private BonSortie bonSortie;
     
     
