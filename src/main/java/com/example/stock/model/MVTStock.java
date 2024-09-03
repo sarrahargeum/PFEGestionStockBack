@@ -34,7 +34,7 @@ public class MVTStock {
     @Column(name = "idmagasin")
     private Integer idMagasin;
 
-    @ManyToOne
+    @ManyToOne 
     @JoinColumn(name = "idarticle")
     private Article article;
 

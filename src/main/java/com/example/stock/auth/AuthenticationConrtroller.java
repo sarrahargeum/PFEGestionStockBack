@@ -43,28 +43,16 @@ public class AuthenticationConrtroller {
     @Autowired
     AuthenticationService service;
 
-    @Autowired
-    MailServiceImpl mailSenderService;
+
+	@Autowired
+	MailServiceImpl mailSenderService;
 
     
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest request) {
     	 
         User user = service.register(request);
-        	String email = user.getEmail();
-
-    	    String password = user.getPassword();   	        	
-    	    String text = "Votre compte est prêt, mais encore désactivé. \n" +
-                    "Email: " + email + "\n" +
-                    "Mot de passe: " + password;
-        String subject=" votre compte est préte";
-      //  User user = service.register(request);
-     
-        try {
-            mailSenderService.sendSimpleMessageToNewUser(user.getEmail(),subject,text);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        
 
     }
 

@@ -3,11 +3,9 @@ package com.example.stock.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
+
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @NoArgsConstructor
@@ -41,8 +39,7 @@ public class Article {
 
 
     //@OneToMany( mappedBy = "article")
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
-
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true )
     private Set<MVTStock>  stocks;
 
     @OneToMany( mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -50,7 +47,6 @@ public class Article {
    
   //  @OneToMany( mappedBy = "article")
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
-
     private Set<LigneSortie> ligneSorties;
 
 
