@@ -38,7 +38,7 @@ public class BonSortie {
     @JoinColumn( name = "idclient")
     private Client client;
     
-    @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+@OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<LigneSortie> ligneSorties;
     
    

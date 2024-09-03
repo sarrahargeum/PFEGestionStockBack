@@ -1,11 +1,14 @@
 package com.example.stock.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface BonEntreeService {
 	
@@ -32,5 +35,5 @@ public interface BonEntreeService {
 	   
 	   List<LigneEntreeDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(Integer idCommande);
 	BonEntreeDto deleteBonEntree(Integer id);
-
+	  public void generateEcelBE(HttpServletResponse response) throws IOException; 
 }

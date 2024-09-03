@@ -36,6 +36,13 @@ public class BonSortieController {
 	    
 	    }
 	    
+	    
+	    @PostMapping("/saveBSClient")
+	    BonSortieDto saveBSClient(@RequestBody BonSortieDto bonSortie) {
+		    return bonSortieService.save(bonSortie);
+
+	    
+	    }
 	    @GetMapping("/retreive-code/{code}")
 	    public BonSortieDto findByCode(@PathVariable("code") String code){
 	      return bonSortieService.findByCode(code);

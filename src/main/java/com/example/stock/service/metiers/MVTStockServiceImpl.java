@@ -69,7 +69,7 @@ public class MVTStockServiceImpl implements MVTStockService {
 		        mvtrepository.save(MVTStockDto.toEntity(mvt)));
 		  }
 	  
-	  private MVTStockDto sortieNegative(MVTStockDto dto, TypeStock typeMvtStk) {
+	/*  private MVTStockDto sortieNegative(MVTStockDto dto, TypeStock typeMvtStk) {
 		    List<String> errors = StockValidator.validate(dto);
 		    if (!errors.isEmpty()) {
 		      log.error("Article is not valid {}", dto);
@@ -84,7 +84,17 @@ public class MVTStockServiceImpl implements MVTStockService {
 		    return  MVTStockDto.fromEntity(
 			        mvtrepository.save(MVTStockDto.toEntity(dto)));
 		    
-		  }
+		  }*/
+	  private MVTStockDto sortieNegative(MVTStockDto dto, TypeStock typeMvtStk) {
+		    List<String> errors = StockValidator.validate(dto);
+		    if (!errors.isEmpty()) {
+		        log.error("Article is not valid {}", dto);
+		        throw new InvalidEntityException("Le mouvement du stock n'est pas valide", errors);
+		    }
+		    dto.setQuantite(dto.getQuantite() * -1);
+		    dto.setTypeMvt(typeMvtStk);
+		    return MVTStockDto.fromEntity(mvtrepository.save(MVTStockDto.toEntity(dto)));
+		}
 
 	@Override
 	public MVTStockDto entreeStock(MVTStockDto mvt) {

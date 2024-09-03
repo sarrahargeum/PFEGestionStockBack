@@ -1,5 +1,6 @@
 package com.example.stock.service.metiers;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +50,8 @@ import com.example.stock.validator.ArticleValidator;
 import com.example.stock.validator.BonEntreeFournisseurValidator;
 import com.example.stock.validator.BonSortieValidator;
 
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -377,6 +384,66 @@ public class BonSortieServiceImpl implements BonSortieService {
 		              "Aucun BonSortie trouvé avec l'ID " + id
 		          ));
 		  }
-
 		  
+		  
+		  
+		  public BonSortieDto saveBSClient(BonSortieDto BSortie) {
+			  List<String> errors = BonSortieValidator.validate(BSortie);
+
+				 if (!errors.isEmpty()) {
+				      log.error("Commande client n'est pas valide");
+				      throw new InvalidEntityException("La commande client n'est pas valide");
+				    }
+
+				    if (BSortie.getId() != null && BSortie.isCommandeLivree()) {
+				      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+				    }
+				    Optional<Client> client = clientRepository.findById(BSortie.getClient().getId());
+				    if (client.isEmpty()) {
+				        ClientDto clientDto = BSortie.getClient();
+				        Client newClient = ClientDto.toEntity(clientDto);
+				        if (newClient.getIdMagasin() == null) {
+				            throw new InvalidEntityException("Le client doit contenir toutes les informations requises");
+				        }
+				        Client savedClient = clientRepository.save(newClient);
+				        BSortie.setClient(ClientDto.fromEntity(savedClient));
+				    }
+				    List<String> articleErrors = new ArrayList<>();
+
+				    if (BSortie.getLigneSorties() != null) {
+				    	BSortie.getLigneSorties().forEach(ligCmdCls -> {
+				        if (ligCmdCls.getArticle() != null) {
+				          Optional<Article> article = articleRepository.findById(ligCmdCls.getArticle().getId());
+				          if (article.isEmpty()) {
+				            articleErrors.add("L'article avec l'ID " + ligCmdCls.getArticle().getId() + " n'existe pas");
+				          }
+				        } else {
+				          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
+				        }
+				      });
+				    }
+
+				    if (!articleErrors.isEmpty()) {
+				      log.warn("");
+				      throw new InvalidEntityException("Article n'existe pas dans la BDD");
+				    }
+				    BSortie.setDateCommande(Instant.now());
+				    
+				    BonSortie savedCmdCls = bonSortieRepository.save(BonSortieDto.toEntity(BSortie));
+
+				    if (BSortie.getLigneSorties() != null) {
+				    	BSortie.getLigneSorties().forEach(ligCmdClt -> {
+				          LigneSortie ligneCommandeClient = LigneSortieDto.toEntity(ligCmdClt);
+				          ligneCommandeClient.setBonSortie(savedCmdCls);
+				          ligneCommandeClient.setIdMagasin(BSortie.getIdMagasin());
+				          LigneSortie savedLigneCmd = ligneSortieRepository.save(ligneCommandeClient);
+
+				          effectuerSortie(savedLigneCmd);
+				        });
+				      }
+				  
+			        return BonSortieDto.fromEntity(savedCmdCls);
+			}
+
+	
 }

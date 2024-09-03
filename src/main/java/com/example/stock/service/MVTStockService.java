@@ -15,6 +15,5 @@ public interface MVTStockService {
 	  MVTStockDto entreeStock(MVTStockDto mvt);
 	  MVTStockDto sortieStock(MVTStockDto dto);
 	  
-	  List<MVTStockDto> getAllMvtStocks() ;
 
 }

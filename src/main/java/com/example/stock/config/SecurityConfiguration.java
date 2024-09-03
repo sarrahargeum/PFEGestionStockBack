@@ -38,7 +38,7 @@ public class SecurityConfiguration {
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        http.csrf().disable()
 	            .authorizeRequests()
-	                .requestMatchers("/api/**").permitAll()
+	                .requestMatchers("/api/**","/ws/**").permitAll()
 	                .anyRequest().authenticated()
 	            .and()
 	            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -49,12 +49,5 @@ public class SecurityConfiguration {
 	    }
 
 
-	/*    @Bean
-	    protected UserDetailsService userDetailsService() {
-	        UserBuilder users = User.withDefaultPasswordEncoder();
-	        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-	        manager.createUser(users.username("user").password("password").roles("USER").build());
-	        manager.createUser(users.username("admin").password("password").roles("ADMIN").build());
-	        return manager;
-	    }*/
+
 }

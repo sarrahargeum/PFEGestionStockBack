@@ -1,5 +1,6 @@
 package com.example.stock.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.service.BonEntreeService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -98,5 +101,16 @@ public class BonEntreeController {
 	           
 	        
 	    }
+	    
+	    @GetMapping("/exportBF/excel")
+	    public void exportToExcel(HttpServletResponse response) throws IOException {
+	    	response.setContentType("application/octet-stream");
+	        String headerKey = "Content-Disposition";
+	        String headerValue = "attachment; filename=categorys.xls";
+	        response.setHeader(headerKey, headerValue);
+
+	        bonEntreeService.generateEcelBE(response);
+	    }
+
 	    
 }

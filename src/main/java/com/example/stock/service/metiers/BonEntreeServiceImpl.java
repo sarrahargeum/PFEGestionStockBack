@@ -1,18 +1,23 @@
 package com.example.stock.service.metiers;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.controller.NotificationController;
 import com.example.stock.dto.ArticleDto;
 import com.example.stock.dto.BonEntreeDto;
-import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.FournisseurDto;
 import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.MVTStockDto;
@@ -21,10 +26,10 @@ import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
 import com.example.stock.model.Article;
 import com.example.stock.model.BonEntree;
-import com.example.stock.model.BonSortie;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.model.LigneEntree;
+import com.example.stock.model.Notification;
 import com.example.stock.model.TypeStock;
 import com.example.stock.repository.ArticleRepository;
 import com.example.stock.repository.BonEntreeRepository;
@@ -35,6 +40,8 @@ import com.example.stock.service.MVTStockService;
 import com.example.stock.validator.ArticleValidator;
 import com.example.stock.validator.BonEntreeFournisseurValidator;
 
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,7 +68,8 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 
 	@Autowired
 	NotificationController notificationController;
-
+	@Autowired
+    NotificationService notificationService;
 	
 	 public BonEntreeDto save(BonEntreeDto BEntree) {
 
@@ -115,8 +123,22 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		        effectuerEntree(saveLigne);
 		      });
 		    }
-		      // Send WebSocket notification
-	      //  notificationController.sendNotification("Commande " + savedCmdFrs.getId() + " saved. Please update status.");
+		    
+		    if(Objects.nonNull(savedCmdFrs)) {
+		        String notificationMessage = "Commande " + savedCmdFrs.getCode() + " en preparation. Please valider this commande.";
+
+		    	 notificationController.sendOrderValidationNotification(notificationMessage);
+		         
+		         // Create and save notification in the database
+		         Notification notification = new Notification();
+		         notification.setMessage(notificationMessage);
+		         notification.setDateNotification(Instant.now());
+		            notification.setEtatNotification(false); // Assuming unread notification
+
+		         notification.setCodeCommande(savedCmdFrs.getCode());
+		         notificationService.save(notification);
+		     }
+		
 	        return BonEntreeDto.fromEntity(savedCmdFrs);
 		 
 
@@ -381,16 +403,50 @@ public BonEntreeDto findById(Integer id) {
 			    }
 
 			    BonEntree bonEntree = optionalBonEntree.get();
-
-			    // Delete related LigneEntrees
-			   
-			            ligneEntreeFournisseurRepository.deleteByBonEntree(bonEntree);
-
-			    // Delete the BonEntree entry
+			      ligneEntreeFournisseurRepository.deleteByBonEntree(bonEntree);
 			    bonEntreeRepository.delete(bonEntree);
 
-			    // Optionally return the deleted BonEntreeDto
 			    return null;
 			}
 		 
+		  
+		  public void generateEcelBE(HttpServletResponse response) throws IOException {
+			  // Fetch all BonEntree entities
+			    List<BonEntree> bonEntrees = bonEntreeRepository.findAll();
+
+			    // Create a new workbook and sheet
+			    Workbook workbook = new HSSFWorkbook();
+			    Sheet sheet = workbook.createSheet("Bon Entree Info");
+
+			    // Create header row
+			    Row headerRow = sheet.createRow(0);
+			    headerRow.createCell(0).setCellValue("ID");
+			    headerRow.createCell(1).setCellValue("Code");
+			    headerRow.createCell(2).setCellValue("Date Commande");
+			    headerRow.createCell(3).setCellValue("Etat Commande");
+			    headerRow.createCell(4).setCellValue("Fournisseur");
+
+			    // Fill data rows
+			    int dataRowIndex = 1;
+			    for (BonEntree bonEntree : bonEntrees) {
+			        Row dataRow = sheet.createRow(dataRowIndex++);
+			        dataRow.createCell(0).setCellValue(bonEntree.getId());
+			        dataRow.createCell(1).setCellValue(bonEntree.getCode());
+			        dataRow.createCell(2).setCellValue(bonEntree.getDateCommande().toString());
+			        dataRow.createCell(3).setCellValue(bonEntree.getEtatCommande().name());
+			        dataRow.createCell(4).setCellValue(bonEntree.getFournisseur().getNom()); 
+			    }
+
+			    response.setContentType("application/vnd.ms-excel");
+			    response.setHeader("Content-Disposition", "attachment;filename=BonEntreeInfo.xls");
+
+			    try (ServletOutputStream ops = response.getOutputStream()) {
+			        workbook.write(ops);
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			    } finally {
+			        workbook.close();
+			    }
+		  }
+
 }
