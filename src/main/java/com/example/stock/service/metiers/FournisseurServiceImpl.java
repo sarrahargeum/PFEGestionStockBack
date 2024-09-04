@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.stock.dto.FournisseurDto;
 import com.example.stock.exception.EntityNotFoundException;
-import com.example.stock.model.Article;
 import com.example.stock.model.BonEntree;
 import com.example.stock.model.Fournisseur;
 import com.example.stock.repository.BonEntreeRepository;

@@ -125,7 +125,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		    }
 		    
 		    if(Objects.nonNull(savedCmdFrs)) {
-		        String notificationMessage = "Commande " + savedCmdFrs.getCode() + " en preparation. Please valider this commande.";
+		        String notificationMessage = "Commande " + savedCmdFrs.getCode() + " en preparation. Please valider this commande Entree.";
 
 		    	 notificationController.sendOrderValidationNotification(notificationMessage);
 		         
@@ -158,30 +158,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 
 	   
 
-	   /* @Override
-	    public BonEntreeDto save(BonEntreeDto BEntree) {
-	        List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
-
-	        if (!errors.isEmpty()) {
-	            log.error("Commande fournisseur n'est pas valide");
-	            throw new InvalidEntityException("La commande fournisseur n'est pas valide");
-	        }
-
-	        if (BEntree.getId() != null && BEntree.isCommandeLivree()) {
-	            throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
-	        }
-
-	        // Save the BonEntree to the database (assuming you have a repository for this)
-	        BonEntree savedBonEntree = bonEntreeRepository.save(BonEntreeDto.toEntity(BEntree));
-	        
-	        // Send WebSocket notification
-	        notificationController.sendNotification("Commande " + savedBonEntree.getId() + " saved. Please update status.");
-	        return BonEntreeDto.fromEntity(savedBonEntree);
-
-	        
-	    }*/
-	
-	
+	 
 	
 
 

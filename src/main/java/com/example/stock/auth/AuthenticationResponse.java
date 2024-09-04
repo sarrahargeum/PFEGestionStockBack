@@ -1,6 +1,5 @@
 package com.example.stock.auth;
 
-import java.util.List;
 
 import com.example.stock.model.Roles;
 import com.example.stock.model.User;

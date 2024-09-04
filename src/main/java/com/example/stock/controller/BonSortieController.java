@@ -39,7 +39,7 @@ public class BonSortieController {
 	    
 	    @PostMapping("/saveBSClient")
 	    BonSortieDto saveBSClient(@RequestBody BonSortieDto bonSortie) {
-		    return bonSortieService.save(bonSortie);
+		    return bonSortieService.saveBSClient(bonSortie);
 
 	    
 	    }

@@ -11,17 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.stock.dto.ClientDto;
-import com.example.stock.dto.FournisseurDto;
 import com.example.stock.model.Client;
-import com.example.stock.model.Fournisseur;
-import com.example.stock.service.ClientService;
-import com.example.stock.service.FournisseurService;
-
-@CrossOrigin(origins = "http://localhost:4200")
+import com.example.stock.service.ClientService;@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {

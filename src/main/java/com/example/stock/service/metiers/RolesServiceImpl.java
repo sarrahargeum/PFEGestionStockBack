@@ -1,6 +1,5 @@
 package com.example.stock.service.metiers;
 
-import com.example.stock.model.Category;
 import com.example.stock.model.Roles;
 import com.example.stock.repository.RolesRepository;
 import com.example.stock.service.RolesService;

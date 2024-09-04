@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.LigneEntreeDto;
-import com.example.stock.model.BonEntree;
 import com.example.stock.model.EtatCommande;
 
 import jakarta.servlet.http.HttpServletResponse;

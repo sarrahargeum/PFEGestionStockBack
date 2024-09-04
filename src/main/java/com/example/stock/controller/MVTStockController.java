@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.stock.dto.MVTStockDto;
-import com.example.stock.model.MVTStock;
 import com.example.stock.service.MVTStockService;
 
 @CrossOrigin(origins = "http://localhost:4200")

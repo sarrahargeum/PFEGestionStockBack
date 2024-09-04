@@ -4,12 +4,8 @@ import com.example.stock.dto.ArticleDto;
 import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.model.Article;
-import com.example.stock.model.Category;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 

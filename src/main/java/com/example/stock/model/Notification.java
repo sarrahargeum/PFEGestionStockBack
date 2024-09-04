@@ -31,6 +31,7 @@ public class Notification {
 	    @Column(name = "etat_notification", nullable = false)
 	    private Boolean etatNotification;
 	    
+	     private String Type;
 	    @Column(name = "code_commande")
 	    private String codeCommande;
 

@@ -42,6 +42,8 @@ public class NotificationController {
     public void sendOrderValidationNotification(String message) {
         messagingTemplate.convertAndSend("/topic/order/validation", HtmlUtils.htmlEscape(message));
     }
+    
+    
 }
 
 // Notification class to encapsulate notification messages

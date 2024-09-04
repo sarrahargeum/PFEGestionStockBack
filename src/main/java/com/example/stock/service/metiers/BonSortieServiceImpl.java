@@ -1,57 +1,42 @@
 package com.example.stock.service.metiers;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.controller.NotificationController;
 import com.example.stock.dto.ArticleDto;
-import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.ClientDto;
-import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.exception.InvalidEntityException;
 import com.example.stock.exception.InvalidOperationException;
 import com.example.stock.model.Article;
-import com.example.stock.model.BonEntree;
 import com.example.stock.model.BonSortie;
 import com.example.stock.model.Client;
 import com.example.stock.model.EtatCommande;
-import com.example.stock.model.Fournisseur;
-import com.example.stock.model.LigneEntree;
 import com.example.stock.model.LigneSortie;
-import com.example.stock.model.MVTStock;
+import com.example.stock.model.Notification;
 import com.example.stock.model.TypeStock;
 import com.example.stock.repository.ArticleRepository;
-import com.example.stock.repository.BonEntreeRepository;
 import com.example.stock.repository.BonSortieRepository;
 import com.example.stock.repository.ClientRepository;
-import com.example.stock.repository.FournisseurRepository;
-import com.example.stock.repository.LigneEntreeRepository;
 import com.example.stock.repository.LigneSortieRepository;
-import com.example.stock.service.BonEntreeService;
 import com.example.stock.service.BonSortieService;
 import com.example.stock.service.MVTStockService;
 import com.example.stock.validator.ArticleValidator;
-import com.example.stock.validator.BonEntreeFournisseurValidator;
 import com.example.stock.validator.BonSortieValidator;
 
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -75,7 +60,8 @@ public class BonSortieServiceImpl implements BonSortieService {
 	
 	@Autowired
 	NotificationController notificationController;
-
+	@Autowired
+    NotificationService notificationService;
 	
 
 	
@@ -132,9 +118,20 @@ public class BonSortieServiceImpl implements BonSortieService {
 		          effectuerSortie(savedLigneCmd);
 		        });
 		      }
-		      // Send WebSocket notification
-	      //  notificationController.sendNotification("Commande " + savedCmdCls.getId() + " saved. Please update status.");
-	        return BonSortieDto.fromEntity(savedCmdCls);
+		    if(Objects.nonNull(savedCmdCls)) {
+		        String notificationMessage = "Please valider this commande Sortie " + savedCmdCls.getCode()  ;
+
+		    	 notificationController.sendOrderValidationNotification(notificationMessage);
+		         
+		         // Create and save notification in the database
+		         Notification notification = new Notification();
+		         notification.setMessage(notificationMessage);
+		         notification.setDateNotification(Instant.now());
+		            notification.setEtatNotification(false); // Assuming unread notification
+
+		         notification.setCodeCommande(savedCmdCls.getCode());
+		         notificationService.save(notification);
+		     }	        return BonSortieDto.fromEntity(savedCmdCls);
 	}
 	 
 	  private void effectuerSortie(LigneSortie lig) {

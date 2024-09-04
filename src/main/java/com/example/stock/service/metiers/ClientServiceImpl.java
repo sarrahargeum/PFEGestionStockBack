@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.dto.ClientDto;
-import com.example.stock.dto.FournisseurDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Client;
 import com.example.stock.repository.ClientRepository;
