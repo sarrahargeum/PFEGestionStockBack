@@ -1,10 +1,8 @@
 package com.example.stock.repository;
 
-import com.example.stock.dto.MVTStockDto;
 import com.example.stock.model.Article;
 import com.example.stock.model.MVTStock;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;

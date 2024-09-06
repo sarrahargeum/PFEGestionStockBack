@@ -9,12 +9,8 @@ import org.springframework.stereotype.Service;
 
 
 import com.example.stock.exception.EntityNotFoundException;
-import com.example.stock.model.Category;
-import com.example.stock.model.Fournisseur;
 import com.example.stock.model.Magasin;
-import com.example.stock.repository.CategoryRepository;
 import com.example.stock.repository.MagasinRepository;
-import com.example.stock.service.ArticleService;
 import com.example.stock.service.MagasinService;
 
 import lombok.extern.slf4j.Slf4j;

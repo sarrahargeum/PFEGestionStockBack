@@ -61,7 +61,7 @@ public class BonSortieServiceImpl implements BonSortieService {
 	@Autowired
 	NotificationController notificationController;
 	@Autowired
-    NotificationService notificationService;
+    NotificationServiceImpl notificationService;
 	
 
 	
@@ -127,7 +127,8 @@ public class BonSortieServiceImpl implements BonSortieService {
 		         Notification notification = new Notification();
 		         notification.setMessage(notificationMessage);
 		         notification.setDateNotification(Instant.now());
-		            notification.setEtatNotification(false); // Assuming unread notification
+		         notification.setType("Validation");
+		          notification.setEtatNotification(false); // Assuming unread notification
 
 		         notification.setCodeCommande(savedCmdCls.getCode());
 		         notificationService.save(notification);

@@ -69,7 +69,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 	@Autowired
 	NotificationController notificationController;
 	@Autowired
-    NotificationService notificationService;
+    NotificationServiceImpl notificationService;
 	
 	 public BonEntreeDto save(BonEntreeDto BEntree) {
 
@@ -133,8 +133,8 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		         Notification notification = new Notification();
 		         notification.setMessage(notificationMessage);
 		         notification.setDateNotification(Instant.now());
-		            notification.setEtatNotification(false); // Assuming unread notification
-
+		            notification.setEtatNotification(false); 
+		            notification.setType("Validation");
 		         notification.setCodeCommande(savedCmdFrs.getCode());
 		         notificationService.save(notification);
 		     }

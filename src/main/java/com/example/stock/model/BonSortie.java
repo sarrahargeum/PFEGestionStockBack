@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -38,8 +39,11 @@ public class BonSortie {
     @JoinColumn( name = "idclient")
     private Client client;
     
-@OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<LigneSortie> ligneSorties;
+/*@OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<LigneSortie> ligneSorties;*/
+    
+    @OneToMany(mappedBy = "bonSortie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<LigneSortie> ligneSorties = new HashSet<>();
     
    
     
