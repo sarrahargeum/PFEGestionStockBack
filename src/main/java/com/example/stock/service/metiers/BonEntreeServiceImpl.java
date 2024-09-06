@@ -71,78 +71,83 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 	@Autowired
     NotificationServiceImpl notificationService;
 	
-	 public BonEntreeDto save(BonEntreeDto BEntree) {
 
-		 List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
+	@Transactional
+	public BonEntreeDto save(BonEntreeDto BEntree) {
 
-		    if (!errors.isEmpty()) {
-		      log.error("Commande fournisseur n'est pas valide");
-		      throw new InvalidEntityException("La commande fournisseur n'est pas valide");
-		    }
+	    List<String> errors = BonEntreeFournisseurValidator.validate(BEntree);
 
-		    if (BEntree.getId() != null && BEntree.isCommandeLivree()) {
-		      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
-		    }
+	    if (!errors.isEmpty()) {
+	        log.error("Commande fournisseur n'est pas valide");
+	        throw new InvalidEntityException("La commande fournisseur n'est pas valide");
+	    }
 
-		    Optional<Fournisseur> fournisseur = fournisseurRepository.findById(BEntree.getFournisseur().getId());
-		    if (fournisseur.isEmpty()) {
-		      log.warn("Fournisseur with ID {} was not found in the DB", BEntree.getFournisseur().getId());
-		      throw new EntityNotFoundException("Aucun fournisseur avec l'ID" + BEntree.getFournisseur().getId() + " n'a ete trouve dans la BDD");
-		    }
+	    if (BEntree.getId() != null && BEntree.isCommandeLivree()) {
+	        throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+	    }
 
-		    List<String> articleErrors = new ArrayList<>();
+	    Optional<Fournisseur> fournisseur = fournisseurRepository.findById(BEntree.getFournisseur().getId());
+	    if (fournisseur.isEmpty()) {
+	        log.warn("Fournisseur with ID {} was not found in the DB", BEntree.getFournisseur().getId());
+	        throw new EntityNotFoundException("Aucun fournisseur avec l'ID " + BEntree.getFournisseur().getId() + " n'a ete trouve dans la BDD");
+	    }
 
-		    if (BEntree.getLigneEntrees() != null) {
-		    	BEntree.getLigneEntrees().forEach(ligCmdFrs -> {
-		        if (ligCmdFrs.getArticle() != null) {
-		          Optional<Article> article = articleRepository.findById(ligCmdFrs.getArticle().getId());
-		          if (article.isEmpty()) {
-		            articleErrors.add("L'article avec l'ID " + ligCmdFrs.getArticle().getId() + " n'existe pas");
-		          }
-		        } else {
-		          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
-		        }
-		      });
-		    }
+	    List<String> articleErrors = new ArrayList<>();
 
-		    if (!articleErrors.isEmpty()) {
-		      log.warn("");
-		      throw new InvalidEntityException("Article n'existe pas dans la BDD");
-		    }
-		    BEntree.setDateCommande(Instant.now());
-		    
-		    BonEntree savedCmdFrs = bonEntreeRepository.save(BonEntreeDto.toEntity(BEntree));
+	    if (BEntree.getLigneEntrees() != null) {
+	        BEntree.getLigneEntrees().forEach(ligCmdFrs -> {
+	            if (ligCmdFrs.getArticle() != null) {
+	                Optional<Article> article = articleRepository.findById(ligCmdFrs.getArticle().getId());
+	                if (article.isEmpty()) {
+	                    articleErrors.add("L'article avec l'ID " + ligCmdFrs.getArticle().getId() + " n'existe pas");
+	                }
+	            } else {
+	                articleErrors.add("Impossible d'enregister une commande avec un article NULL");
+	            }
+	        });
+	    }
 
-		    if (BEntree.getLigneEntrees() != null) {
-		    	BEntree.getLigneEntrees().forEach(ligCmdFrs -> {
-		        LigneEntree ligneEntree = LigneEntreeDto.toEntity(ligCmdFrs);
-		        ligneEntree.setBonEntree(savedCmdFrs);
-		        ligneEntree.setIdMagasin(savedCmdFrs.getIdMagasin());
-		        LigneEntree saveLigne = ligneEntreeFournisseurRepository.save(ligneEntree);
+	    if (!articleErrors.isEmpty()) {
+	        log.warn("");
+	        throw new InvalidEntityException("Article n'existe pas dans la BDD");
+	    }
 
-		        effectuerEntree(saveLigne);
-		      });
-		    }
-		    
-		    if(Objects.nonNull(savedCmdFrs)) {
-		        String notificationMessage = "Commande " + savedCmdFrs.getCode() + " en preparation. Please valider this commande Entree.";
+	    BEntree.setDateCommande(Instant.now());
 
-		    	 notificationController.sendOrderValidationNotification(notificationMessage);
-		         
-		         // Create and save notification in the database
-		         Notification notification = new Notification();
-		         notification.setMessage(notificationMessage);
-		         notification.setDateNotification(Instant.now());
-		            notification.setEtatNotification(false); 
-		            notification.setType("Validation");
-		         notification.setCodeCommande(savedCmdFrs.getCode());
-		         notificationService.save(notification);
-		     }
-		
-	        return BonEntreeDto.fromEntity(savedCmdFrs);
-		 
+	    // Enregistrer la commande sans le code pour le moment
+	    BonEntree savedCmdFrs = bonEntreeRepository.save(BonEntreeDto.toEntity(BEntree));
 
+	    if (BEntree.getLigneEntrees() != null) {
+	        BEntree.getLigneEntrees().forEach(ligCmdFrs -> {
+	            LigneEntree ligneEntree = LigneEntreeDto.toEntity(ligCmdFrs);
+	            ligneEntree.setBonEntree(savedCmdFrs);
+	            ligneEntree.setIdMagasin(savedCmdFrs.getIdMagasin());
+	            LigneEntree saveLigne = ligneEntreeFournisseurRepository.save(ligneEntree);
+	            effectuerEntree(saveLigne);
+	        });
+	    }
+	    bonEntreeRepository.save(savedCmdFrs); 
+
+	    if (Objects.nonNull(savedCmdFrs)) {
+	        String notificationMessage = "Commande " + savedCmdFrs.getCode() + " en préparation. Please valider cette commande d'Entrée.";
+	        notificationController.sendOrderValidationNotification(notificationMessage);
+
+	        Notification notification = new Notification();
+	        notification.setMessage(notificationMessage);
+	        notification.setDateNotification(Instant.now());
+	        notification.setEtatNotification(false);
+	        notification.setType("Validation");
+	        notification.setCodeCommande(savedCmdFrs.getCode());
+	        notificationService.save(notification);
+	    }
+
+	    return BonEntreeDto.fromEntity(savedCmdFrs);
 	}
+
+
+	 
+    
+
 	  private void effectuerEntree(LigneEntree lig) {
 		    MVTStockDto mvtStkDto = MVTStockDto.builder()
 		        .article(ArticleDto.fromEntity(lig.getArticle()))

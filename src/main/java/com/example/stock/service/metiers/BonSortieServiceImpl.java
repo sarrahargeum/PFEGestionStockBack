@@ -66,74 +66,84 @@ public class BonSortieServiceImpl implements BonSortieService {
 
 	
 
-	 public BonSortieDto save(BonSortieDto BSortie) {
+	public BonSortieDto save(BonSortieDto BSortie) {
 
-		 List<String> errors = BonSortieValidator.validate(BSortie);
+	    List<String> errors = BonSortieValidator.validate(BSortie);
+	    if (!errors.isEmpty()) {
+	        log.error("Commande client n'est pas valide");
+	        throw new InvalidEntityException("La commande client n'est pas valide");
+	    }
 
-		 if (!errors.isEmpty()) {
-		      log.error("Commande client n'est pas valide");
-		      throw new InvalidEntityException("La commande client n'est pas valide");
-		    }
+	    if (BSortie.getId() != null && BSortie.isCommandeLivree()) {
+	        throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
+	    }
 
-		    if (BSortie.getId() != null && BSortie.isCommandeLivree()) {
-		      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
-		    }
+	    Optional<Client> client = clientRepository.findById(BSortie.getClient().getId());
+	    if (client.isEmpty()) {
+	        log.warn("Client with ID {} was not found in the DB", BSortie.getClient().getId());
+	        throw new EntityNotFoundException("Aucun client avec l'ID " + BSortie.getClient().getId() + " n'a ete trouve dans la BDD");
+	    }
 
-		    Optional<Client> client = clientRepository.findById(BSortie.getClient().getId());
-		    if (client.isEmpty()) {
-		      log.warn("Client with ID {} was not found in the DB", BSortie.getClient().getId());
-		      throw new EntityNotFoundException("Aucun client avec l'ID" + BSortie.getClient().getId() + " n'a ete trouve dans la BDD");
-		    }
+	    List<String> articleErrors = new ArrayList<>();
 
-		    List<String> articleErrors = new ArrayList<>();
+	    if (BSortie.getLigneSorties() != null) {
+	        BSortie.getLigneSorties().forEach(ligCmdCls -> {
+	            if (ligCmdCls.getArticle() != null) {
+	                Optional<Article> article = articleRepository.findById(ligCmdCls.getArticle().getId());
+	                if (article.isEmpty()) {
+	                    articleErrors.add("L'article avec l'ID " + ligCmdCls.getArticle().getId() + " n'existe pas");
+	                } else {
+	                    // Vérification du stock réel de l'article
+	                    Integer stockReel = mvtStockService.stockReelArticle(ligCmdCls.getArticle().getId());
+	                    
+	                    // Vérification si la quantité demandée est supérieure au stock disponible
+	                    if (ligCmdCls.getQuantite() > stockReel) {
+	                        throw new InvalidOperationException("Quantité demandée pour l'article avec ID " 
+	                            + ligCmdCls.getArticle().getId() + " dépasse le stock actuel (" + stockReel + " unités disponibles).");
+	                    }
+	                }
+	            } else {
+	                articleErrors.add("Impossible d'enregistrer une commande avec un article NULL");
+	            }
+	        });
+	    }
 
-		    if (BSortie.getLigneSorties() != null) {
-		    	BSortie.getLigneSorties().forEach(ligCmdCls -> {
-		        if (ligCmdCls.getArticle() != null) {
-		          Optional<Article> article = articleRepository.findById(ligCmdCls.getArticle().getId());
-		          if (article.isEmpty()) {
-		            articleErrors.add("L'article avec l'ID " + ligCmdCls.getArticle().getId() + " n'existe pas");
-		          }
-		        } else {
-		          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
-		        }
-		      });
-		    }
+	    if (!articleErrors.isEmpty()) {
+	        log.warn("Erreurs avec les articles : {}", articleErrors);
+	        throw new InvalidEntityException("Articles non valides dans la commande");
+	    }
 
-		    if (!articleErrors.isEmpty()) {
-		      log.warn("");
-		      throw new InvalidEntityException("Article n'existe pas dans la BDD");
-		    }
-		    BSortie.setDateCommande(Instant.now());
-		    
-		    BonSortie savedCmdCls = bonSortieRepository.save(BonSortieDto.toEntity(BSortie));
+	    BSortie.setDateCommande(Instant.now());
+	    BonSortie savedCmdCls = bonSortieRepository.save(BonSortieDto.toEntity(BSortie));
 
-		    if (BSortie.getLigneSorties() != null) {
-		    	BSortie.getLigneSorties().forEach(ligCmdClt -> {
-		          LigneSortie ligneCommandeClient = LigneSortieDto.toEntity(ligCmdClt);
-		          ligneCommandeClient.setBonSortie(savedCmdCls);
-		          ligneCommandeClient.setIdMagasin(BSortie.getIdMagasin());
-		          LigneSortie savedLigneCmd = ligneSortieRepository.save(ligneCommandeClient);
+	    if (BSortie.getLigneSorties() != null) {
+	        BSortie.getLigneSorties().forEach(ligCmdClt -> {
+	            LigneSortie ligneCommandeClient = LigneSortieDto.toEntity(ligCmdClt);
+	            ligneCommandeClient.setBonSortie(savedCmdCls);
+	            ligneCommandeClient.setIdMagasin(BSortie.getIdMagasin());
+	            LigneSortie savedLigneCmd = ligneSortieRepository.save(ligneCommandeClient);
 
-		          effectuerSortie(savedLigneCmd);
-		        });
-		      }
-		    if(Objects.nonNull(savedCmdCls)) {
-		        String notificationMessage = "Please valider this commande Sortie " + savedCmdCls.getCode()  ;
+	            effectuerSortie(savedLigneCmd); // Effectuer la sortie du stock
+	        });
+	    }
 
-		    	 notificationController.sendOrderValidationNotification(notificationMessage);
-		         
-		         // Create and save notification in the database
-		         Notification notification = new Notification();
-		         notification.setMessage(notificationMessage);
-		         notification.setDateNotification(Instant.now());
-		         notification.setType("Validation");
-		          notification.setEtatNotification(false); // Assuming unread notification
+	    if (Objects.nonNull(savedCmdCls)) {
+	        String notificationMessage = "Please valider cette commande Sortie " + savedCmdCls.getCode();
+	        notificationController.sendOrderValidationNotification(notificationMessage);
 
-		         notification.setCodeCommande(savedCmdCls.getCode());
-		         notificationService.save(notification);
-		     }	        return BonSortieDto.fromEntity(savedCmdCls);
+	        // Créer et enregistrer une notification
+	        Notification notification = new Notification();
+	        notification.setMessage(notificationMessage);
+	        notification.setDateNotification(Instant.now());
+	        notification.setType("Validation");
+	        notification.setEtatNotification(false);
+	        notification.setCodeCommande(savedCmdCls.getCode());
+	        notificationService.save(notification);
+	    }
+
+	    return BonSortieDto.fromEntity(savedCmdCls);
 	}
+
 	 
 	  private void effectuerSortie(LigneSortie lig) {
 		    MVTStockDto mvtStkDto = MVTStockDto.builder()
