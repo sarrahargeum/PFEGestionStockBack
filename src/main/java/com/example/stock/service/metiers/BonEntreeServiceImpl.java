@@ -158,16 +158,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 		        .build();
 		    mvtStockService.entreeStock(mvtStkDto);
 		  }
-		
-
-
-	   
-
-	 
 	
-
-
-
 @Override
 public BonEntreeDto findById(Integer id) {
     if (id == null) {
@@ -430,5 +421,12 @@ public BonEntreeDto findById(Integer id) {
 			        workbook.close();
 			    }
 		  }
+		  
+		  
+			@Override
+			public long countBonEntrees() {
+				return bonEntreeRepository.count();
+				    
+			}
 
 }

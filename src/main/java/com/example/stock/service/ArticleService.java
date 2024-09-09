@@ -23,7 +23,7 @@ public interface ArticleService {
      Article retrieveArticle (Integer id);
 	
 
-	List<Article> getAllArticle();
+	List<ArticleDto> getAllArticle();
 
 	  List<LigneSortieDto> findHistoriaueCommandeClient(Integer idArticle);
 

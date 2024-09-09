@@ -34,5 +34,6 @@ public interface BonEntreeService {
 	   
 	   List<LigneEntreeDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(Integer idCommande);
 	BonEntreeDto deleteBonEntree(Integer id);
-	  public void generateEcelBE(HttpServletResponse response) throws IOException; 
+	  public void generateEcelBE(HttpServletResponse response) throws IOException;
+	long countBonEntrees(); 
 }

@@ -33,5 +33,6 @@ public interface BonSortieService {
 	  List<LigneSortieDto> findAllLignesCommandesClientByCommandeClientId(Integer idCommande);
 	BonSortieDto deleteBonSortie(Integer id);
 	
-	  public BonSortieDto saveBSClient(BonSortieDto BSortie); 
+	  public BonSortieDto saveBSClient(BonSortieDto BSortie);
+	long countBonSorties(); 
 	  }

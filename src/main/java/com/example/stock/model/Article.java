@@ -12,6 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "article")
+@EqualsAndHashCode(exclude = "stocks") 
+@ToString(exclude = "stocks") 
 public class Article {
 
     public Article(String string, String string2) {
@@ -39,7 +41,7 @@ public class Article {
 
 
     //@OneToMany( mappedBy = "article")
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true )
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true ,fetch = FetchType.EAGER )
     private Set<MVTStock>  stocks;
 
     @OneToMany( mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)

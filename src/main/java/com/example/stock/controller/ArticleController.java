@@ -121,7 +121,7 @@ public class ArticleController {
     
     
     @GetMapping("/allArticle")
-    public List<Article> getAllArticle() {
+    public List<ArticleDto> getAllArticle() {
         return articleService.getAllArticle();
     }
     

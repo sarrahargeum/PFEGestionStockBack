@@ -3,7 +3,6 @@ package com.example.stock.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,11 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.LigneSortieDto;
-import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.service.BonSortieService;
 
@@ -102,8 +98,12 @@ public class BonSortieController {
 	    @DeleteMapping("/deleteCmd/{id}")
 	   BonSortieDto deleteBonSortie(@PathVariable Integer id) {
 	           return bonSortieService.deleteBonSortie(id);
-	           
-	        
+	       }
+	    
+	    @GetMapping("/count")
+	    public ResponseEntity<Long> countBonSorties() {
+	        long bonSortieCount = bonSortieService.countBonSorties();
+	        return ResponseEntity.ok(bonSortieCount);
 	    }
 	    
 }

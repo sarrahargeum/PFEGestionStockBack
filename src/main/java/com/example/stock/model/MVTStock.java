@@ -1,6 +1,8 @@
 package com.example.stock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Table(name = "Mvtstock")
-
 public class MVTStock {
 	
     @Id
@@ -34,8 +35,8 @@ public class MVTStock {
     @Column(name = "idmagasin")
     private Integer idMagasin;
 
-    @ManyToOne 
-    @JoinColumn(name = "idarticle")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idarticle" )
     private Article article;
 
 

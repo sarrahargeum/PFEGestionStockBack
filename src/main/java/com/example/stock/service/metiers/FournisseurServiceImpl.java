@@ -100,6 +100,14 @@ public class FournisseurServiceImpl implements FournisseurService {
 		        .collect(Collectors.toList());
 	}
 
+
+
+	@Override
+	public long countFournisseurs() {
+		return fournisseurRepository.count();
+		    
+	}
+
 	
 
 }

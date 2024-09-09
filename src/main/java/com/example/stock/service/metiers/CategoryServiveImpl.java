@@ -1,6 +1,8 @@
 package com.example.stock.service.metiers;
 
 
+import com.example.stock.dto.ArticleDto;
+import com.example.stock.dto.CategoryDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Article;
 import com.example.stock.model.Category;
@@ -47,10 +49,14 @@ public class CategoryServiveImpl implements CategoryService {
 
     
     @Override
-    public List<Category> findAll() {
-    	return categoryRepository.findAll().stream()
-		        .collect(Collectors.toList());
-    	    }
+    public List<CategoryDto> findAll() {
+      	 return categoryRepository.findAll().stream()
+	          .map(CategoryDto::fromEntity)
+	          .collect(Collectors.toList());
+	
+}	   
+    
+    
 
 
     public Category deleteCategory(Integer id) {

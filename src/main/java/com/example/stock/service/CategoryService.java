@@ -1,6 +1,7 @@
 package com.example.stock.service;
 
 
+import com.example.stock.dto.CategoryDto;
 import com.example.stock.model.Category;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ public interface CategoryService {
     
     Category deleteCategory(Integer id);
     
-    List<Category> findAll();
+    List<CategoryDto> findAll();
     public void generateEcel (HttpServletResponse response) throws IOException;
     
     Category retrieveCategory (Integer categoryId);

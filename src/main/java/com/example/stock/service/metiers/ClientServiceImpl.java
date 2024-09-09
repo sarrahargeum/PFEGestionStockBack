@@ -87,6 +87,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
+    public long countClients() {
+        return clientRepository.count();
+    }
 	
 
 }

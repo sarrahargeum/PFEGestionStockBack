@@ -1,6 +1,7 @@
 package com.example.stock.controller;
 
 
+import com.example.stock.dto.CategoryDto;
 import com.example.stock.model.Category;
 import com.example.stock.repository.CategoryRepository;
 import com.example.stock.service.CategoryService;
@@ -33,7 +34,7 @@ public class CategoryController {
 
     @GetMapping("/all")
     @ResponseBody
-    public List<Category> findAll() {
+    public List<CategoryDto> findAll() {
 
         return categoryService.findAll();
     }

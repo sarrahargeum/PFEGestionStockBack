@@ -453,5 +453,10 @@ public class BonSortieServiceImpl implements BonSortieService {
 			        return BonSortieDto.fromEntity(savedCmdCls);
 			}
 
+			@Override
+			public long countBonSorties() {
+				return bonSortieRepository.count();
+				    
+			}
 	
 }

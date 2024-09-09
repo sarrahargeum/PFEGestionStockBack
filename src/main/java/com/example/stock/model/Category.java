@@ -3,7 +3,10 @@ package com.example.stock.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.util.List;
 import java.util.Set;
 
@@ -12,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 @Table(name = "category")
+ 
 public class Category {
 
     @Id

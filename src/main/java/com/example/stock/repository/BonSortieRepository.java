@@ -15,5 +15,6 @@ public interface BonSortieRepository extends JpaRepository<BonSortie, Integer> {
 	
 	
     List<BonSortie> findAllByClientId(Integer id);
+    long count();
 
 }

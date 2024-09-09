@@ -13,5 +13,6 @@ public interface FournisseurService {
     List<FournisseurDto> findAll();
     
     public FournisseurDto retrieveFournisseur(Integer id);
+	long countFournisseurs();
 
 }

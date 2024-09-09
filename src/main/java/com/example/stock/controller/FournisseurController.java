@@ -3,6 +3,7 @@ package com.example.stock.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,5 +52,10 @@ public class FournisseurController {
 	    @DeleteMapping("/delete/{id}")
 	    public void deleteFournisseur(@PathVariable Integer id) {
 	        fournisseurService.deleteFournisseur(id);
+	    }
+	    @GetMapping("/count")
+	    public ResponseEntity<Long> countFournisseurs() {
+	        long fourCount = fournisseurService.countFournisseurs();
+	        return ResponseEntity.ok(fourCount);
 	    }
 }

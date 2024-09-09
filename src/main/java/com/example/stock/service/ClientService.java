@@ -17,4 +17,6 @@ public interface ClientService {
    List<ClientDto> findAll();
    Client retrieveClient (Integer clientId);
 
+long countClients();
+
 }
