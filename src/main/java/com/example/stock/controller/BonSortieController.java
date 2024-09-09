@@ -1,6 +1,7 @@
 package com.example.stock.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.stock.dto.BonSortieDto;
+import com.example.stock.dto.ClientDto;
 import com.example.stock.dto.LigneSortieDto;
+import com.example.stock.model.BonSortie;
+import com.example.stock.model.Client;
 import com.example.stock.model.EtatCommande;
+import com.example.stock.repository.ClientRepository;
 import com.example.stock.service.BonSortieService;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -25,6 +30,9 @@ public class BonSortieController {
 
 	 @Autowired
 	     BonSortieService bonSortieService;
+	 
+	 @Autowired
+	 ClientRepository clientRepository;
 	    @PostMapping("/saveBS")
 	    BonSortieDto save(@RequestBody BonSortieDto bonSortie) {
 		    return bonSortieService.save(bonSortie);
@@ -35,8 +43,18 @@ public class BonSortieController {
 	    
 	    @PostMapping("/saveBSClient")
 	    BonSortieDto saveBSClient(@RequestBody BonSortieDto bonSortie) {
-		    return bonSortieService.saveBSClient(bonSortie);
+	    	// Validation et enregistrement du client
+	        Optional<Client> client = clientRepository.findById(bonSortie.getClient().getId());
+	        if (client.isEmpty()) {
+	            ClientDto clientDto = bonSortie.getClient();
+	            Client newClient = ClientDto.toEntity(clientDto);
+	            clientRepository.save(newClient);
+	        }
 
+	        // Validation et enregistrement du bon de sortie
+	     //   BonSortieDto savedBonSortie = bonSortieService.saveBSClient(bonSortie);
+
+		    return bonSortieService.save(bonSortie);
 	    
 	    }
 	    @GetMapping("/retreive-code/{code}")

@@ -25,7 +25,6 @@ public class ArticleDto {
 	private MagasinDto magasin;
 	//private int stockDisponible;
 
-	@JsonCreator
 	public static ArticleDto fromEntity(Article article) {
 		if (article == null) {
 			return null;
@@ -54,4 +53,6 @@ public class ArticleDto {
 		return article;
 	}
 
+	
+	
 }

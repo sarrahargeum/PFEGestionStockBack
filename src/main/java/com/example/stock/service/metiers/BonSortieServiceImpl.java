@@ -396,62 +396,73 @@ public class BonSortieServiceImpl implements BonSortieService {
 		  
 		  
 		  public BonSortieDto saveBSClient(BonSortieDto BSortie) {
-			  List<String> errors = BonSortieValidator.validate(BSortie);
+			// Validate BonSortie data
+		        List<String> errors = BonSortieValidator.validate(BSortie);
+		        if (!errors.isEmpty()) {
+		            throw new InvalidEntityException("Commande client n'est pas valide", errors);
+		        }
 
-				 if (!errors.isEmpty()) {
-				      log.error("Commande client n'est pas valide");
-				      throw new InvalidEntityException("La commande client n'est pas valide");
-				    }
+		        // Check if the order is already delivered
+		        if (BSortie.getId() != null && BSortie.isCommandeLivree()) {
+		            throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livrée");
+		        }
 
-				    if (BSortie.getId() != null && BSortie.isCommandeLivree()) {
-				      throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree");
-				    }
-				    Optional<Client> client = clientRepository.findById(BSortie.getClient().getId());
-				    if (client.isEmpty()) {
-				        ClientDto clientDto = BSortie.getClient();
-				        Client newClient = ClientDto.toEntity(clientDto);
-				        if (newClient.getIdMagasin() == null) {
-				            throw new InvalidEntityException("Le client doit contenir toutes les informations requises");
-				        }
-				        Client savedClient = clientRepository.save(newClient);
-				        BSortie.setClient(ClientDto.fromEntity(savedClient));
-				    }
-				    List<String> articleErrors = new ArrayList<>();
+		        // Check if the client exists, otherwise create a new one
+		        Optional<Client> client = clientRepository.findById(BSortie.getClient().getId());
+		        if (client.isEmpty()) {
+		            ClientDto clientDto = BSortie.getClient();
+		            Client newClient = ClientDto.toEntity(clientDto);
+		            if (newClient.getIdMagasin() == null) {
+		                throw new InvalidEntityException("Le client doit contenir toutes les informations requises");
+		            }
+		            Client savedClient = clientRepository.save(newClient);
+		            BSortie.setClient(ClientDto.fromEntity(savedClient));
+		        }
 
-				    if (BSortie.getLigneSorties() != null) {
-				    	BSortie.getLigneSorties().forEach(ligCmdCls -> {
-				        if (ligCmdCls.getArticle() != null) {
-				          Optional<Article> article = articleRepository.findById(ligCmdCls.getArticle().getId());
-				          if (article.isEmpty()) {
-				            articleErrors.add("L'article avec l'ID " + ligCmdCls.getArticle().getId() + " n'existe pas");
-				          }
-				        } else {
-				          articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
-				        }
-				      });
-				    }
+		        // Validate the articles in the BonSortie
+		        List<String> articleErrors = new ArrayList<>();
+		        if (BSortie.getLigneSorties() != null) {
+		            BSortie.getLigneSorties().forEach(ligCmdCls -> {
+		                if (ligCmdCls.getArticle() != null) {
+		                    Optional<Article> article = articleRepository.findById(ligCmdCls.getArticle().getId());
+		                    if (article.isEmpty()) {
+		                        articleErrors.add("L'article avec l'ID " + ligCmdCls.getArticle().getId() + " n'existe pas");
+		                    }
+		                } else {
+		                    articleErrors.add("Impossible d'enregistrer une commande avec un article NULL");
+		                }
+		            });
+		        }
 
-				    if (!articleErrors.isEmpty()) {
-				      log.warn("");
-				      throw new InvalidEntityException("Article n'existe pas dans la BDD");
-				    }
-				    BSortie.setDateCommande(Instant.now());
-				    
-				    BonSortie savedCmdCls = bonSortieRepository.save(BonSortieDto.toEntity(BSortie));
+		        // Handle article validation errors
+		        if (!articleErrors.isEmpty()) {
+		            throw new InvalidEntityException("Article(s) non valide(s)", articleErrors);
+		        }
 
-				    if (BSortie.getLigneSorties() != null) {
-				    	BSortie.getLigneSorties().forEach(ligCmdClt -> {
-				          LigneSortie ligneCommandeClient = LigneSortieDto.toEntity(ligCmdClt);
-				          ligneCommandeClient.setBonSortie(savedCmdCls);
-				          ligneCommandeClient.setIdMagasin(BSortie.getIdMagasin());
-				          LigneSortie savedLigneCmd = ligneSortieRepository.save(ligneCommandeClient);
+		        // Set order date
+		        BSortie.setDateCommande(Instant.now());
 
-				          effectuerSortie(savedLigneCmd);
-				        });
-				      }
-				  
-			        return BonSortieDto.fromEntity(savedCmdCls);
-			}
+		        // Save BonSortie entity
+		        BonSortie savedBonSortie = bonSortieRepository.save(BonSortieDto.toEntity(BSortie));
+
+		        // Save LigneSortie entities and associate them with the BonSortie
+		        if (BSortie.getLigneSorties() != null) {
+		            BSortie.getLigneSorties().forEach(ligCmdClt -> {
+		                LigneSortie ligneSortie = LigneSortieDto.toEntity(ligCmdClt);
+		                ligneSortie.setBonSortie(savedBonSortie);
+		                ligneSortie.setIdMagasin(BSortie.getIdMagasin());
+		                ligneSortieRepository.save(ligneSortie);
+
+		                // Handle stock management or other post-processing
+		                effectuerSortie(ligneSortie);
+		            });
+		        }
+
+		        return BonSortieDto.fromEntity(savedBonSortie);
+		    }
+
+		 
+		
 
 			@Override
 			public long countBonSorties() {
