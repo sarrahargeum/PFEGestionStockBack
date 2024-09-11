@@ -129,7 +129,7 @@ public class BonEntreeServiceImpl implements BonEntreeService{
 	    bonEntreeRepository.save(savedCmdFrs); 
 
 	    if (Objects.nonNull(savedCmdFrs)) {
-	        String notificationMessage = "Commande " + savedCmdFrs.getCode() + " en préparation. Please valider cette commande d'Entrée.";
+	        String notificationMessage = "Commande " + savedCmdFrs.getCode() + " en preparation. Please valider cette commande Entree.";
 	        notificationController.sendOrderValidationNotification(notificationMessage);
 
 	        Notification notification = new Notification();

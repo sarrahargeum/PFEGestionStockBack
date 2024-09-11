@@ -23,8 +23,9 @@ public class ArticleDto {
 	private String image;
 	private CategoryDto category;
 	private MagasinDto magasin;
-	//private int stockDisponible;
+	private Long stockDisponible;
 
+	
 	public static ArticleDto fromEntity(Article article) {
 		if (article == null) {
 			return null;
@@ -53,6 +54,34 @@ public class ArticleDto {
 		return article;
 	}
 
-	
+	public ArticleDto(Integer id, String code, String designation, Float prix, Float tauxTva, String image,
+			Long stockDisponible) {
+		super();
+		this.id = id;
+		this.code = code;
+		this.designation = designation;
+		this.prix = prix;
+		this.tauxTva = tauxTva;
+		this.image = image;
+		this.stockDisponible = stockDisponible;
+	}
+
+	public ArticleDto(Integer id, String code, String designation, Float prix, Float tauxTva, String image,
+			CategoryDto category, MagasinDto magasin, Long stockDisponible) {
+		super();
+		this.id = id;
+		this.code = code;
+		this.designation = designation;
+		this.prix = prix;
+		this.tauxTva = tauxTva;
+		this.image = image;
+		this.category = category;
+		this.magasin = magasin;
+		this.stockDisponible = stockDisponible;
+	}
+
+	public ArticleDto() {
+		super();
+	}
 	
 }

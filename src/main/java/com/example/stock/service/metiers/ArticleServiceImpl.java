@@ -84,8 +84,7 @@ public class ArticleServiceImpl  implements ArticleService {
     public List<ArticleDto> getAllArticle() {
     	
     	//dto
-    	 return articleRepository.findAll().stream()
-    	          .map(ArticleDto::fromEntity)
+    	 return articleRepository.findAllWithStocks().stream()
     	          .collect(Collectors.toList());
     	
     }
@@ -168,7 +167,6 @@ public class ArticleServiceImpl  implements ArticleService {
           .map(ArticleDto::fromEntity)
           .collect(Collectors.toList());
     }
-
 
 
 

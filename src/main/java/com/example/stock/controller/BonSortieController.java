@@ -44,17 +44,19 @@ public class BonSortieController {
 	    @PostMapping("/saveBSClient")
 	    BonSortieDto saveBSClient(@RequestBody BonSortieDto bonSortie) {
 	    	// Validation et enregistrement du client
-	        Optional<Client> client = clientRepository.findById(bonSortie.getClient().getId());
-	        if (client.isEmpty()) {
-	            ClientDto clientDto = bonSortie.getClient();
-	            Client newClient = ClientDto.toEntity(clientDto);
-	            clientRepository.save(newClient);
-	        }
-
+//	        Optional<Client> client = clientRepository.findById(bonSortie.getClient().getId());
+//	        if (client.isEmpty()) {
+//	            ClientDto clientDto = bonSortie.getClient();
+//	            Client newClient = ClientDto.toEntity(clientDto);
+//	            Client c= clientRepository.save(newClient);
+//	            bonSortie.getClient().setId(c.getId());
+//	        }
+	        //c
+	       
 	        // Validation et enregistrement du bon de sortie
-	     //   BonSortieDto savedBonSortie = bonSortieService.saveBSClient(bonSortie);
+	        //BonSortieDto savedBonSortie = bonSortieService.saveBSClient(bonSortie);
 
-		    return bonSortieService.save(bonSortie);
+		    return bonSortieService.saveBSClient(bonSortie);
 	    
 	    }
 	    @GetMapping("/retreive-code/{code}")
@@ -86,7 +88,7 @@ public class BonSortieController {
 	    }
 	    
 	    
-	    @PutMapping("/quantite/{id}/{idligneSortie}/{quantite}")
+	    @PutMapping("/quantite/{id}/{idligneSortie}/{quantite}")  
 	    BonSortieDto updateQuantiteCommande(@PathVariable("id") Integer id,
 	    		@PathVariable("idligneSortie") Integer idligneSortie, @PathVariable("quantite") Integer quantite){
 	      return bonSortieService.updateQuantiteCommande(id, idligneSortie,quantite);
