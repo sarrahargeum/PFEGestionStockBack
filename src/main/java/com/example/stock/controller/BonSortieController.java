@@ -51,7 +51,7 @@ public class BonSortieController {
 //	            Client c= clientRepository.save(newClient);
 //	            bonSortie.getClient().setId(c.getId());
 //	        }
-	        //c
+	       
 	       
 	        // Validation et enregistrement du bon de sortie
 	        //BonSortieDto savedBonSortie = bonSortieService.saveBSClient(bonSortie);
