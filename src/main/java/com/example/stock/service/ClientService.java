@@ -11,11 +11,11 @@ public interface ClientService {
 	
 	ClientDto ajouterClient(ClientDto dto);
 	
-	 public ClientDto findById(Integer id);
+	// public ClientDto findById(Integer id);
 	 void  updateClient(Integer id, Client cli);
 	Client deleteClient(Integer id);
    List<ClientDto> findAll();
-   Client retrieveClient (Integer clientId);
+   ClientDto retrieveClient (Integer id);
 
 long countClients();
 

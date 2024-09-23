@@ -1,6 +1,7 @@
 package com.example.stock.service.metiers;
 
 import com.example.stock.dto.ArticleDto;
+import com.example.stock.dto.ClientDto;
 import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.exception.EntityNotFoundException;
@@ -94,20 +95,18 @@ public class ArticleServiceImpl  implements ArticleService {
 
       
 
-    public Article retrieveArticle (Integer id){ 
+    public ArticleDto retrieveArticle (Integer id){ 
     	if (id == null) {
         log.error("Article ID is null");
         return null;
+    } return articleRepository.findById(id)
+	        .map(ArticleDto::fromEntity)
+	        .orElseThrow(() -> new EntityNotFoundException(
+	            "Aucun Client avec l'ID = " + id + " n' ete trouve dans la BDD")
+	        );
+
     }
-    return articleRepository.findById(id).orElseThrow(() ->
-    new EntityNotFoundException(
-        "Aucun article avec l'ID = " + id + " n' ete trouve dans la BDD")
-);
-    }
-
-
-
-    
+   
 	
     
     public void update(Integer id, Article Article) {
@@ -128,10 +127,7 @@ public class ArticleServiceImpl  implements ArticleService {
     
     @Transactional
 
-    public Article deleteArticle(Integer id) {
-      /*  articleRepository.deleteById(id);
-        return null*/
-    	
+    public Article deleteArticle(Integer id) {   	
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Article not found"));
 

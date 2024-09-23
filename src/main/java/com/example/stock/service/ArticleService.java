@@ -20,7 +20,7 @@ public interface ArticleService {
    void update(Integer id, Article Article);
    Article deleteArticle(Integer id);
     
-     Article retrieveArticle (Integer id);
+   ArticleDto retrieveArticle (Integer id);
 	
 
 	List<ArticleDto> getAllArticle();

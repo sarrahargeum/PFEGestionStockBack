@@ -135,7 +135,7 @@ public class ArticleController {
   
 
     @GetMapping("/retrieve-article/{id}")
-    public Article retrieveArticle(@PathVariable("id") Integer id) {
+    public ArticleDto retrieveArticle(@PathVariable("id") Integer id) {
         return articleService.retrieveArticle(id);
     }
     

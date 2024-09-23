@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.stock.dto.ClientDto;
+import com.example.stock.dto.FournisseurDto;
 import com.example.stock.exception.EntityNotFoundException;
 import com.example.stock.model.Client;
 import com.example.stock.repository.ClientRepository;
@@ -24,7 +25,7 @@ public class ClientServiceImpl implements ClientService {
 	
 	
 	
-	  public ClientDto ajouterClient(ClientDto dto) {
+	  public ClientDto retrieveClient(ClientDto dto) {
 		 
 
 		    return ClientDto.fromEntity(
@@ -34,7 +35,7 @@ public class ClientServiceImpl implements ClientService {
 		    );
 		  }
 
-		  public ClientDto findById(Integer id) {
+		  public ClientDto retrieveClient( Integer id) {
 		    if (id == null) {
 		      log.error("Client ID is null");
 		      return null;
@@ -46,6 +47,7 @@ public class ClientServiceImpl implements ClientService {
 		        );
 		  }
 
+	
 
 	
 	public void updateClient(Integer id, Client client) {
@@ -81,15 +83,24 @@ public class ClientServiceImpl implements ClientService {
 		        .map(ClientDto::fromEntity)
 		        .collect(Collectors.toList());
 	}
-    public Client retrieveClient (Integer clientId){
-    	Client cl = clientRepository.findById(clientId).get();
-        return  cl;
-    }
+	
+	
+  
 
+    
+    
 
     public long countClients() {
         return clientRepository.count();
     }
+
+	@Override
+	public ClientDto ajouterClient(ClientDto dto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	
 
 }

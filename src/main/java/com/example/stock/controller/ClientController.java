@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.stock.dto.ClientDto;
+import com.example.stock.dto.FournisseurDto;
 import com.example.stock.model.Client;
-import com.example.stock.service.ClientService;@CrossOrigin(origins = "http://localhost:4200")
+import com.example.stock.service.ClientService;
+
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {
@@ -41,10 +44,10 @@ public class ClientController {
     }
     
     @GetMapping("/retrieve-client/{id}")
-    public Client retrieveClient(@PathVariable("id") Integer clientId) {
-        return clientService.retrieveClient(clientId);
+     ClientDto retrieveClient(@PathVariable("id") Integer id) {
+        return clientService.retrieveClient(id);
     }
-    
+  
     @DeleteMapping("/delete/{id}")
     public void deleteClient(@PathVariable Integer id) {
         clientService.deleteClient(id);
