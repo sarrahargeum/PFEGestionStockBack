@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -19,5 +20,8 @@ public interface BonEntreeRepository extends JpaRepository<BonEntree, Integer> {
 
     BonEntree findFirstByOrderByIdDesc();
 
+    
+    @Query("SELECT MONTH(b.dateCommande), COUNT(b) FROM BonEntree b GROUP BY MONTH(b.dateCommande)")
+    List<Object[]> countBonEntreeByMonth();
 
 }

@@ -43,18 +43,7 @@ public class BonSortieController {
 	    
 	    @PostMapping("/saveBSClient")
 	    BonSortieDto saveBSClient(@RequestBody BonSortieDto bonSortie) {
-	    	// Validation et enregistrement du client
-//	        Optional<Client> client = clientRepository.findById(bonSortie.getClient().getId());
-//	        if (client.isEmpty()) {
-//	            ClientDto clientDto = bonSortie.getClient();
-//	            Client newClient = ClientDto.toEntity(clientDto);
-//	            Client c= clientRepository.save(newClient);
-//	            bonSortie.getClient().setId(c.getId());
-//	        }
-	       
-	       
-	        // Validation et enregistrement du bon de sortie
-	        //BonSortieDto savedBonSortie = bonSortieService.saveBSClient(bonSortie);
+
 
 		    return bonSortieService.saveBSClient(bonSortie);
 	    

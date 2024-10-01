@@ -2,6 +2,7 @@ package com.example.stock.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -117,5 +118,9 @@ public class BonEntreeController {
 	        return ResponseEntity.ok(bonEntreeCount);
 	    }
 
+	    @GetMapping("/monthly-bon-data")
+	    public Map<String, Object> getBonDataByMonth() {
+	        return bonEntreeService.getBonDataByMonth();
+	    }
 	    
 }

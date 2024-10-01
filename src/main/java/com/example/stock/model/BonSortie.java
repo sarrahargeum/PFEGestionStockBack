@@ -47,9 +47,9 @@ public class BonSortie {
 
     
     @OneToMany(mappedBy = "bonSortie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<LigneSortie> ligneSorties = new HashSet<>();
+    private Set<LigneSortie> ligneSorties ;
+  
     
-   
     @PrePersist
     public void generateCodeProp() {
         String prefix = "C";  // Define the prefix for the code

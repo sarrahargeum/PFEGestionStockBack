@@ -1,5 +1,6 @@
 package com.example.stock.dto;
 
+import com.example.stock.model.BonSortie;
 import com.example.stock.model.LigneSortie;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
@@ -13,7 +14,7 @@ public class LigneSortieDto {
 
   private ArticleDto article;
 
-  private BonSortieDto bonSortie;
+  private BonSortie bonSortie;
 
   private Integer quantite;
 

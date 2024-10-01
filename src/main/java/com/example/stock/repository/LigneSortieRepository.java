@@ -24,8 +24,7 @@ public interface LigneSortieRepository extends JpaRepository<LigneSortie, Intege
 	    void deleteByBonSortie(BonSortie bonSortie); 
 
 	    void deleteByArticle(Article article);
-	    @Query("SELECT bs FROM BonSortie bs LEFT JOIN FETCH bs.ligneSorties WHERE bs.id = :id")
-	    Optional<BonSortie> findByIdWithLigneSorties(@Param("id") Integer id);
-
-
+	 
+	    
+	   
 }
