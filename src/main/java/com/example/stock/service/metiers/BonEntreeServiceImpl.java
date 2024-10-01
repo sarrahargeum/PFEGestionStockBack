@@ -3,7 +3,9 @@ package com.example.stock.service.metiers;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -428,5 +430,25 @@ public BonEntreeDto findById(Integer id) {
 				return bonEntreeRepository.count();
 				    
 			}
+			
+			
+			
+			  public Map<String, Object> getBonDataByMonth() {
+			        List<Object[]> bonEntreeData = bonEntreeRepository.countBonEntreeByMonth();
+
+			        // Prepare result maps
+			        Map<String, Object> result = new HashMap<>();
+			        Map<Integer, Long> entreeDataMap = new HashMap<>();
+
+			        // Process BonEntree data
+			        for (Object[] data : bonEntreeData) {
+			            Integer month = (Integer) data[0];
+			            Long count = (Long) data[1];
+			            entreeDataMap.put(month, count);
+			        }
+
+			        result.put("bonEntree", entreeDataMap);
+			        return result;
+			    }
 
 }

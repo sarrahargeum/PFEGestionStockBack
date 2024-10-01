@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.stock.controller.NotificationController;
 import com.example.stock.dto.ArticleDto;
+import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.ClientDto;
+import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.EntityNotFoundException;
@@ -363,49 +365,25 @@ public class BonSortieServiceImpl implements BonSortieService {
 		  
 		  @Override
 		  public BonSortieDto findById(Integer id) {
-		      if (id == null) {
-		          log.error("BonSortie ID is NULL");
-		          return null;
-		      }
-
-		      return bonSortieRepository.findById(id)
-		          .map(bonSortie -> {
-		              // Initialiser et charger les LigneSorties
-		              Set<LigneSortie> ligneSortiesSet = bonSortie.getLigneSorties();
-		              List<LigneSortieDto> ligneSortiesDtoList = new ArrayList<>();
-
-		              if (ligneSortiesSet != null) {
-		                  ligneSortiesDtoList = ligneSortiesSet.stream()
-		                      .map(LigneSortieDto::fromEntity)
-		                      .collect(Collectors.toList());
-		              }
-		              if (Objects.nonNull(bonSortie)) {
-		      	        String notificationMessage = "Please valider cette commande Sortie " + bonSortie.getCode();
-		      	        notificationController.sendOrderValidationNotification(notificationMessage);
-
-		      	        // Créer et enregistrer une notification
-		      	        Notification notification = new Notification();
-		      	        notification.setMessage(notificationMessage);
-		      	        notification.setDateNotification(Instant.now());
-		      	        notification.setType("Validation");
-		      	        notification.setEtatNotification(false);
-		      	        notification.setCodeCommande(bonSortie.getCode());
-		      	        notificationService.save(notification);
-		      	    }
-
-
-		              // Convertir BonSortie en BonSortieDto
-		              BonSortieDto dto = BonSortieDto.fromEntity(bonSortie);
-
-		              // Ajouter les LigneSorties converties au DTO
-		              dto.setLigneSorties(ligneSortiesDtoList);
-
-		              return dto;
-		          })
-		          .orElseThrow(() -> new EntityNotFoundException(
-		              "Aucun BonSortie trouvé avec l'ID " + id
-		          ));
-		  }
+			  if (id == null) {
+			        log.error("Commande client ID is NULL");
+			        return null;
+			    }
+			    return bonSortieRepository.findById(id)
+			        .map(bonSortie -> {
+			            BonSortieDto dto = BonSortieDto.fromEntity(bonSortie);
+			            dto.setLigneSorties(
+			            		bonSortie.getLigneSorties() != null ?
+			            		bonSortie.getLigneSorties().stream()
+			                    .map(LigneSortieDto::fromEntity)
+			                    .collect(Collectors.toList()) : null
+			            );
+			            return dto;
+			        })
+			        .orElseThrow(() -> new EntityNotFoundException(
+			            "Aucune commande client n'a ete trouve avec l'ID " + id));
+			}
+		  
 		  
 		  
 		  
@@ -483,6 +461,19 @@ public class BonSortieServiceImpl implements BonSortieService {
 			            // Handle stock management or other post-processing
 			            effectuerSortie(ligneSortie);
 			        });
+			    }
+			    if (Objects.nonNull(savedBonSortie)) {
+			        String notificationMessage = "Please valider cette commande Sortie " + savedBonSortie.getCode();
+			        notificationController.sendOrderValidationNotification(notificationMessage);
+
+			        // Créer et enregistrer une notification
+			        Notification notification = new Notification();
+			        notification.setMessage(notificationMessage);
+			        notification.setDateNotification(Instant.now());
+			        notification.setType("Validation");
+			        notification.setEtatNotification(false);
+			        notification.setCodeCommande(savedBonSortie.getCode());
+			        notificationService.save(notification);
 			    }
 
 			    return BonSortieDto.fromEntity(savedBonSortie);

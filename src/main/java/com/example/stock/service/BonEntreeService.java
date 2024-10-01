@@ -2,6 +2,7 @@ package com.example.stock.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.LigneEntreeDto;
@@ -35,5 +36,6 @@ public interface BonEntreeService {
 	   List<LigneEntreeDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(Integer idCommande);
 	BonEntreeDto deleteBonEntree(Integer id);
 	  public void generateEcelBE(HttpServletResponse response) throws IOException;
-	long countBonEntrees(); 
+	long countBonEntrees();
+	Map<String, Object> getBonDataByMonth(); 
 }
