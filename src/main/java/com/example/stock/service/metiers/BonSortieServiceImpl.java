@@ -2,6 +2,7 @@ package com.example.stock.service.metiers;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -485,22 +486,24 @@ public class BonSortieServiceImpl implements BonSortieService {
 			}
 			
 			
-			  public Map<String, Object> getBonDataByMonth() {
-			        List<Object[]> bonSortieData = bonSortieRepository.countBonSortieByMonth();
+			public Map<String, Object> getBonDataByMonth() {
+			    // Get BonEntree data
+			    List<Object[]> bonSortieData = bonSortieRepository.countBonSortieByMonth();
 
-			        // Prepare result maps
-			        Map<String, Object> result = new HashMap<>();
-			        Map<Integer, Long> SortieDataMap = new HashMap<>();
+			    // Initialize arrays for BonEntree counts (12 months)
+			    Long[] sortieDataArray = new Long[12];
+			    Arrays.fill(sortieDataArray, 0L); 
 
-			        // Process BonEntree data
-			        for (Object[] data : bonSortieData) {
-			            Integer month = (Integer) data[0];
-			            Long count = (Long) data[1];
-			            SortieDataMap.put(month, count);
-			        }
-
-			        result.put("bonSortie", SortieDataMap);
-			        return result;
+			    // Process BonEntree data
+			    for (Object[] data : bonSortieData) {
+			        Integer month = (Integer) data[0]; 
+			        Long count = (Long) data[1];
+			        sortieDataArray[month - 1] = count;
 			    }
+			    Map<String, Object> result = new HashMap<>();
+			    result.put("bonSortie", sortieDataArray);
+
+			    return result;
+			}
 	
 }

@@ -3,6 +3,7 @@ package com.example.stock.service.metiers;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -430,22 +431,27 @@ public BonEntreeDto findById(Integer id) {
 			}
 			
 			
-			  public Map<String, Object> getBonDataByMonth() {
-			        List<Object[]> bonEntreeData = bonEntreeRepository.countBonEntreeByMonth();
+			public Map<String, Object> getBonDataByMonth() {
+			    // Get BonEntree data
+			    List<Object[]> bonEntreeData = bonEntreeRepository.countBonEntreeByMonth();
 
-			        // Prepare result maps
-			        Map<String, Object> result = new HashMap<>();
-			        Map<Integer, Long> entreeDataMap = new HashMap<>();
+			    // Initialize arrays for BonEntree counts (12 months)
+			    Long[] entreeDataArray = new Long[12];
+			    Arrays.fill(entreeDataArray, 0L); // Initialize all months with 0
 
-			        // Process BonEntree data
-			        for (Object[] data : bonEntreeData) {
-			            Integer month = (Integer) data[0];
-			            Long count = (Long) data[1];
-			            entreeDataMap.put(month, count);
-			        }
-
-			        result.put("bonEntree", entreeDataMap);
-			        return result;
+			    // Process BonEntree data
+			    for (Object[] data : bonEntreeData) {
+			        Integer month = (Integer) data[0]; // Assuming month is 1 (Jan) to 12 (Dec)
+			        Long count = (Long) data[1];
+			        entreeDataArray[month - 1] = count; // Store the count in the respective month index
 			    }
+
+			    // Prepare result map
+			    Map<String, Object> result = new HashMap<>();
+			    result.put("bonEntree", entreeDataArray); // Store the array instead of a map
+
+			    return result;
+			}
+
 
 }
