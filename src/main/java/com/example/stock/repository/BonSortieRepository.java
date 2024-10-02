@@ -1,7 +1,6 @@
 package com.example.stock.repository;
 
 import com.example.stock.model.BonSortie;
-import com.example.stock.model.Client;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,4 +22,7 @@ public interface BonSortieRepository extends JpaRepository<BonSortie, Integer> {
 
     @Query("SELECT b FROM BonSortie b LEFT JOIN FETCH b.ligneSorties WHERE b.id = :id")
     Optional<BonSortie> findByIdWithLigneSorties(@Param("id") Integer id);
+    
+    @Query("SELECT MONTH(b.dateCommande), COUNT(b) FROM BonSortie b GROUP BY MONTH(b.dateCommande)")
+    List<Object[]> countBonSortieByMonth();
 }

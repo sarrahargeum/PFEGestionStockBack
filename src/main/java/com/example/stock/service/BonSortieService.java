@@ -1,10 +1,10 @@
 package com.example.stock.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.LigneSortieDto;
-import com.example.stock.model.BonSortie;
 import com.example.stock.model.EtatCommande;
 
 public interface BonSortieService {
@@ -38,4 +38,6 @@ public interface BonSortieService {
 	
 	  public BonSortieDto saveBSClient(BonSortieDto BSortie);
 	long countBonSorties();
+	Map<String, Object> getBonDataByMonth(); 
+
 	  }

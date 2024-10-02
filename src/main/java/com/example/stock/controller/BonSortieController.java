@@ -1,7 +1,7 @@
 package com.example.stock.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.stock.dto.BonSortieDto;
-import com.example.stock.dto.ClientDto;
 import com.example.stock.dto.LigneSortieDto;
-import com.example.stock.model.BonSortie;
-import com.example.stock.model.Client;
 import com.example.stock.model.EtatCommande;
 import com.example.stock.repository.ClientRepository;
 import com.example.stock.service.BonSortieService;
@@ -113,6 +110,11 @@ public class BonSortieController {
 	    public ResponseEntity<Long> countBonSorties() {
 	        long bonSortieCount = bonSortieService.countBonSorties();
 	        return ResponseEntity.ok(bonSortieCount);
+	    }
+	    
+	    @GetMapping("/monthly-bon-data")
+	    public Map<String, Object> getBonDataByMonth() {
+	        return bonSortieService.getBonDataByMonth();
 	    }
 	    
 }

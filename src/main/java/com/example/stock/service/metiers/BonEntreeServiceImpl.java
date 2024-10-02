@@ -349,14 +349,12 @@ public BonEntreeDto findById(Integer id) {
 			      throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un " + msg + " ID article null");
 			    }
 			  }
-	
-		  
+	  
 		  public BonEntreeDto deleteArticle(Integer idCommande, Integer idLigneCommande) {
 		    checkIdCommande(idCommande);
 		    checkIdLigneCommande(idLigneCommande);
 
 		    BonEntreeDto commandeFournisseur = checkEtatCommande(idCommande);
-		    // Just to check the LigneCommandeFournisseur and inform the fournisseur in case it is absent
 		    findLigneCommandeFournisseur(idLigneCommande);
 		    ligneEntreeFournisseurRepository.deleteById(idLigneCommande);
 
@@ -430,7 +428,6 @@ public BonEntreeDto findById(Integer id) {
 				return bonEntreeRepository.count();
 				    
 			}
-			
 			
 			
 			  public Map<String, Object> getBonDataByMonth() {

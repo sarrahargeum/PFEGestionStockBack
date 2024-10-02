@@ -2,12 +2,9 @@ package com.example.stock.repository;
 
 import com.example.stock.model.BonEntree;
 
-import net.bytebuddy.asm.Advice.OffsetMapping.Sort;
 
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

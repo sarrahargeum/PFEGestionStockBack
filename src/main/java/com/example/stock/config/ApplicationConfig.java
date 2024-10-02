@@ -20,6 +20,7 @@ import com.example.stock.repository.UserRepository;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
+	
 	@Autowired
       UserRepository repository;
 

@@ -2,10 +2,11 @@ package com.example.stock.service.metiers;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -14,10 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.stock.controller.NotificationController;
 import com.example.stock.dto.ArticleDto;
-import com.example.stock.dto.BonEntreeDto;
 import com.example.stock.dto.BonSortieDto;
 import com.example.stock.dto.ClientDto;
-import com.example.stock.dto.LigneEntreeDto;
 import com.example.stock.dto.LigneSortieDto;
 import com.example.stock.dto.MVTStockDto;
 import com.example.stock.exception.EntityNotFoundException;
@@ -479,13 +478,29 @@ public class BonSortieServiceImpl implements BonSortieService {
 			    return BonSortieDto.fromEntity(savedBonSortie);
 			}
 
-		 
-		
-
 			@Override
 			public long countBonSorties() {
 				return bonSortieRepository.count();
 				    
 			}
+			
+			
+			  public Map<String, Object> getBonDataByMonth() {
+			        List<Object[]> bonSortieData = bonSortieRepository.countBonSortieByMonth();
+
+			        // Prepare result maps
+			        Map<String, Object> result = new HashMap<>();
+			        Map<Integer, Long> SortieDataMap = new HashMap<>();
+
+			        // Process BonEntree data
+			        for (Object[] data : bonSortieData) {
+			            Integer month = (Integer) data[0];
+			            Long count = (Long) data[1];
+			            SortieDataMap.put(month, count);
+			        }
+
+			        result.put("bonSortie", SortieDataMap);
+			        return result;
+			    }
 	
 }
