@@ -11,6 +11,7 @@ public interface NotificationService {
     List<Notification> getAllNotifications();
     Notification save(Notification notification);
 	List<Notification> getNotificationsByType(String type);
+	List<Notification> markAllAsRead();
 
 
 }

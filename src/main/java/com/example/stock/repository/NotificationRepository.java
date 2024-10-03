@@ -12,7 +12,7 @@ import com.example.stock.model.Notification;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
 
-    //List<Notification> findByType(String type);
+    List<Notification> findByEtatNotificationFalse();
 
 
     @Query("SELECT n FROM Notification n WHERE n.type = :type ORDER BY n.codeCommande DESC")

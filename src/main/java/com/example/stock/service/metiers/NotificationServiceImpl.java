@@ -31,4 +31,18 @@ public class NotificationServiceImpl implements NotificationService {
     public List<Notification> getNotificationsByType(String type) {
         return notificationRepository.findByType(type);
     }
+    
+    
+    public List<Notification> markAllAsRead() {
+        List<Notification> unreadNotifications = notificationRepository.findByEtatNotificationFalse();
+
+        unreadNotifications.forEach(notification -> {
+            notification.setEtatNotification(true);
+        });
+
+        return notificationRepository.saveAll(unreadNotifications);
+    }
+
+
+
 }

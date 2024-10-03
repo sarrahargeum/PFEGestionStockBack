@@ -53,5 +53,10 @@ public class Notification {
 	            .type(notification.getType())
 	            .build();
 	      }
+
+		public boolean isEtatNotification() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 	    
 }
