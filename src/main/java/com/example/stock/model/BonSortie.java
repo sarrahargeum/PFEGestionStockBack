@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +19,8 @@ import java.util.Set;
 
 
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,21 +36,6 @@ public class BonSortie {
 
  
     
-    @Column(name = "etatcommande")
-    @Enumerated(EnumType.STRING)
-    private EtatCommande etatCommande;
-
-    @Column(name = "idmagasin")
-    private Integer idMagasin;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn( name = "idclient")
-    private Client client;
-    
-
-    
-    @OneToMany(mappedBy = "bonSortie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<LigneSortie> ligneSorties ;
   
     
     @PrePersist
@@ -68,5 +56,21 @@ public class BonSortie {
     }
     
   
+
+    @Column(name = "etatcommande")
+    @Enumerated(EnumType.STRING)
+    private EtatCommande etatCommande;
+
+    @Column(name = "idmagasin")
+    private Integer idMagasin;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn( name = "idclient")
+    private Client client;
+    
+
+    
+    @OneToMany(mappedBy = "bonSortie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<LigneSortie> ligneSorties ;
 
 }

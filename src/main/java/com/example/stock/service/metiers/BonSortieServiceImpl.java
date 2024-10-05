@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -365,28 +366,29 @@ public class BonSortieServiceImpl implements BonSortieService {
 		  
 		  @Override
 		  public BonSortieDto findById(Integer id) {
-			  if (id == null) {
-			        log.error("Commande client ID is NULL");
-			        return null;
-			    }
-			    return bonSortieRepository.findById(id)
-			        .map(bonSortie -> {
-			            BonSortieDto dto = BonSortieDto.fromEntity(bonSortie);
-			            dto.setLigneSorties(
-			            		bonSortie.getLigneSorties() != null ?
-			            		bonSortie.getLigneSorties().stream()
-			                    .map(LigneSortieDto::fromEntity)
-			                    .collect(Collectors.toList()) : null
-			            );
-			            return dto;
-			        })
-			        .orElseThrow(() -> new EntityNotFoundException(
-			            "Aucune commande client n'a ete trouve avec l'ID " + id));
-			}
-		  
-		  
-		  
-		  
+		      if (id == null) {
+		          log.error("Commande client ID is NULL");
+		          return null;
+		      }
+		      return bonSortieRepository.findById(id)
+		          .map(bonSortie -> {
+		              // Force loading of LigneSorties
+		              Set<LigneSortie> ligneSorties = bonSortie.getLigneSorties();
+		              // Map to DTO
+		              BonSortieDto dto = BonSortieDto.fromEntity(bonSortie);
+		              dto.setLigneSorties(
+		                  ligneSorties != null ?
+		                  ligneSorties.stream()
+		                      .map(LigneSortieDto::fromEntity)
+		                      .collect(Collectors.toList()) : null
+		              );
+		              return dto;
+		          })
+		          .orElseThrow(() -> new EntityNotFoundException(
+		              "Aucune commande client n'a été trouvée avec l'ID " + id));
+		  }
+
+
 	
 		  
 		  public BonSortieDto saveBSClient(BonSortieDto BSortie) {
