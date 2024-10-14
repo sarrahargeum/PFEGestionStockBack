@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:4200"); // Replace with your Angular app URL
         config.addAllowedOrigin("http://localhost");
-        config.addAllowedOrigin("http://192.168.95.240:4200");
+        config.addAllowedOrigin("http://192.168.1.19:4200");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
