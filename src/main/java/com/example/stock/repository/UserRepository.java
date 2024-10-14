@@ -17,7 +17,6 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     Optional<Object> findOneByEmailIgnoreCase(String email);
     
-    /*@Query("select u.id from  User u where u.firstname= ?1 and u.lastname= ?2 ")
-	int searchUserBynomEtprenom(String firstname, String lastname);*/
+
 
 }

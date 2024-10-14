@@ -57,6 +57,6 @@ public class BonSortieDto {
   }
 
   public boolean isCommandeLivree() {
-    return EtatCommande.LIVREE.equals(this.etatCommande);
+    return EtatCommande.VALIDEE.equals(this.etatCommande);
   }
 }

@@ -66,20 +66,7 @@ public class ArticleServiceImpl  implements ArticleService {
     );
     }
 
-   /* @Override
-    public ArticleDto findByCodeArticle(String code) {
-        if (!StringUtils.hasLength(code)) {
-            log.error("Article CODE is null");
-            return null;
-        }
-        return articleRepository.findByCodeArticle(code).map(ArticleDto::fromEntity)
-                .orElseThrow(() ->
-                    new EntityNotFoundException(
-                        "Aucun article avec le CODE = " + codeArticle + " n' ete trouve dans la BDD",
-                        ErrorCodes.ARTICLE_NOT_FOUND)
-                );
 
-    }*/
 
     @Override
     public List<ArticleDto> getAllArticle() {
